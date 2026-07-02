@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://cg66ksdd4jth"]
+
+[ext_resource type="Script" uid="uid://dh6bi3m5d5ih" path="res://scripts/dragged_part.gd" id="1_bkyfo"]
+
+[node name="dragged_part" type="Control" unique_id=1949268490 node_paths=PackedStringArray("part_grid")]
+modulate = Color(1, 1, 1, 0.49411765)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_bkyfo")
+part_grid = NodePath("GridContainer")
+
+[node name="GridContainer" type="GridContainer" parent="." unique_id=2066180897]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2

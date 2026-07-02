@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Part" format=3 uid="uid://ca54g30sm6yun"]
+
+[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_mrnp6"]
+[ext_resource type="Texture2D" uid="uid://bh2gelbgg5ebw" path="res://assets/weapons/explosive/rocket_launcher0.png" id="1_nt5v8"]
+[ext_resource type="Texture2D" uid="uid://btejmtscle1t2" path="res://assets/weapons/explosive/rocket_launcher1.png" id="2_ltxjq"]
+[ext_resource type="Texture2D" uid="uid://c56dt5quowekq" path="res://assets/weapons/explosive/rocket_launcher2.png" id="3_cs2hy"]
+[ext_resource type="Texture2D" uid="uid://ph628hhh0rme" path="res://assets/weapons/explosive/rocket_launcher3.png" id="4_8xxho"]
+[ext_resource type="Texture2D" uid="uid://bbsrksx4f08vd" path="res://assets/weapons/explosive/rocket_launcher4.png" id="5_nyg0e"]
+[ext_resource type="Texture2D" uid="uid://bdnpma2xsuvt5" path="res://assets/weapons/explosive/rocket_launcher5.png" id="6_xumdh"]
+
+[resource]
+script = ExtResource("1_mrnp6")
+part_name = "Rocket Launcher"
+part_id = "weapon_rocket_launcher"
+part_type = 1
+part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(0, 2), Vector2i(1, 2)])
+part_icons = Array[Texture2D]([ExtResource("1_nt5v8"), ExtResource("2_ltxjq"), ExtResource("3_cs2hy"), ExtResource("4_8xxho"), ExtResource("5_nyg0e"), ExtResource("6_xumdh")])
+part_description = "[b]ROCKET LAUNCHER (RNG: 3-5 // DMG: 4)[/b]
+[b]Explosive:[/b] -1 ACC. Hit adjacent squares for 1 DMG on a hit.
+[b]Crit:[/b] +1 DMG to all squares hit."
+metadata/_custom_type_script = "uid://d1mht1k84568t"

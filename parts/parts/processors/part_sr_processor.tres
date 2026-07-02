@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Part" format=3 uid="uid://0hyww16j1lsp"]
+
+[ext_resource type="Texture2D" uid="uid://bfbs3p3yv15gf" path="res://assets/parts/processors/sr_processor.png" id="1_11irk"]
+[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_h71oj"]
+
+[resource]
+script = ExtResource("1_h71oj")
+part_name = "SR Processor"
+part_id = "part_sr_processor"
+part_type = 7
+part_configuration = Array[Vector2i]([Vector2i(0, 0)])
+part_icons = Array[Texture2D]([ExtResource("1_11irk")])
+part_description = "[b]SR PROCESSOR[/b]
+Connected shield generators restore their Capacity to half if it's lower than that (round up) at the start of your turn."
+metadata/_custom_type_script = "uid://d1mht1k84568t"

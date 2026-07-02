@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Part" format=3 uid="uid://qi2fmpae0o4r"]
+
+[ext_resource type="Texture2D" uid="uid://bi6mlnae0qked" path="res://assets/parts/thrusters/u_thrusters0.png" id="1_53vcj"]
+[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_nj4fp"]
+[ext_resource type="Texture2D" uid="uid://dmuo704wruwgv" path="res://assets/parts/thrusters/u_thrusters1.png" id="2_8fo6j"]
+[ext_resource type="Texture2D" uid="uid://kvdo87ymupud" path="res://assets/parts/thrusters/u_thrusters2.png" id="3_onpjo"]
+[ext_resource type="Texture2D" uid="uid://swxxyxv2epy5" path="res://assets/parts/thrusters/u_thrusters3.png" id="4_hjuah"]
+
+[resource]
+script = ExtResource("1_nj4fp")
+part_name = "U Thrusters"
+part_id = "part_u_thrusters"
+part_type = 6
+part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1)])
+part_icons = Array[Texture2D]([ExtResource("1_53vcj"), ExtResource("2_8fo6j"), ExtResource("3_onpjo"), ExtResource("4_hjuah")])
+metadata/_custom_type_script = "uid://d1mht1k84568t"

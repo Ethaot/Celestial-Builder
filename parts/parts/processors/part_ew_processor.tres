@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Part" format=3 uid="uid://ka7vxupbstue"]
+
+[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_lacbt"]
+[ext_resource type="Texture2D" uid="uid://dexggo7kecpep" path="res://assets/parts/processors/ew_processor.png" id="1_xs7xm"]
+
+[resource]
+script = ExtResource("1_lacbt")
+part_name = "EW Processor"
+part_id = "part_ew_processor"
+part_type = 7
+part_configuration = Array[Vector2i]([Vector2i(0, 0)])
+part_icons = Array[Texture2D]([ExtResource("1_xs7xm")])
+part_description = "[b]EW PROCESSOR[/b]
+Connected Shock weapons, Virus weapons, and ECM generators that don't count as Melee or Missiles have +1 maximum range."
+metadata/_custom_type_script = "uid://d1mht1k84568t"

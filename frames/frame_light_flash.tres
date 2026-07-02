@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Frame" format=3 uid="uid://ch71vayt4726p"]
+
+[ext_resource type="Script" uid="uid://bxyavh1gp883h" path="res://scripts/resource_scripts/frame.gd" id="1_vw2tt"]
+
+[resource]
+script = ExtResource("1_vw2tt")
+frame_name = "LIGHT//FLASH"
+frame_id = "frame_light_flash"
+frame_available_slots = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(3, 0), Vector2i(4, 0), Vector2i(5, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1), Vector2i(4, 1), Vector2i(5, 1)])
+frame_feature_name = "Streamlined"
+frame_feature_text = "Gain 1 Evasion for every 2 Zones you move per turn instead of every 3."
+frame_hp = 12
+metadata/_custom_type_script = "uid://bxyavh1gp883h"

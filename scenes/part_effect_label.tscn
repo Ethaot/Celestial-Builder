@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://c8c5o5inixfx5"]
+
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_5lgn5"]
+
+[node name="PartEffectLabel" type="RichTextLabel" unique_id=235664563]
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+theme = ExtResource("1_5lgn5")
+theme_override_font_sizes/normal_font_size = 48
+theme_override_font_sizes/bold_font_size = 48
+theme_override_font_sizes/bold_italics_font_size = 48
+theme_override_font_sizes/italics_font_size = 48
+theme_override_font_sizes/mono_font_size = 48
+bbcode_enabled = true
+fit_content = true

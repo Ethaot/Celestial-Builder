@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Part" format=3 uid="uid://d1iwd3qbidv5i"]
+
+[ext_resource type="Texture2D" uid="uid://cs0a2yqpb4i56" path="res://assets/parts/shields/m_shields0.png" id="1_4snpk"]
+[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_mt6ne"]
+[ext_resource type="Texture2D" uid="uid://csi8lowvoimm5" path="res://assets/parts/shields/m_shields1.png" id="2_s3rmj"]
+
+[resource]
+script = ExtResource("1_mt6ne")
+part_name = "M Shields"
+part_id = "part_m_shields"
+part_type = 8
+part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1)])
+part_icons = Array[Texture2D]([ExtResource("1_4snpk"), ExtResource("2_s3rmj")])
+part_description = "[b]M SHIELDS (CPC: 10)[/b]
++/- 2 CPC if the mech is over/underpowered."
+metadata/_custom_type_script = "uid://d1mht1k84568t"

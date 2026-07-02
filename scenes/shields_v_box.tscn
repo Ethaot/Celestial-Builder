@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://kfrtocrmdq4l"]
+
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_np4tb"]
+
+[node name="ShieldsVBox" type="VBoxContainer" unique_id=2113031562]
+offset_right = 580.0
+offset_bottom = 240.0
+
+[node name="Label" type="Label" parent="." unique_id=1006234886]
+layout_mode = 2
+theme = ExtResource("1_np4tb")
+text = "Shields"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="." unique_id=539591089]
+layout_mode = 2
+theme = ExtResource("1_np4tb")
+text = "^"
+
+[node name="Label2" type="Label" parent="." unique_id=2122444542]
+layout_mode = 2
+theme = ExtResource("1_np4tb")
+text = "8"
+horizontal_alignment = 1
+
+[node name="Button2" type="Button" parent="." unique_id=1980528739]
+layout_mode = 2
+theme = ExtResource("1_np4tb")
+text = "v"

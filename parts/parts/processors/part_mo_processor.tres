@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Part" format=3 uid="uid://co61cxgdx0lli"]
+
+[ext_resource type="Texture2D" uid="uid://xdthkqisyjxg" path="res://assets/parts/processors/mo_processor.png" id="1_u4egm"]
+[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_w0i0r"]
+
+[resource]
+script = ExtResource("1_w0i0r")
+part_name = "MO Processor"
+part_id = "part_mo_processor"
+part_type = 7
+part_configuration = Array[Vector2i]([Vector2i(0, 0)])
+part_icons = Array[Texture2D]([ExtResource("1_u4egm")])
+part_description = "[b]MO PROCESSOR[/b]
+When connected to both non-missile weapons and thrusters that count as the frame's size or larger, before or after attacking with connected weapons, the frame may move 1 Zone."
+metadata/_custom_type_script = "uid://d1mht1k84568t"

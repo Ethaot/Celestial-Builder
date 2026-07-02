@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://dvo8r5sjxddnn"]
+
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_frvqa"]
+
+[node name="LoadFrameBuildButton" type="Button" unique_id=2035650039]
+offset_right = 8.0
+offset_bottom = 8.0
+size_flags_horizontal = 3
+theme = ExtResource("1_frvqa")

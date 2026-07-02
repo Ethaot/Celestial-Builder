@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://ds7f4gbwumq5b"]
+
+[ext_resource type="Script" uid="uid://dwfretloj5tlp" path="res://scripts/part_container.gd" id="1_6xq2q"]
+
+[node name="PartContainer" type="GridContainer" unique_id=1434471779]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+script = ExtResource("1_6xq2q")

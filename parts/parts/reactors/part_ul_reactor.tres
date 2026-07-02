@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Part" format=3 uid="uid://drgaeeuvvhe2v"]
+
+[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_chqm5"]
+[ext_resource type="Texture2D" uid="uid://cdjxjh8342a28" path="res://assets/parts/reactors/ul_reactor.png" id="1_ye48q"]
+
+[resource]
+script = ExtResource("1_chqm5")
+part_name = "UL Reactor"
+part_id = "part_ul_reactor"
+part_type = 5
+part_configuration = Array[Vector2i]([Vector2i(0, 0)])
+part_icons = Array[Texture2D]([ExtResource("1_ye48q")])
+metadata/_custom_type_script = "uid://d1mht1k84568t"

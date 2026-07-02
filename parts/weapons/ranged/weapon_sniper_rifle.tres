@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="Part" format=3 uid="uid://b80c4e3xj607t"]
+
+[ext_resource type="Texture2D" uid="uid://cct7ehb4bo1ch" path="res://assets/weapons/ranged/sniper_rifle0.png" id="1_ertou"]
+[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_nxklu"]
+[ext_resource type="Texture2D" uid="uid://cb63ks74m5t4r" path="res://assets/weapons/ranged/sniper_rifle1.png" id="2_n3ii7"]
+[ext_resource type="Texture2D" uid="uid://deefmrjirjcak" path="res://assets/weapons/ranged/sniper_rifle2.png" id="3_5nwst"]
+[ext_resource type="Texture2D" uid="uid://cwcowiarwfk8c" path="res://assets/weapons/ranged/sniper_rifle3.png" id="4_xrq44"]
+
+[resource]
+script = ExtResource("1_nxklu")
+part_name = "Sniper Rifle"
+part_id = "weapon_sniper_rifle"
+part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2), Vector2i(0, 3)])
+part_icons = Array[Texture2D]([ExtResource("1_ertou"), ExtResource("2_n3ii7"), ExtResource("3_5nwst"), ExtResource("4_xrq44")])
+part_description = "[b]SNIPER RIFLE (RNG: 4-5 // DMG: 4)[/b]
+[b]Single-Shot:[/b] +1 ACC, or +2 if you haven't moved yet this turn.
+[b]Crit:[/b] Triple DMG."
+metadata/_custom_type_script = "uid://d1mht1k84568t"

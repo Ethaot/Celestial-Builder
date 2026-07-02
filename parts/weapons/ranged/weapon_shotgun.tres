@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="Part" format=3 uid="uid://dybfcg5yknqbh"]
+
+[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_m8w7k"]
+[ext_resource type="Texture2D" uid="uid://cxx1t6mqhdx8y" path="res://assets/weapons/ranged/shotgun0.png" id="1_y343a"]
+[ext_resource type="Texture2D" uid="uid://crhbe5hwj02y1" path="res://assets/weapons/ranged/shotgun1.png" id="2_q1hbu"]
+[ext_resource type="Texture2D" uid="uid://cqo3onokvrlks" path="res://assets/weapons/ranged/shotgun2.png" id="3_lp8d3"]
+
+[resource]
+script = ExtResource("1_m8w7k")
+part_name = "Shotgun"
+part_id = "weapon_shotgun"
+part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0)])
+part_icons = Array[Texture2D]([ExtResource("1_y343a"), ExtResource("2_q1hbu"), ExtResource("3_lp8d3")])
+part_description = "[b]SHOTGUN (RNG: 0-2 // DMG: 5)[/b]
+[b]Single-Shot:[/b] +1 ACC. Make three hit rolls against missiles. Double DMG against Shields.
+[b]Crit:[/b] Hit every adjacent square for 1 DMG."
+metadata/_custom_type_script = "uid://d1mht1k84568t"

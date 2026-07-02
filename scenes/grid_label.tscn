@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cy40nqb78dshp"]
+
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_3c07d"]
+
+[node name="Label" type="Label" unique_id=1416348174]
+custom_minimum_size = Vector2(64, 64)
+theme = ExtResource("1_3c07d")
+horizontal_alignment = 1

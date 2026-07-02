@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Part" format=3 uid="uid://c7xpk7r5js32p"]
+
+[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_gs6mo"]
+[ext_resource type="Texture2D" uid="uid://csx1lejaqa0tu" path="res://assets/parts/processors/pt_processor.png" id="1_qxrcb"]
+
+[resource]
+script = ExtResource("1_gs6mo")
+part_name = "PT Processor"
+part_id = "part_pt_processor"
+part_type = 7
+part_configuration = Array[Vector2i]([Vector2i(0, 0)])
+part_icons = Array[Texture2D]([ExtResource("1_qxrcb")])
+part_description = "[b]PT PROCESSOR[/b]
+Connected weapons that multiply DMG on a crit add 1 to their DMG before multiplying. Connected non-missile Explosive and Shock Weapons gain +1 ACC."
+metadata/_custom_type_script = "uid://d1mht1k84568t"

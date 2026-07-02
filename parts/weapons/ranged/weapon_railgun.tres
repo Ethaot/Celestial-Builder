@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="Part" format=3 uid="uid://1kfc7td5y3vw"]
+
+[ext_resource type="Texture2D" uid="uid://crr7edmgk8p8" path="res://assets/weapons/ranged/railgun0.png" id="1_ehyil"]
+[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_hxspi"]
+[ext_resource type="Texture2D" uid="uid://cy2e8qbj747j1" path="res://assets/weapons/ranged/railgun1.png" id="2_wx46l"]
+[ext_resource type="Texture2D" uid="uid://d3e8i338o7svu" path="res://assets/weapons/ranged/railgun2.png" id="3_g4603"]
+[ext_resource type="Texture2D" uid="uid://dch5l1rf8qr7h" path="res://assets/weapons/ranged/railgun3.png" id="4_844ls"]
+
+[resource]
+script = ExtResource("1_hxspi")
+part_name = "Railgun"
+part_id = "weapon_railgun"
+part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2), Vector2i(0, 3)])
+part_icons = Array[Texture2D]([ExtResource("1_ehyil"), ExtResource("2_wx46l"), ExtResource("3_g4603"), ExtResource("4_844ls")])
+part_description = "[b]RAILGUN (RNG: 4-6 // DMG: 4)[/b]
+[b]Electronic:[/b] Powered. -2 ACC when Damaged.
+[b]Single-Shot:[/b] +1 ACC. Double DMG against Shields.
+[b]Crit:[/b] Triple DMG."
+metadata/_custom_type_script = "uid://d1mht1k84568t"

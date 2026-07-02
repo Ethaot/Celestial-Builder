@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://dn5na0pqptrep"]
+
+[ext_resource type="Script" uid="uid://bisg0232c0w0r" path="res://scripts/part_picker_v_box.gd" id="1_a8tbi"]
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_qfdwu"]
+
+[node name="PartPickerVBox" type="VBoxContainer" unique_id=33346189 node_paths=PackedStringArray("name_label", "grid_container")]
+size_flags_horizontal = 3
+script = ExtResource("1_a8tbi")
+name_label = NodePath("Label")
+grid_container = NodePath("GridContainer")
+
+[node name="Label" type="Label" parent="." unique_id=381685581]
+layout_mode = 2
+theme = ExtResource("1_qfdwu")
+autowrap_mode = 3
+
+[node name="GridContainer" type="GridContainer" parent="." unique_id=116348514]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0

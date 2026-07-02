@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Part" format=3 uid="uid://cj728uixoaoul"]
+
+[ext_resource type="Texture2D" uid="uid://brr2338g0uvus" path="res://assets/parts/thrusters/h_thrusters0.png" id="1_mg08f"]
+[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_ryk0y"]
+[ext_resource type="Texture2D" uid="uid://ngqunsm4om71" path="res://assets/parts/thrusters/h_thrusters1.png" id="2_ja3ur"]
+[ext_resource type="Texture2D" uid="uid://du6fiw1qkaoab" path="res://assets/parts/thrusters/h_thrusters2.png" id="3_qret7"]
+
+[resource]
+script = ExtResource("1_ryk0y")
+part_name = "H Thrusters"
+part_id = "part_h_thrusters"
+part_type = 6
+part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0)])
+part_icons = Array[Texture2D]([ExtResource("1_mg08f"), ExtResource("2_ja3ur"), ExtResource("3_qret7")])
+metadata/_custom_type_script = "uid://d1mht1k84568t"

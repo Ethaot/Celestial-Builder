@@ -1,0 +1,382 @@
+[gd_scene format=3 uid="uid://d2twsscusvcdc"]
+
+[ext_resource type="Script" uid="uid://cdpj4gsaeh3tc" path="res://scripts/main_script.gd" id="1_gubc5"]
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_w2twt"]
+[ext_resource type="Script" uid="uid://chgjg4cfqjfww" path="res://scripts/alt_aspect_ratio_container.gd" id="2_7ykc4"]
+[ext_resource type="Script" uid="uid://b5es3k3xamepu" path="res://scripts/app_scroll_container.gd" id="2_gubc5"]
+[ext_resource type="PackedScene" uid="uid://kfrtocrmdq4l" path="res://scenes/shields_v_box.tscn" id="4_pu3yx"]
+[ext_resource type="PackedScene" uid="uid://cg66ksdd4jth" path="res://scenes/dragged_part.tscn" id="6_rt2n2"]
+
+[sub_resource type="GDScript" id="GDScript_pu3yx"]
+script/source = "extends ScrollContainer
+
+func _ready() -> void:
+	custom_minimum_size.x = get_window().size.x
+"
+
+[node name="MainScene" type="ColorRect" unique_id=289542231 node_paths=PackedStringArray("app_scroll_container", "main_scroll_container", "character_name_line_edit", "character_callsign_line_edit", "frame_option_button", "frame_name_line_edit", "grid_grid_container", "armor_grid_container", "part_effects_vbox", "save_frame_build_button", "load_frame_build_button", "parts_scroll_container", "parts_grid_container", "weapons_ranged_tab_button", "weapons_explosive_tab_button", "weapons_melee_tab_button", "weapons_ew_tab_button", "weapons_missiles_tab_button", "parts_reactors_tab_button", "parts_thrusters_tab_button", "parts_processors_tab_button", "parts_shields_tab_button", "dragged_part", "menu_tab_button", "frames_tab_button", "parts_tab_button", "load_frame_build_menu", "load_frame_build_vbox")]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+script = ExtResource("1_gubc5")
+app_scroll_container = NodePath("AppScreenScrollContainer")
+main_scroll_container = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer")
+character_name_line_edit = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/CharacterNameLineEdit")
+character_callsign_line_edit = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/CharacterCallsignLineEdit")
+frame_option_button = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/FrameOptionButton")
+frame_name_line_edit = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/FrameNameLineEdit")
+grid_grid_container = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/AspectRatioContainer/GridContainer")
+armor_grid_container = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/AspectRatioContainer/ArmorGridContainer")
+part_effects_vbox = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/PartEffectsVBox")
+save_frame_build_button = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/HBoxContainer/SaveFrameBuildButton")
+load_frame_build_button = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/HBoxContainer/LoadFrameBuildButton")
+parts_scroll_container = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer")
+parts_grid_container = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/GridContainer")
+weapons_ranged_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer/WeaponsRangedTabButton")
+weapons_explosive_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer/WeaponsExplosiveTabButton")
+weapons_melee_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer/WeaponsMeleeTabButton")
+weapons_ew_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer2/WeaponsElectronicWarfareTabButton")
+weapons_missiles_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer2/WeaponsMissilesTabButton")
+parts_reactors_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer3/PartsReactorsTabButton")
+parts_thrusters_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer3/PartsThrustersTabButton")
+parts_processors_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer4/PartsProcessorsTabButton")
+parts_shields_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer4/PartsShieldsTabButton")
+dragged_part = NodePath("dragged_part")
+menu_tab_button = NodePath("HBoxContainer/MenuTabButton")
+frames_tab_button = NodePath("HBoxContainer/FrameTabButton")
+parts_tab_button = NodePath("HBoxContainer/PartsTabButton")
+load_frame_build_menu = NodePath("LoadFrameBuildMenu")
+load_frame_build_vbox = NodePath("LoadFrameBuildMenu/ScrollContainer/LoadFrameBuildVBox")
+
+[node name="AppScreenScrollContainer" type="ScrollContainer" parent="." unique_id=733877498 node_paths=PackedStringArray("main_scene")]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 96.0
+offset_bottom = -72.0
+grow_horizontal = 2
+grow_vertical = 2
+follow_focus = true
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
+scroll_deadzone = 128
+script = ExtResource("2_gubc5")
+main_scene = NodePath("..")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="AppScreenScrollContainer" unique_id=1250608330]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="MenuScrollContainer" type="ScrollContainer" parent="AppScreenScrollContainer/HBoxContainer" unique_id=1134152300]
+custom_minimum_size = Vector2(1080, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+script = SubResource("GDScript_pu3yx")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer" unique_id=1082593203]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/VBoxContainer" unique_id=1110360057]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "Celestial Builder"
+horizontal_alignment = 1
+
+[node name="NewPilotButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/VBoxContainer" unique_id=1543168115]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "New Pilot"
+
+[node name="LoadPilotButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/VBoxContainer" unique_id=446912237]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "Load Pilot"
+
+[node name="MainScrollContainer" type="ScrollContainer" parent="AppScreenScrollContainer/HBoxContainer" unique_id=138395016]
+custom_minimum_size = Vector2(1080, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+script = SubResource("GDScript_pu3yx")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer" unique_id=460806789]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CharacterNameLineEdit" type="LineEdit" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer" unique_id=870182942]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+placeholder_text = "Lamplighter Name"
+
+[node name="CharacterCallsignLineEdit" type="LineEdit" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer" unique_id=1792909835]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+placeholder_text = "Callsign"
+
+[node name="FrameOptionButton" type="OptionButton" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer" unique_id=1699439432]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+
+[node name="FrameNameLineEdit" type="LineEdit" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer" unique_id=1802610658]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+placeholder_text = "Frame Name"
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer" unique_id=202332360]
+layout_mode = 2
+stretch_mode = 0
+alignment_vertical = 0
+script = ExtResource("2_7ykc4")
+
+[node name="ColorRect" type="ColorRect" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/AspectRatioContainer" unique_id=122499749]
+layout_mode = 2
+color = Color(0.9098039, 0, 0.54901963, 1)
+
+[node name="ColorRect" type="ColorRect" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/AspectRatioContainer/ColorRect" unique_id=1033060964]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.3137255, 0.3137255, 0.3137255, 1)
+
+[node name="GridContainer" type="GridContainer" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/AspectRatioContainer" unique_id=111944944]
+layout_mode = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 7
+
+[node name="ArmorGridContainer" type="GridContainer" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/AspectRatioContainer" unique_id=1865831977]
+layout_mode = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 6
+
+[node name="DefensesHBox" type="HBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer" unique_id=2012013395]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/DefensesHBox" unique_id=1251235379]
+custom_minimum_size = Vector2(192, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/DefensesHBox/VBoxContainer" unique_id=1218734575]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "Hull Points"
+horizontal_alignment = 1
+
+[node name="HPUpButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/DefensesHBox/VBoxContainer" unique_id=2095403382]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "^"
+
+[node name="HPLabel" type="Label" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/DefensesHBox/VBoxContainer" unique_id=1102309749]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "12"
+horizontal_alignment = 1
+
+[node name="HPDownButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/DefensesHBox/VBoxContainer" unique_id=1118660402]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "v"
+
+[node name="ShieldsVBox" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/DefensesHBox" unique_id=2113031562 instance=ExtResource("4_pu3yx")]
+layout_mode = 2
+
+[node name="PartEffectsVBox" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer" unique_id=1000833807]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer" unique_id=1107752053]
+layout_mode = 2
+
+[node name="SaveFrameBuildButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/HBoxContainer" unique_id=2097759601]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
+text = "Save Frame Build"
+autowrap_mode = 3
+
+[node name="LoadFrameBuildButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/HBoxContainer" unique_id=716831588]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
+text = "Load Frame Build"
+autowrap_mode = 3
+
+[node name="PartsScrollContainer" type="ScrollContainer" parent="AppScreenScrollContainer/HBoxContainer" unique_id=2109849229]
+custom_minimum_size = Vector2(1080, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+script = SubResource("GDScript_pu3yx")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer" unique_id=1955997277]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2" unique_id=1573470496]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer" unique_id=1433510037]
+layout_mode = 2
+alignment = 1
+
+[node name="WeaponsRangedTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer" unique_id=465770656]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
+text = "Ranged"
+
+[node name="WeaponsExplosiveTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer" unique_id=233686634]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
+text = "Explosive"
+
+[node name="WeaponsMeleeTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer" unique_id=33984850]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
+text = "Melee"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer" unique_id=2117322341]
+layout_mode = 2
+alignment = 1
+
+[node name="WeaponsElectronicWarfareTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer2" unique_id=699798386]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
+text = "Electronic Warfare"
+
+[node name="WeaponsMissilesTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer2" unique_id=1908189709]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
+text = "Missiles"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer" unique_id=1170185123]
+layout_mode = 2
+alignment = 1
+
+[node name="PartsReactorsTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer3" unique_id=1305027875]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
+text = "Reactors"
+
+[node name="PartsThrustersTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer3" unique_id=242988368]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
+text = "Thrusters"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer" unique_id=450076020]
+layout_mode = 2
+alignment = 1
+
+[node name="PartsProcessorsTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer4" unique_id=1171613787]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
+text = "Processors"
+
+[node name="PartsShieldsTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer4" unique_id=294337288]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
+text = "Shields"
+
+[node name="ColorRect" type="ColorRect" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2" unique_id=8417058]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+color = Color(0.15686275, 0.15686275, 0.15686275, 0)
+
+[node name="ColorRect2" type="ColorRect" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2" unique_id=1685833234]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="ColorRect3" type="ColorRect" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2" unique_id=461095955]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+color = Color(0.15686275, 0.15686275, 0.015686275, 0)
+
+[node name="GridContainer" type="GridContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2" unique_id=492859911]
+layout_mode = 2
+mouse_filter = 2
+columns = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=705278593]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -61.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MenuTabButton" type="Button" parent="HBoxContainer" unique_id=699706217]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
+disabled = true
+text = "Menu"
+
+[node name="FrameTabButton" type="Button" parent="HBoxContainer" unique_id=1946234948]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
+text = "Frame"
+
+[node name="PartsTabButton" type="Button" parent="HBoxContainer" unique_id=425230735]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
+text = "Parts"
+
+[node name="dragged_part" parent="." unique_id=1949268490 instance=ExtResource("6_rt2n2")]
+layout_mode = 1
+
+[node name="LoadFrameBuildMenu" type="ColorRect" parent="." unique_id=203744107]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="LoadFrameBuildMenu" unique_id=109342421]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 128.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LoadFrameBuildVBox" type="VBoxContainer" parent="LoadFrameBuildMenu/ScrollContainer" unique_id=1581653521]
+layout_mode = 2
+size_flags_horizontal = 3

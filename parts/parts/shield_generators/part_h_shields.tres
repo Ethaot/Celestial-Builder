@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="Part" format=3 uid="uid://2166h54va2yy"]
+
+[ext_resource type="Texture2D" uid="uid://cmayvo6m6yqjf" path="res://assets/parts/shields/h_shields0.png" id="1_cdq4d"]
+[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_w7ryn"]
+[ext_resource type="Texture2D" uid="uid://dvgtw0i84hus1" path="res://assets/parts/shields/h_shields1.png" id="2_p5g41"]
+[ext_resource type="Texture2D" uid="uid://umpkxdu5uk3p" path="res://assets/parts/shields/h_shields2.png" id="3_8itkm"]
+
+[resource]
+script = ExtResource("1_w7ryn")
+part_name = "H Shields"
+part_id = "part_h_shields"
+part_type = 8
+part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2)])
+part_icons = Array[Texture2D]([ExtResource("1_cdq4d"), ExtResource("2_p5g41"), ExtResource("3_8itkm")])
+part_description = "[b]H SHIELDS (CPC: 15)[/b]
++/- 3 CPC if the mech is over/underpowered."
+metadata/_custom_type_script = "uid://d1mht1k84568t"
