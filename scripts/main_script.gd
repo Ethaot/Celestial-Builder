@@ -163,7 +163,7 @@ func populate_grid() -> void:
 			b.mouse_entered.connect(_on_grid_cell_hovered.bind((i - 1) * 6 + n))
 			b.mouse_exited.connect(_on_grid_cell_unhovered.bind((i - 1) * 6 + n))
 			b.grid_texture_button_up.connect(_on_part_dropped.bind((i - 1) * 6 + n))
-			b.pivot_offset_ratio = Vector2(0.5, 0.5)
+			b.texrect.pivot_offset_ratio = Vector2(0.5, 0.5)
 			grid_container_texture_buttons.append(b)
 
 func show_parts_screen(part_type: Constants.PartType) -> void:
@@ -414,6 +414,7 @@ func draw_grid_cells() -> void:
 	var f: Frame = ResourceManager.frame_dict[current_frame_build.frame_id]
 	for i in range(grid_container_texture_buttons.size()):
 		grid_container_texture_buttons[i].texture_normal = selectable_grid_frame
+		grid_container_texture_buttons[i].texrect.texture = null
 		if !f.frame_available_slots.has(Vector2i(i % 6, floori(float(i) / 6.0))):
 			grid_container_texture_buttons[i].self_modulate = Color("282828")
 			grid_container_texture_buttons[i].disabled = true
@@ -432,12 +433,20 @@ func draw_grid_cells() -> void:
 		for i in range(pi.times_rotated):
 			hp = rotate_slots(hp)
 		for i in range(pi.part_instance_slots.size()):
-			grid_container_texture_buttons[pi.part_instance_slots[i]].texture_normal = hp.part_icons[i]
+			#grid_container_texture_buttons[pi.part_instance_slots[i]].texture_normal = hp.part_icons[i]
+			grid_container_texture_buttons[pi.part_instance_slots[i]].texrect.texture = hp.part_icons[i]
 			if hp.mirrored_h: 
-				grid_container_texture_buttons[pi.part_instance_slots[i]].flip_h = true
+				#grid_container_texture_buttons[pi.part_instance_slots[i]].flip_h = true
+				grid_container_texture_buttons[pi.part_instance_slots[i]].texrect.flip_h = true
+			else:
+				grid_container_texture_buttons[pi.part_instance_slots[i]].texrect.flip_h = false
 			if hp.mirrored_v: 
-				grid_container_texture_buttons[pi.part_instance_slots[i]].flip_v = true
-			grid_container_texture_buttons[pi.part_instance_slots[i]].rotation_degrees = hp.times_rotated * 90.0
+				#grid_container_texture_buttons[pi.part_instance_slots[i]].flip_v = true
+				grid_container_texture_buttons[pi.part_instance_slots[i]].texrect.flip_v = true
+			else:
+				grid_container_texture_buttons[pi.part_instance_slots[i]].texrect.flip_v = false
+			#grid_container_texture_buttons[pi.part_instance_slots[i]].rotation_degrees = hp.times_rotated * 90.0
+			grid_container_texture_buttons[pi.part_instance_slots[i]].texrect.rotation_degrees = hp.times_rotated * 90.0
 	populate_part_labels()
 	draw_armor_grids()
 
@@ -540,7 +549,15 @@ func pickup_placed_part(idx: int) -> void:
 			part = ResourceManager.part_dict[pi.part_id]
 			current_held_part = HeldPart.new()
 			current_held_part.part_id = part.part_id
+			current_held_part.part_icons = part.part_icons
 			current_held_part.slots = part.part_configuration
+			if pi.mirrored_h:
+				current_held_part = mirror_slots_horizontally(current_held_part)
+			if pi.mirrored_v:
+				current_held_part = mirror_slots_vertically(current_held_part)
+			for i in range(pi.times_rotated):
+				current_held_part = rotate_slots(current_held_part)
+			
 			dragged_part.assign_part(current_held_part)
 			current_frame_build.frame_build_configuration.remove_at(iter)
 			draw_grid_cells()
@@ -563,7 +580,7 @@ func _on_grid_button_clicked(index: int) -> void:
 			pass
 
 func _on_grid_button_button_up(index: int) -> void:
-	if !button_held:
+	if grid_container_texture_buttons[index].hovered:
 		grid_container_texture_buttons[index].cycle_labels()
 
 func _on_part_chosen(part: HeldPart) -> void:

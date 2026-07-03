@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="Part" format=3 uid="uid://d0l4ulmm72pru"]
+
+[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_3ey66"]
+[ext_resource type="Texture2D" uid="uid://dac8cb5hh7rjn" path="res://assets/weapons/missiles/l_guided_missiles0.png" id="1_al2i0"]
+[ext_resource type="Texture2D" uid="uid://btb1le6xoa8y8" path="res://assets/weapons/missiles/l_guided_missiles1.png" id="2_36rog"]
+[ext_resource type="Texture2D" uid="uid://li1epxen2tlr" path="res://assets/weapons/missiles/l_guided_missiles2.png" id="3_jlov8"]
+
+[resource]
+script = ExtResource("1_3ey66")
+part_name = "S Guided Missiles"
+part_id = "weapon_l_guided_missiles"
+part_type = 4
+part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2)])
+part_icons = Array[Texture2D]([ExtResource("1_al2i0"), ExtResource("2_36rog"), ExtResource("3_jlov8")])
+part_description = "[b]S GUIDED MISSILES (QTY: 2 // DMG: 4)[/b]
+[b]Speed:[/b] 3 in any direction.
+[b]Guided:[/b] Does not have to designate a target when Deployed. Can choose to have Guided missiles attack any target at range 0. Increase the number to shoot down by 1.
+[b]Crit:[/b] Hit every adjacent square for 1 DMG."
+metadata/_custom_type_script = "uid://d1mht1k84568t"

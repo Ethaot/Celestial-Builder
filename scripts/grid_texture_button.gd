@@ -1,10 +1,11 @@
 extends TextureButton
 class_name GridTextureButton
 
-enum Mode {Normal, Damaged, Disabled}
+enum Mode {Normal, Damaged, Disabled, Both}
 
 signal grid_texture_button_up
 
+@export var texrect: TextureRect
 @export var damage_label: Label
 @export var disabled_label: Label
 
@@ -42,6 +43,10 @@ func cycle_labels() -> void:
 			disabled_label.visible = true
 			current_mode = Mode.Disabled
 		Mode.Disabled:
+			damage_label.visible = true
+			disabled_label.visible = true
+			current_mode = Mode.Both
+		Mode.Both:
 			damage_label.visible = false
 			disabled_label.visible = false
 			current_mode = Mode.Normal

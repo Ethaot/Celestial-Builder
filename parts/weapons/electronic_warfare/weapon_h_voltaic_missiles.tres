@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="Part" format=3 uid="uid://dmeumowxiagle"]
+
+[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_6b4pu"]
+[ext_resource type="Texture2D" uid="uid://b1eifgue6gghk" path="res://assets/weapons/electronic_warfare/h_voltaic_missiles0.png" id="1_miikw"]
+[ext_resource type="Texture2D" uid="uid://c5ya6l5n5hhtq" path="res://assets/weapons/electronic_warfare/h_voltaic_missiles1.png" id="2_aabid"]
+[ext_resource type="Texture2D" uid="uid://dem0kfvthi8qo" path="res://assets/weapons/electronic_warfare/h_voltaic_missiles2.png" id="3_phdwx"]
+[ext_resource type="Texture2D" uid="uid://dv56w4vupg4po" path="res://assets/weapons/electronic_warfare/h_voltaic_missiles3.png" id="4_735xq"]
+[ext_resource type="Texture2D" uid="uid://dntkfnbnv1gy4" path="res://assets/weapons/electronic_warfare/h_voltaic_missiles4.png" id="5_q3ewn"]
+[ext_resource type="Texture2D" uid="uid://dj5q377hhyb7a" path="res://assets/weapons/electronic_warfare/h_voltaic_missiles5.png" id="6_jfojp"]
+
+[resource]
+script = ExtResource("1_6b4pu")
+part_name = "H Voltaic Missiles"
+part_id = "weapon_h_voltaic_missiles"
+part_type = 3
+part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(0, 2), Vector2i(1, 2)])
+part_icons = Array[Texture2D]([ExtResource("1_miikw"), ExtResource("2_aabid"), ExtResource("3_phdwx"), ExtResource("4_735xq"), ExtResource("5_q3ewn"), ExtResource("6_jfojp")])
+part_description = "[b]H VOLTAIC MISSILES (QTY: 4 // DMG: 1 // DUR: 1)[/b]
+[b]Electronic:[/b] Powered. Ignores Shields.
+[b]Speed:[/b] 4 towards the target.
+[b]Shock:[/b] Parts/Weapons hit are Disabled for DUR rounds.
+[b]Crit:[/b] Parts adjacent to the hit location are Disabled for DUR rounds."
+metadata/_custom_type_script = "uid://d1mht1k84568t"

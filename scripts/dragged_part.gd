@@ -15,7 +15,6 @@ func _input(event: InputEvent) -> void:
 				clear_part()
 
 func assign_part(held_part: HeldPart) -> void:
-	var part: Part = ResourceManager.part_dict[held_part.part_id]
 	var num_columns: int = 0
 	var num_rows: int = 0
 	for p in held_part.slots:
@@ -27,15 +26,28 @@ func assign_part(held_part: HeldPart) -> void:
 	var current_texture_index: int = 0
 	for y in range(num_rows):
 		for x in range(num_columns):
+			var cont: Control = Control.new()
+			cont.custom_minimum_size = Vector2(128.0, 128.0)
+			cont.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			cont.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			part_grid.add_child(cont)
 			var texrect: TextureRect = TextureRect.new()
+			texrect.set_anchors_preset(Control.LayoutPreset.PRESET_FULL_RECT)
+			texrect.pivot_offset_ratio = Vector2(0.5, 0.5)
 			texrect.custom_minimum_size = Vector2(128.0, 128.0)
 			if held_part.slots.has(Vector2i(x, y)):
-				texrect.texture = part.part_icons[current_texture_index]
+				texrect.texture = held_part.part_icons[current_texture_index]
+				if held_part.mirrored_h:
+					texrect.flip_h = true
+				if held_part.mirrored_v:
+					texrect.flip_v = true
+				for i in range(held_part.times_rotated):
+					texrect.rotation_degrees += 90.0
 				current_texture_index += 1
 			else:
 				texrect.texture = empty_grid_frame
 			texrect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			part_grid.add_child(texrect)
+			cont.add_child(texrect)
 
 func clear_part() -> void:
 	for child in part_grid.get_children():

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="Part" format=3 uid="uid://c04eb7dsatjcf"]
+
+[ext_resource type="Texture2D" uid="uid://ii5p4uuk1by8" path="res://assets/weapons/electronic_warfare/stun_needle_launcher0.png" id="1_illr4"]
+[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_mc7kj"]
+[ext_resource type="Texture2D" uid="uid://bkehgivgcs8dd" path="res://assets/weapons/electronic_warfare/stun_needle_launcher1.png" id="2_10wlw"]
+[ext_resource type="Texture2D" uid="uid://dx176hsnhw6iy" path="res://assets/weapons/electronic_warfare/stun_needle_launcher2.png" id="3_671n2"]
+[ext_resource type="Texture2D" uid="uid://c56cgymi3d7ij" path="res://assets/weapons/electronic_warfare/stun_needle_launcher3.png" id="4_6t2r3"]
+[ext_resource type="Texture2D" uid="uid://cw4x6fierwc1f" path="res://assets/weapons/electronic_warfare/stun_needle_launcher4.png" id="5_j84br"]
+
+[resource]
+script = ExtResource("1_mc7kj")
+part_name = "Stun Needle Launcher"
+part_id = "weapon_stun_needle_launcher"
+part_type = 3
+part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2), Vector2i(0, 3), Vector2i(0, 4)])
+part_icons = Array[Texture2D]([ExtResource("1_illr4"), ExtResource("2_10wlw"), ExtResource("3_671n2"), ExtResource("4_6t2r3"), ExtResource("5_j84br")])
+part_description = "[b]STUN NEEDLE LAUNCHER (RNG: 4-5 // DMG: 1 // DUR: 1)[/b]
+[b]Electronic:[/b] Powered. -2 ACC when Damaged.
+[b]Shock:[/b] +2 ACC. Ignores shields. Parts or weapons hit are Disabled for DUR rounds.
+[b]Crit:[/b] Parts adjacent to the hit location are Disabled for DUR rounds."
+metadata/_custom_type_script = "uid://d1mht1k84568t"

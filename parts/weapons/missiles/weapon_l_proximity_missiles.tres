@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="Part" format=3 uid="uid://oimx60sxo4kr"]
+
+[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_4lpp5"]
+[ext_resource type="Texture2D" uid="uid://cbiiueb15fjt" path="res://assets/weapons/missiles/l_proximity_missiles0.png" id="1_23blm"]
+[ext_resource type="Texture2D" uid="uid://s2k4tt7jf1m4" path="res://assets/weapons/missiles/l_proximity_missiles1.png" id="2_n3usn"]
+[ext_resource type="Texture2D" uid="uid://oe17437etf77" path="res://assets/weapons/missiles/l_proximity_missiles2.png" id="3_qlpew"]
+[ext_resource type="Texture2D" uid="uid://cwjexah3yswh0" path="res://assets/weapons/missiles/l_proximity_missiles3.png" id="4_d8tr2"]
+
+[resource]
+script = ExtResource("1_4lpp5")
+part_name = "S Proximity Missiles"
+part_id = "weapon_l_proximity_missiles"
+part_type = 4
+part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2), Vector2i(0, 3)])
+part_icons = Array[Texture2D]([ExtResource("1_23blm"), ExtResource("2_n3usn"), ExtResource("3_qlpew"), ExtResource("4_d8tr2")])
+part_description = "[b]S PROXIMITY MISSILES (QTY: 3 // DMG: 3)[/b]
+[b]Speed:[/b] 4 towards the target.
+[b]Proximity:[/b] 1 DMG on a miss.
+[b]Crit:[/b] Hit every adjacent square for 1 DMG."
+metadata/_custom_type_script = "uid://d1mht1k84568t"
