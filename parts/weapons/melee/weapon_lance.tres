@@ -20,4 +20,5 @@ part_description = "[b]LANCE (RNG: 0 // DMG: 6)[/b]
 [b]Kinetic:[/b] Add Evasion to DMG.
 [b]Self-Propelled:[/b] May move 1 Zone before Attacking (stacks with other movement).
 [b]Crit:[/b] Triple DMG."
+part_tab = "Lance"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

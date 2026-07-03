@@ -4,7 +4,6 @@
 [ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_w2twt"]
 [ext_resource type="Script" uid="uid://chgjg4cfqjfww" path="res://scripts/alt_aspect_ratio_container.gd" id="2_7ykc4"]
 [ext_resource type="Script" uid="uid://b5es3k3xamepu" path="res://scripts/app_scroll_container.gd" id="2_gubc5"]
-[ext_resource type="PackedScene" uid="uid://kfrtocrmdq4l" path="res://scenes/shields_v_box.tscn" id="4_pu3yx"]
 [ext_resource type="PackedScene" uid="uid://cg66ksdd4jth" path="res://scenes/dragged_part.tscn" id="6_rt2n2"]
 
 [sub_resource type="GDScript" id="GDScript_pu3yx"]
@@ -14,7 +13,7 @@ func _ready() -> void:
 	custom_minimum_size.x = get_window().size.x
 "
 
-[node name="MainScene" type="ColorRect" unique_id=289542231 node_paths=PackedStringArray("app_scroll_container", "main_scroll_container", "character_name_line_edit", "character_callsign_line_edit", "frame_option_button", "frame_name_line_edit", "grid_grid_container", "armor_grid_container", "part_effects_vbox", "save_frame_build_button", "load_frame_build_button", "parts_scroll_container", "parts_grid_container", "weapons_ranged_tab_button", "weapons_explosive_tab_button", "weapons_melee_tab_button", "weapons_ew_tab_button", "weapons_missiles_tab_button", "parts_reactors_tab_button", "parts_thrusters_tab_button", "parts_processors_tab_button", "parts_shields_tab_button", "dragged_part", "menu_tab_button", "frames_tab_button", "parts_tab_button", "load_frame_build_menu", "load_frame_build_vbox")]
+[node name="MainScene" type="ColorRect" unique_id=289542231 node_paths=PackedStringArray("app_scroll_container", "main_scroll_container", "character_name_line_edit", "character_callsign_line_edit", "frame_option_button", "frame_name_line_edit", "grid_grid_container", "armor_grid_container", "defenses_hbox", "hp_up_button", "hp_label", "hp_down_button", "part_effects_vbox", "save_frame_build_button", "load_frame_build_button", "parts_scroll_container", "part_tabs_vbox", "parts_grid_container", "weapons_ranged_tab_button", "weapons_explosive_tab_button", "weapons_melee_tab_button", "weapons_ew_tab_button", "weapons_missiles_tab_button", "parts_reactors_tab_button", "parts_thrusters_tab_button", "parts_processors_tab_button", "parts_shields_tab_button", "dragged_part", "menu_tab_button", "frames_tab_button", "parts_tab_button", "load_frame_build_menu", "load_frame_build_vbox")]
 texture_filter = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,20 +30,25 @@ frame_option_button = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrol
 frame_name_line_edit = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/FrameNameLineEdit")
 grid_grid_container = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/AspectRatioContainer/GridContainer")
 armor_grid_container = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/AspectRatioContainer/ArmorGridContainer")
+defenses_hbox = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/DefensesHBox")
+hp_up_button = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/DefensesHBox/VBoxContainer/HPUpButton")
+hp_label = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/DefensesHBox/VBoxContainer/HPLabel")
+hp_down_button = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/DefensesHBox/VBoxContainer/HPDownButton")
 part_effects_vbox = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/PartEffectsVBox")
 save_frame_build_button = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/HBoxContainer/SaveFrameBuildButton")
 load_frame_build_button = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/HBoxContainer/LoadFrameBuildButton")
 parts_scroll_container = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer")
+part_tabs_vbox = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox")
 parts_grid_container = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/GridContainer")
-weapons_ranged_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer/WeaponsRangedTabButton")
-weapons_explosive_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer/WeaponsExplosiveTabButton")
-weapons_melee_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer/WeaponsMeleeTabButton")
-weapons_ew_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer2/WeaponsElectronicWarfareTabButton")
-weapons_missiles_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer2/WeaponsMissilesTabButton")
-parts_reactors_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer3/PartsReactorsTabButton")
-parts_thrusters_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer3/PartsThrustersTabButton")
-parts_processors_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer4/PartsProcessorsTabButton")
-parts_shields_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer4/PartsShieldsTabButton")
+weapons_ranged_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox/HBoxContainer/WeaponsRangedTabButton")
+weapons_explosive_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox/HBoxContainer/WeaponsExplosiveTabButton")
+weapons_melee_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox/HBoxContainer/WeaponsMeleeTabButton")
+weapons_ew_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox/HBoxContainer2/WeaponsElectronicWarfareTabButton")
+weapons_missiles_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox/HBoxContainer2/WeaponsMissilesTabButton")
+parts_reactors_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox/HBoxContainer3/PartsReactorsTabButton")
+parts_thrusters_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox/HBoxContainer3/PartsThrustersTabButton")
+parts_processors_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox/HBoxContainer4/PartsProcessorsTabButton")
+parts_shields_tab_button = NodePath("AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox/HBoxContainer4/PartsShieldsTabButton")
 dragged_part = NodePath("dragged_part")
 menu_tab_button = NodePath("HBoxContainer/MenuTabButton")
 frames_tab_button = NodePath("HBoxContainer/FrameTabButton")
@@ -197,9 +201,6 @@ layout_mode = 2
 theme = ExtResource("1_w2twt")
 text = "v"
 
-[node name="ShieldsVBox" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/DefensesHBox" unique_id=2113031562 instance=ExtResource("4_pu3yx")]
-layout_mode = 2
-
 [node name="PartEffectsVBox" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer" unique_id=1000833807]
 layout_mode = 2
 mouse_filter = 2
@@ -234,74 +235,74 @@ script = SubResource("GDScript_pu3yx")
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2" unique_id=1573470496]
+[node name="PartTabsVBox" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2" unique_id=1573470496]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer" unique_id=1433510037]
+[node name="HBoxContainer" type="HBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox" unique_id=1433510037]
 layout_mode = 2
 alignment = 1
 
-[node name="WeaponsRangedTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer" unique_id=465770656]
+[node name="WeaponsRangedTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox/HBoxContainer" unique_id=465770656]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_w2twt")
 text = "Ranged"
 
-[node name="WeaponsExplosiveTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer" unique_id=233686634]
+[node name="WeaponsExplosiveTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox/HBoxContainer" unique_id=233686634]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_w2twt")
 text = "Explosive"
 
-[node name="WeaponsMeleeTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer" unique_id=33984850]
+[node name="WeaponsMeleeTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox/HBoxContainer" unique_id=33984850]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_w2twt")
 text = "Melee"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer" unique_id=2117322341]
+[node name="HBoxContainer2" type="HBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox" unique_id=2117322341]
 layout_mode = 2
 alignment = 1
 
-[node name="WeaponsElectronicWarfareTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer2" unique_id=699798386]
+[node name="WeaponsElectronicWarfareTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox/HBoxContainer2" unique_id=699798386]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_w2twt")
 text = "Electronic Warfare"
 
-[node name="WeaponsMissilesTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer2" unique_id=1908189709]
+[node name="WeaponsMissilesTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox/HBoxContainer2" unique_id=1908189709]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_w2twt")
 text = "Missiles"
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer" unique_id=1170185123]
+[node name="HBoxContainer3" type="HBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox" unique_id=1170185123]
 layout_mode = 2
 alignment = 1
 
-[node name="PartsReactorsTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer3" unique_id=1305027875]
+[node name="PartsReactorsTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox/HBoxContainer3" unique_id=1305027875]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_w2twt")
 text = "Reactors"
 
-[node name="PartsThrustersTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer3" unique_id=242988368]
+[node name="PartsThrustersTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox/HBoxContainer3" unique_id=242988368]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_w2twt")
 text = "Thrusters"
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer" unique_id=450076020]
+[node name="HBoxContainer4" type="HBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox" unique_id=450076020]
 layout_mode = 2
 alignment = 1
 
-[node name="PartsProcessorsTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer4" unique_id=1171613787]
+[node name="PartsProcessorsTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox/HBoxContainer4" unique_id=1171613787]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_w2twt")
 text = "Processors"
 
-[node name="PartsShieldsTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/VBoxContainer/HBoxContainer4" unique_id=294337288]
+[node name="PartsShieldsTabButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/VBoxContainer2/PartTabsVBox/HBoxContainer4" unique_id=294337288]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_w2twt")

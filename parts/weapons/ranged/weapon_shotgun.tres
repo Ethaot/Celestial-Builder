@@ -14,4 +14,5 @@ part_icons = Array[Texture2D]([ExtResource("1_y343a"), ExtResource("2_q1hbu"), E
 part_description = "[b]SHOTGUN (RNG: 0-2 // DMG: 5)[/b]
 [b]Single-Shot:[/b] +1 ACC. Make three hit rolls against missiles. Double DMG against Shields.
 [b]Crit:[/b] Hit every adjacent square for 1 DMG."
+part_tab = "Shotgun"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

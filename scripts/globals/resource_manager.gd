@@ -11,6 +11,7 @@ var parts_processors: Array[Part]
 var parts_shields: Array[Part]
 
 var frames: Array[Frame]
+var frame_builds: Array[FrameBuild]
 
 var part_dict: Dictionary[String, Part]
 var frame_dict: Dictionary[String, Frame]
@@ -21,6 +22,7 @@ func _ready() -> void:
 	assign_parts_array(parse_parts(parts_array))
 	frames = import_frames("res://frames/", ".tres")
 	frame_dict = construct_frame_dict(frames)
+	frame_builds = import_frame_builds("res://frame_builds/", ".tres")
 
 func import_parts(path: String, extension: String) -> Array[Part]:
 	var loaded_parts: Array[Part]
@@ -101,7 +103,7 @@ func import_frames(path: String, extension: String) -> Array[Frame]:
 		var full_path: String = path.path_join(file_name)
 		if dir.current_is_dir():
 			var sub_folder_path: String = full_path + "/"
-			loaded_frames.append_array(import_parts(sub_folder_path, extension))
+			loaded_frames.append_array(import_frames(sub_folder_path, extension))
 		else:
 			var clean_path: String = full_path.replace(".remap", "")
 			if clean_path.ends_with(extension):
@@ -117,3 +119,28 @@ func construct_frame_dict(fr: Array[Frame]) -> Dictionary[String, Frame]:
 	for f in fr:
 		dict[f.frame_id] = f
 	return dict
+
+func import_frame_builds(path: String, extension: String) -> Array[FrameBuild]:
+	var loaded_builds: Array[FrameBuild]
+	var dir: DirAccess = DirAccess.open(path)
+	if !dir:
+		push_error("Failed to open frame builds directory (resource_manager).")
+		return loaded_builds
+	dir.list_dir_begin()
+	var file_name: String = dir.get_next()
+	
+	while file_name != "":
+		var full_path: String = path.path_join(file_name)
+		if dir.current_is_dir():
+			var sub_folder_path: String = full_path + "/"
+			loaded_builds.append_array(import_frame_builds(sub_folder_path, extension))
+		else:
+			var clean_path: String = full_path.replace(".remap", "")
+			if clean_path.ends_with(extension):
+				var res: Resource = load(clean_path)
+				if res is FrameBuild:
+					loaded_builds.append(res)
+					print(res.frame_build_name)
+		
+		file_name = dir.get_next()
+	return loaded_builds

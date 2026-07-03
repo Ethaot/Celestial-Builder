@@ -20,4 +20,5 @@ part_description = "[b]H VOLTAIC MISSILES (QTY: 4 // DMG: 1 // DUR: 1)[/b]
 [b]Speed:[/b] 4 towards the target.
 [b]Shock:[/b] Parts/Weapons hit are Disabled for DUR rounds.
 [b]Crit:[/b] Parts adjacent to the hit location are Disabled for DUR rounds."
+part_tab = "Voltaic Missiles"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

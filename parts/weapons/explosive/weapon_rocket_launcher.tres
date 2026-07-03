@@ -18,4 +18,5 @@ part_icons = Array[Texture2D]([ExtResource("1_nt5v8"), ExtResource("2_ltxjq"), E
 part_description = "[b]ROCKET LAUNCHER (RNG: 3-5 // DMG: 4)[/b]
 [b]Explosive:[/b] -1 ACC. Hit adjacent squares for 1 DMG on a hit.
 [b]Crit:[/b] +1 DMG to all squares hit."
+part_tab = "Rocket Launcher"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

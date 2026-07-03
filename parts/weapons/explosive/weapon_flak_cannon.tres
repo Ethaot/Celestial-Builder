@@ -18,4 +18,5 @@ part_icons = Array[Texture2D]([ExtResource("1_jcl3t"), ExtResource("2_p6bt1"), E
 part_description = "[b]FLAK CANNON (RNG: 4-5 // DMG: 2)[/b]
 [b]Explosive:[/b] -10 ACC. Make 3 hit rolls. Hit adjacent squares for 1 DMG on a hit. Deal 1 DMG on a miss.
 [b]Crit:[/b] +1 DMG to all squares hit."
+part_tab = "Flak Cannon"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

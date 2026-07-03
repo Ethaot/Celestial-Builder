@@ -1,0 +1,62 @@
+[gd_resource type="Resource" script_class="FrameBuild" format=3]
+
+[ext_resource type="Script" path="res://scripts/resource_scripts/part_instance.gd" id="1_y2huk"]
+[ext_resource type="Script" path="res://scripts/resource_scripts/frame_build.gd" id="2_f1ygi"]
+
+[sub_resource type="Resource" id="Resource_13473"]
+script = ExtResource("1_y2huk")
+part_instance_name = "H Thrusters"
+part_instance_id = "87099797116144975435149934245270"
+part_id = "part_h_thrusters"
+part_instance_slots = Array[int]([0, 1, 2])
+
+[sub_resource type="Resource" id="Resource_5h7js"]
+script = ExtResource("1_y2huk")
+part_instance_name = "Stun Needle Launcher"
+part_instance_id = "85934452519862600285588220097112"
+part_id = "weapon_stun_needle_launcher"
+part_instance_slots = Array[int]([3, 9, 15, 21, 27])
+
+[sub_resource type="Resource" id="Resource_thcu8"]
+script = ExtResource("1_y2huk")
+part_instance_name = "H Reactor"
+part_instance_id = "59906721453373636933513773098679"
+part_id = "part_h_reactor"
+part_instance_slots = Array[int]([6, 7, 8, 12, 13, 14])
+times_rotated = 1
+
+[sub_resource type="Resource" id="Resource_pbgxp"]
+script = ExtResource("1_y2huk")
+part_instance_name = "H Shields"
+part_instance_id = "35472960934564655804927061138308"
+part_id = "part_h_shields"
+part_instance_slots = Array[int]([18, 24, 30])
+
+[sub_resource type="Resource" id="Resource_1si40"]
+script = ExtResource("1_y2huk")
+part_instance_name = "Virus Probe"
+part_instance_id = "70572283768136584339714458253600"
+part_id = "weapon_virus_probe"
+part_instance_slots = Array[int]([19, 25, 31])
+
+[sub_resource type="Resource" id="Resource_vsp7p"]
+script = ExtResource("1_y2huk")
+part_instance_name = "EW Processor"
+part_instance_id = "35760816418391432171762456584770"
+part_id = "part_ew_processor"
+part_instance_slots = Array[int]([20])
+
+[sub_resource type="Resource" id="Resource_m1jnf"]
+script = ExtResource("1_y2huk")
+part_instance_name = "SMG"
+part_instance_id = "37236102935746930615019319839341"
+part_id = "weapon_smg"
+part_instance_slots = Array[int]([26, 32, 33])
+mirrored_h = true
+mirrored_v = true
+
+[resource]
+script = ExtResource("2_f1ygi")
+frame_build_name = "HN-GRIDLOCK"
+frame_id = "frame_heavy_nerve"
+frame_build_configuration = Array[ExtResource("1_y2huk")]([SubResource("Resource_13473"), SubResource("Resource_5h7js"), SubResource("Resource_thcu8"), SubResource("Resource_pbgxp"), SubResource("Resource_1si40"), SubResource("Resource_vsp7p"), SubResource("Resource_m1jnf")])

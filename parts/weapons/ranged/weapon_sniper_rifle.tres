@@ -15,4 +15,5 @@ part_icons = Array[Texture2D]([ExtResource("1_ertou"), ExtResource("2_n3ii7"), E
 part_description = "[b]SNIPER RIFLE (RNG: 4-5 // DMG: 4)[/b]
 [b]Single-Shot:[/b] +1 ACC, or +2 if you haven't moved yet this turn.
 [b]Crit:[/b] Triple DMG."
+part_tab = "Sniper Rifle"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

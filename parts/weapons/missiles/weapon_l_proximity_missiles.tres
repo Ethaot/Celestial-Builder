@@ -17,4 +17,5 @@ part_description = "[b]S PROXIMITY MISSILES (QTY: 3 // DMG: 3)[/b]
 [b]Speed:[/b] 4 towards the target.
 [b]Proximity:[/b] 1 DMG on a miss.
 [b]Crit:[/b] Hit every adjacent square for 1 DMG."
+part_tab = "Proximity Missiles"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

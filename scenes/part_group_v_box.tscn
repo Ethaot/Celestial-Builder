@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://bunwfdhphceuq"]
+
+[ext_resource type="Script" uid="uid://cgdt8ig2fcujm" path="res://scripts/part_group_v_box.gd" id="1_h70uf"]
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="2_kk4x8"]
+
+[node name="PartGroupVBox" type="VBoxContainer" unique_id=1337059516 node_paths=PackedStringArray("group_tab_button", "group_tab_grid_container")]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+mouse_filter = 2
+script = ExtResource("1_h70uf")
+group_tab_button = NodePath("Button")
+group_tab_grid_container = NodePath("GridContainer")
+
+[node name="Button" type="Button" parent="." unique_id=1850344540]
+layout_mode = 2
+mouse_behavior_recursive = 2
+theme = ExtResource("2_kk4x8")
+
+[node name="GridContainer" type="GridContainer" parent="." unique_id=1329945843]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+columns = 2

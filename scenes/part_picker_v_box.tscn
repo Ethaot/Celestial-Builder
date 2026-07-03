@@ -9,10 +9,12 @@ script = ExtResource("1_a8tbi")
 name_label = NodePath("Label")
 grid_container = NodePath("GridContainer")
 
-[node name="Label" type="Label" parent="." unique_id=381685581]
+[node name="Label" type="RichTextLabel" parent="." unique_id=796622611]
 layout_mode = 2
+mouse_filter = 2
 theme = ExtResource("1_qfdwu")
-autowrap_mode = 3
+bbcode_enabled = true
+fit_content = true
 
 [node name="GridContainer" type="GridContainer" parent="." unique_id=116348514]
 layout_mode = 2

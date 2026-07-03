@@ -17,4 +17,5 @@ part_icons = Array[Texture2D]([ExtResource("1_cbinq"), ExtResource("2_ijbuu"), E
 part_description = "[b]SWORD (RNG: 0 // DMG: 6)[/b]
 [b]Strong Melee:[/b] +2 ACC.
 [b]Crit:[/b] Triple DMG."
+part_tab = "Sword"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

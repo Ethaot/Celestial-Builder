@@ -17,4 +17,5 @@ part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(0
 part_icons = Array[Texture2D]([ExtResource("1_t0gai"), ExtResource("2_0fkwe"), ExtResource("3_tbhcn"), ExtResource("4_vq48e"), ExtResource("5_ytcmk"), ExtResource("6_juyeb")])
 part_description = "[b]H REACTOR[/b]
 Does not lose power on damaged squares until 3+ are damaged."
+part_tab = "H Reactor"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

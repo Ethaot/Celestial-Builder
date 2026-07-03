@@ -18,4 +18,5 @@ part_description = "[b]STUN NEEDLE LAUNCHER (RNG: 4-5 // DMG: 1 // DUR: 1)[/b]
 [b]Electronic:[/b] Powered. -2 ACC when Damaged.
 [b]Shock:[/b] +2 ACC. Ignores shields. Parts or weapons hit are Disabled for DUR rounds.
 [b]Crit:[/b] Parts adjacent to the hit location are Disabled for DUR rounds."
+part_tab = "Stun Needle"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

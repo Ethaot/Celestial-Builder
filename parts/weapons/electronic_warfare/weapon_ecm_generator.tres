@@ -15,4 +15,5 @@ part_icons = Array[Texture2D]([ExtResource("1_k61dw"), ExtResource("2_qdo54"), E
 part_description = "[b]ECM GENERATOR (RNG: 3-5 // TARGET: ZONE // DUR: 1)[/b]
 [b]Electronic:[/b] Powered. Does not operate if damaged.
 [b]ECM Cloud:[/b] -2 ACC to all in Zone, -4 for EW weaponry, until your next turn. Cloud lasts for DUR rounds and destroys all missiles."
+part_tab = "ECM Generator"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

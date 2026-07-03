@@ -13,4 +13,5 @@ part_icons = Array[Texture2D]([ExtResource("1_p57fa"), ExtResource("2_w27cb")])
 part_description = "[b]PISTOL (RNG: 0-2 // DMG: 1)[/b]
 [b]Single-Shot:[/b] +2 ACC.
 [b]Crit:[/b] Triple DMG."
+part_tab = "Pistol"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

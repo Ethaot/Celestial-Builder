@@ -19,4 +19,5 @@ part_icons = Array[Texture2D]([ExtResource("1_modnq"), ExtResource("2_gssmg"), E
 part_description = "[b]ENORMOUS AXE (RNG: 0 // DMG: 6)[/b]
 [b]Strong Melee:[/b] Hit adjacent squares for 1 DMG on a hit.
 [b]Crit:[/b] Double DMG."
+part_tab = "Enormous Axe"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

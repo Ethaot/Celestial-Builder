@@ -16,4 +16,5 @@ part_icons = Array[Texture2D]([ExtResource("1_paecj"), ExtResource("2_cg6x4"), E
 part_description = "[b]M SWARM MISSILES (QTY: 6 // DMG: 3)[/b]
 [b]Speed:[/b] 4 towards the target.
 [b]Crit:[/b] Hits every adjacent square for 1 DMG."
+part_tab = "Swarm Missiles"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

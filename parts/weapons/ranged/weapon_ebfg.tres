@@ -19,4 +19,5 @@ part_icons = Array[Texture2D]([ExtResource("1_6f18m"), ExtResource("2_v7c0m"), E
 part_description = "[b]EVEN BIGGER FUCKING GUN (RNG: 2-3 // DMG: 3)[/b]
 [b]Full Auto:[/b] -3 ACC if Ultra, -5 if Heavy, -10 if Medium or Light. Make 6 hit rolls.
 [b]Crit:[/b] +1 DMG."
+part_tab = "Even Bigger Fucking Gun"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

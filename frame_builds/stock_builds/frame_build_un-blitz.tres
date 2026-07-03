@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="FrameBuild" format=3]
+
+[ext_resource type="Script" path="res://scripts/resource_scripts/part_instance.gd" id="1_bofj7"]
+[ext_resource type="Script" path="res://scripts/resource_scripts/frame_build.gd" id="2_mg3ji"]
+
+[sub_resource type="Resource" id="Resource_3hc2w"]
+script = ExtResource("1_bofj7")
+part_instance_name = "U Thrusters"
+part_instance_id = "42086015040211100187373913600428"
+part_id = "part_u_thrusters"
+part_instance_slots = Array[int]([0, 1, 6, 7])
+
+[sub_resource type="Resource" id="Resource_22v7t"]
+script = ExtResource("1_bofj7")
+part_instance_name = "H Reactor"
+part_instance_id = "42284695478896791403161063177578"
+part_id = "part_h_reactor"
+part_instance_slots = Array[int]([2, 3, 4, 8, 9, 10])
+times_rotated = 3
+
+[sub_resource type="Resource" id="Resource_2xs4k"]
+script = ExtResource("1_bofj7")
+part_instance_name = "H Swarm Missiles"
+part_instance_id = "82125927995676925598748756438876"
+part_id = "weapon_h_swarm_missiles"
+part_instance_slots = Array[int]([12, 13, 18, 19, 24, 25, 30, 31])
+
+[sub_resource type="Resource" id="Resource_hxf58"]
+script = ExtResource("1_bofj7")
+part_instance_name = "MC Processor"
+part_instance_id = "69894226041059550276124332694055"
+part_id = "part_mc_processor"
+part_instance_slots = Array[int]([14])
+
+[sub_resource type="Resource" id="Resource_fbut3"]
+script = ExtResource("1_bofj7")
+part_instance_name = "H Proximity Missiles"
+part_instance_id = "99623329433315661473018467085297"
+part_id = "weapon_h_proximity_missiles"
+part_instance_slots = Array[int]([15, 16, 21, 22, 27, 28, 33, 34])
+mirrored_h = true
+
+[sub_resource type="Resource" id="Resource_re8uc"]
+script = ExtResource("1_bofj7")
+part_instance_name = "H Shields"
+part_instance_id = "66625497632944690111380947916990"
+part_id = "part_h_shields"
+part_instance_slots = Array[int]([20, 26, 32])
+
+[resource]
+script = ExtResource("2_mg3ji")
+frame_build_name = "UN-BLITZ"
+frame_id = "frame_ultra_nerve"
+frame_build_configuration = Array[ExtResource("1_bofj7")]([SubResource("Resource_3hc2w"), SubResource("Resource_22v7t"), SubResource("Resource_2xs4k"), SubResource("Resource_hxf58"), SubResource("Resource_fbut3"), SubResource("Resource_re8uc")])

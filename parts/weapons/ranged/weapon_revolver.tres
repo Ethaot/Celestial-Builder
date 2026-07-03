@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="Part" format=3 uid="uid://dxliwfs2kt0uq"]
+
+[ext_resource type="Texture2D" uid="uid://b37mwwltmqota" path="res://assets/weapons/ranged/revolver0.png" id="1_2sa5i"]
+[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_6p81m"]
+[ext_resource type="Texture2D" uid="uid://bqgbqxxt1ri77" path="res://assets/weapons/ranged/revolver1.png" id="2_puohj"]
+
+[resource]
+script = ExtResource("1_6p81m")
+part_name = "Revolver"
+part_id = "weapon_revolver"
+part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1)])
+part_icons = Array[Texture2D]([ExtResource("1_2sa5i"), ExtResource("2_puohj")])
+part_description = "[b]REVOLVER (RNG: 1-3 // DMG: 1)[/b]
+[b]Single-Shot:[/b] +2 ACC.
+[b]Crit:[/b] Triple DMG."
+requirements = "Ballistics Lab"
+part_tab = "Revolver"
+metadata/_custom_type_script = "uid://d1mht1k84568t"

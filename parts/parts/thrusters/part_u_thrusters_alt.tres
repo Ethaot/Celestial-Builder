@@ -13,4 +13,5 @@ part_id = "part_u_thrusters_alt"
 part_type = 6
 part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(3, 0)])
 part_icons = Array[Texture2D]([ExtResource("1_ndsik"), ExtResource("2_o6442"), ExtResource("3_4l0bh"), ExtResource("4_cvx0a")])
+part_tab = "U Thrusters"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

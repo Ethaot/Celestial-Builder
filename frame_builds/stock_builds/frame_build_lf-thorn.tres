@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="FrameBuild" format=3 uid="uid://7grevomcfjau"]
+
+[ext_resource type="Script" uid="uid://cmpk3f1dx1ucy" path="res://scripts/resource_scripts/part_instance.gd" id="1_7pu0c"]
+[ext_resource type="Script" uid="uid://cqxb8ni3n6r2c" path="res://scripts/resource_scripts/frame_build.gd" id="2_yv0a1"]
+
+[sub_resource type="Resource" id="Resource_7pu0c"]
+script = ExtResource("1_7pu0c")
+part_instance_name = "M Thrusters"
+part_instance_id = "lf_thorn_part_m_thrusters"
+part_id = "part_m_thrusters"
+part_instance_slots = Array[int]([0, 6])
+times_rotated = 1
+metadata/_custom_type_script = "uid://cmpk3f1dx1ucy"
+
+[sub_resource type="Resource" id="Resource_yv0a1"]
+script = ExtResource("1_7pu0c")
+part_instance_name = "UL Reactor"
+part_instance_id = "lf_thorn_part_ul_reactor"
+part_id = "part_ul_reactor"
+part_instance_slots = Array[int]([1])
+metadata/_custom_type_script = "uid://cmpk3f1dx1ucy"
+
+[sub_resource type="Resource" id="Resource_0o4iq"]
+script = ExtResource("1_7pu0c")
+part_instance_name = "PT Processor"
+part_instance_id = "lf_thorn_part_pt_processor"
+part_id = "part_pt_processor"
+part_instance_slots = Array[int]([2])
+metadata/_custom_type_script = "uid://cmpk3f1dx1ucy"
+
+[sub_resource type="Resource" id="Resource_2jsfr"]
+script = ExtResource("1_7pu0c")
+part_instance_name = "Shotgun"
+part_instance_id = "lf_thorn_weapon_shotgun"
+part_id = "weapon_shotgun"
+part_instance_slots = Array[int]([3, 4, 5])
+metadata/_custom_type_script = "uid://cmpk3f1dx1ucy"
+
+[sub_resource type="Resource" id="Resource_6bp5i"]
+script = ExtResource("1_7pu0c")
+part_instance_name = "Sword"
+part_instance_id = "lf_thorn_weapon_sword"
+part_id = "weapon_sword"
+part_instance_slots = Array[int]([7, 8, 9, 10, 11])
+metadata/_custom_type_script = "uid://cmpk3f1dx1ucy"
+
+[resource]
+script = ExtResource("2_yv0a1")
+frame_build_name = "LF-THORN"
+frame_id = "frame_light_flash"
+frame_build_configuration = Array[ExtResource("1_7pu0c")]([SubResource("Resource_7pu0c"), SubResource("Resource_yv0a1"), SubResource("Resource_0o4iq"), SubResource("Resource_2jsfr"), SubResource("Resource_6bp5i")])
+metadata/_custom_type_script = "uid://cqxb8ni3n6r2c"

@@ -16,4 +16,5 @@ part_description = "[b]STUN BATON (RNG: 0 // DMG: 2 // DUR: 1)[/b]
 [b]Strong Melee:[/b] +1 ACC.
 [b]Shock:[/b] Ignores shields. Parts or weapons hit are Disabled for DUR rounds.
 [b]Crit:[/b] Parts adjacent to the hit location are Disabled for DUR rounds."
+part_tab = "Stun Baton"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

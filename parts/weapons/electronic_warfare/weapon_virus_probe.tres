@@ -16,4 +16,5 @@ part_description = "[b]VIRUS PROBE (RNG: 2-3 // DMG: 0 // DUR: 1)[/b]
 [b]Electronic:[/b] Powered.
 [b]Virus:[/b] Make 2 hit rolls. Ignores armor/shields. Parts or weapons hit are Disabled for DUR rounds.
 [b]Crit:[/b] Pick a part/weapon to Disable for DUR rounds."
+part_tab = "Virus Probe"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

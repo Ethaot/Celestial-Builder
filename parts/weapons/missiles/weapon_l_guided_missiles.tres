@@ -16,4 +16,5 @@ part_description = "[b]S GUIDED MISSILES (QTY: 2 // DMG: 4)[/b]
 [b]Speed:[/b] 3 in any direction.
 [b]Guided:[/b] Does not have to designate a target when Deployed. Can choose to have Guided missiles attack any target at range 0. Increase the number to shoot down by 1.
 [b]Crit:[/b] Hit every adjacent square for 1 DMG."
+part_tab = "Guided Missiles"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

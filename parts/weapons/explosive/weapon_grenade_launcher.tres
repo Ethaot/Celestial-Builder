@@ -17,4 +17,5 @@ part_description = "[b]GRENADE LAUNCHER (RNG: 2-3 // DMG: 3)[/b]
 [b]Explosive:[/b] -2 ACC. Hit adjacent squares for 1 DMG on a hit or miss. Deal 1 DMG on a miss that hits no adjacent squares.
 [b]Splash:[/b] 1 DMG to others in the target's Zone.
 [b]Crit:[/b] +1 DMG to all squares hit."
+part_tab = "Grenade Launcher"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

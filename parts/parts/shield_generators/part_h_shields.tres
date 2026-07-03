@@ -14,4 +14,6 @@ part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1), Vector2i(0
 part_icons = Array[Texture2D]([ExtResource("1_cdq4d"), ExtResource("2_p5g41"), ExtResource("3_8itkm")])
 part_description = "[b]H SHIELDS (CPC: 15)[/b]
 +/- 3 CPC if the mech is over/underpowered."
+part_tab = "H Shields"
+shield_amount = 15
 metadata/_custom_type_script = "uid://d1mht1k84568t"

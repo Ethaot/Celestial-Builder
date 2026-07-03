@@ -3,7 +3,7 @@ class_name PartPickerVBox
 
 signal part_picker_button_down
 
-@export var name_label: Label
+@export var name_label: RichTextLabel
 @export var grid_container: GridContainer
 
 func _gui_input(event: InputEvent) -> void:

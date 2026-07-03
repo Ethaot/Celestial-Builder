@@ -14,4 +14,5 @@ part_icons = Array[Texture2D]([ExtResource("1_tvaeu"), ExtResource("2_83d7u"), E
 part_description = "[b]CARBINE (RNG: 1-2 // DMG: 2)[/b]
 [b]Full Auto:[/b] Make 3 hit rolls.
 [b]Crit:[/b] +1 DMG."
+part_tab = "Carbine"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

@@ -15,4 +15,5 @@ part_icons = Array[Texture2D]([ExtResource("1_skcqq"), ExtResource("2_oehyy"), E
 part_description = "[b]DAGGER (RNG: 0 // DMG: 3)[/b]
 [b]Fast Melee:[/b] Make 3 hit rolls.
 [b]Crit:[/b] +1 DMG."
+part_tab = "Dagger"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

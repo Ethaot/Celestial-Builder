@@ -14,4 +14,5 @@ part_icons = Array[Texture2D]([ExtResource("1_up3v0"), ExtResource("2_606f2"), E
 part_description = "[b]SMG (RNG: 0-1 // DMG: 1)[/b]
 [b]Full Auto:[/b] Make 5 hit rolls.
 [b]Crit:[/b] +1 DMG."
+part_tab = "SMG"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

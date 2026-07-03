@@ -8,9 +8,11 @@ var label_prefab: PackedScene = preload("res://scenes/grid_label.tscn")
 var grid_texture_button_prefab: PackedScene = preload("res://scenes/grid_texture_button.tscn")
 var empty_grid_frame: Texture2D = preload("res://assets/empty_grid_frame.png")
 var selectable_grid_frame: Texture2D = preload("res://assets/ui/EmptyGridSpace.png")
+var part_group_tab_vbox_prefab: PackedScene = preload("res://scenes/part_group_v_box.tscn")
 var part_picker_vbox_prefab: PackedScene = preload("res://scenes/part_picker_v_box.tscn")
 var part_effect_label_prefab: PackedScene = preload("res://scenes/part_effect_label.tscn")
 var load_frame_build_button_prefab: PackedScene = preload("res://scenes/load_frame_build_button.tscn")
+var shields_vbox_prefab: PackedScene = preload("res://scenes/shields_v_box.tscn")
 
 @export var app_scroll_container: AppScrollContainer
 @export_group("Menu")
@@ -24,11 +26,17 @@ var load_frame_build_button_prefab: PackedScene = preload("res://scenes/load_fra
 @export var frame_name_line_edit: LineEdit
 @export var grid_grid_container: GridContainer
 @export var armor_grid_container: GridContainer
+@export var defenses_hbox: HBoxContainer
+@export var hp_up_button: Button
+@export var hp_label: Label
+@export var hp_down_button: Button
 @export var part_effects_vbox: VBoxContainer
 @export var save_frame_build_button: Button
+#@export var debug_save_frame_build_button: Button
 @export var load_frame_build_button: Button
 @export_group("Parts Screen")
 @export var parts_scroll_container: ScrollContainer
+@export var part_tabs_vbox: VBoxContainer
 @export var parts_grid_container: GridContainer
 @export var weapons_ranged_tab_button: Button
 @export var weapons_explosive_tab_button: Button
@@ -72,7 +80,11 @@ func _ready() -> void:
 	frames_tab_button.button_up.connect(app_scroll_container.go_to_page.bind(1))
 	parts_tab_button.button_up.connect(app_scroll_container.go_to_page.bind(2))
 	
+	hp_up_button.button_up.connect(_on_hp_up_button_pressed)
+	hp_down_button.button_up.connect(_on_hp_down_button_pressed)
+	
 	save_frame_build_button.button_up.connect(_on_save_frame_build_button_pressed)
+	#debug_save_frame_build_button.button_up.connect(_debug_save_stock_build)
 	load_frame_build_button.button_up.connect(_on_load_frame_build_button_pressed)
 	
 	current_frame_build = FrameBuild.new()
@@ -171,6 +183,10 @@ func show_parts_screen(part_type: Constants.PartType) -> void:
 	populate_parts_screen(part_type)
 
 func populate_parts_screen(part_type: Constants.PartType) -> void:
+	var part_groups_dict: Dictionary[String, PartGroupVBox]
+	for child in part_tabs_vbox.get_children():
+		if child.get_index() > 3:
+			child.queue_free()
 	for child in parts_grid_container.get_children():
 		child.queue_free()
 	var parts: Array[Part]
@@ -194,6 +210,17 @@ func populate_parts_screen(part_type: Constants.PartType) -> void:
 		Constants.PartType.PartShield:
 			parts = ResourceManager.parts_shields
 	for part in parts:
+		var target_parent: GridContainer = parts_grid_container
+		if part.part_tab != "":
+			if part_groups_dict.has(part.part_tab):
+				target_parent = part_groups_dict[part.part_tab].group_tab_grid_container
+			else:
+				var part_tab: PartGroupVBox = part_group_tab_vbox_prefab.instantiate()
+				part_tab.group_tab_button.text = part.part_tab
+				part_tabs_vbox.add_child(part_tab)
+				part_groups_dict[part.part_tab] = part_tab
+				target_parent = part_tab.group_tab_grid_container
+		
 		
 		var held_part: HeldPart = HeldPart.new()
 		held_part.part_id = part.part_id
@@ -201,41 +228,42 @@ func populate_parts_screen(part_type: Constants.PartType) -> void:
 		held_part.part_icons = part.part_icons
 		match part.part_type:
 			Constants.PartType.PartProcessor:
-				draw_part(held_part, false, false, 0)
+				target_parent.add_child(draw_part(held_part, false, false, 0))
 			Constants.PartType.WeaponRanged, Constants.PartType.WeaponExplosive, Constants.PartType.WeaponMelee, Constants.PartType.WeaponEW, Constants.PartType.WeaponMissile:
 				for i in range(4):
 					var hp: HeldPart = held_part.duplicate(true)
 					match i:
 						0:
-							draw_part(hp, false, false, 0)
+							target_parent.add_child(draw_part(hp, false, false, 0))
 						1:
 							hp = mirror_slots_horizontally(hp)
-							draw_part(hp, true, false, 0)
+							target_parent.add_child(draw_part(hp, true, false, 0))
 						2:
 							hp = mirror_slots_vertically(hp)
-							draw_part(hp, false, true, 0)
+							target_parent.add_child(draw_part(hp, false, true, 0))
 						3:
 							hp = mirror_slots_horizontally(mirror_slots_vertically(hp))
-							draw_part(hp, true, true, 0)
+							target_parent.add_child(draw_part(hp, true, true, 0))
 			Constants.PartType.PartReactor, Constants.PartType.PartThruster, Constants.PartType.PartShield:
 				for i in range(4):
 					var hp: HeldPart = held_part.duplicate(true)
 					match i:
 						0:
-							draw_part(hp, false, false, 0)
+							target_parent.add_child(draw_part(hp, false, false, 0))
 						1:
 							rotate_slots(hp)
-							draw_part(hp, false, false, 1)
+							target_parent.add_child(draw_part(hp, false, false, 1))
 						2:
 							rotate_slots(rotate_slots(hp))
-							draw_part(hp, false, false, 2)
+							target_parent.add_child(draw_part(hp, false, false, 2))
 						3:
 							rotate_slots(rotate_slots(rotate_slots(hp)))
-							draw_part(hp, false, false, 3)
+							target_parent.add_child(draw_part(hp, false, false, 3))
 		
-		
+	var vb: VBoxContainer = part_tabs_vbox.get_parent()
+	vb.move_child(parts_grid_container, vb.get_children().size() - 1)
 
-func draw_part(hp: HeldPart, mirrored_horizontally: bool, mirrored_vertically: bool, times_rotated: int) -> void:
+func draw_part(hp: HeldPart, mirrored_horizontally: bool, mirrored_vertically: bool, times_rotated: int) -> PartPickerVBox:
 	var part: Part = ResourceManager.part_dict[hp.part_id]
 	var ppvb: PartPickerVBox = part_picker_vbox_prefab.instantiate()
 	var num_columns: int = 0
@@ -272,9 +300,11 @@ func draw_part(hp: HeldPart, mirrored_horizontally: bool, mirrored_vertically: b
 			ppvb.grid_container.add_child(texrect_parent)
 			texrect_parent.add_child(texrect)
 	ppvb.name_label.text = part.part_name
+	if part.requirements != "":
+		ppvb.name_label.text += " [color=purple]Req: " + part.requirements + "[/color]"
 	#ppvb.name_button.button_down.connect(_on_part_grabbed.bind(hp))
 	ppvb.part_picker_button_down.connect(_on_part_grab_started.bind(hp))
-	parts_grid_container.add_child(ppvb)
+	return ppvb
 
 func mirror_slots_horizontally(hp: HeldPart) -> HeldPart:
 	#var p: HeldPart = hp.duplicate(true)
@@ -569,6 +599,7 @@ func pickup_placed_part(idx: int) -> void:
 func _on_frame_option_chosen(idx: int) -> void:
 	current_frame_build = FrameBuild.new()
 	current_frame_build.frame_id = frame_option_dict[idx]
+	hp_label.text = str(ResourceManager.frame_dict[current_frame_build.frame_id].frame_hp)
 	draw_grid_cells()
 
 func _on_grid_button_clicked(index: int) -> void:
@@ -636,6 +667,11 @@ func _on_load_frame_build_button_pressed() -> void:
 		lfbb.text = fb.frame_build_name
 		lfbb.button_up.connect(_on_frame_build_load.bind(fb))
 		load_frame_build_vbox.add_child(lfbb)
+	for fb in ResourceManager.frame_builds:
+		var lfbb: Button = load_frame_build_button_prefab.instantiate()
+		lfbb.text = fb.frame_build_name
+		lfbb.button_up.connect(_on_frame_build_load.bind(fb))
+		load_frame_build_vbox.add_child(lfbb)
 	var back_button: Button = load_frame_build_button_prefab.instantiate()
 	back_button.text = "Back"
 	back_button.button_up.connect(func() -> void: load_frame_build_menu.visible = false)
@@ -651,8 +687,20 @@ func _on_frame_build_load(fb: FrameBuild) -> void:
 			break
 	frame_option_button.select(frame_idx)
 	current_frame_build = fb
+	hp_label.text = str(ResourceManager.frame_dict[current_frame_build.frame_id].frame_hp)
 	draw_grid_cells()
 	load_frame_build_menu.visible = false
+
+func _on_hp_up_button_pressed() -> void:
+	hp_label.text = str(int(hp_label.text) + 1)
+
+func _on_hp_down_button_pressed() -> void:
+	hp_label.text = str(int(hp_label.text) - 1)
+
+func _debug_save_stock_build() -> void:
+	if frame_name_line_edit.text != "":
+		current_frame_build.frame_build_name = frame_name_line_edit.text
+		ResourceSaver.save(current_frame_build, "res://frame_builds/stock_builds/frame_build_" + current_frame_build.frame_build_name.to_lower() + ".tres")
 
 func _debug_grid_button_clicked() -> void:
 	var p: Part = ResourceManager.weapons_melee[0]

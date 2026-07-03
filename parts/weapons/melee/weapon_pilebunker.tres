@@ -21,4 +21,5 @@ part_description = "[b]PILEBUNKER (RNG: 0 // DMG: 6)[/b]
 [b]Strong Melee:[/b] +1 ACC.
 [b]CQC:[/b] Ignores Evasion.
 [b]Crit:[/b] Quadruple DMG."
+part_tab = "Pilebunker"
 metadata/_custom_type_script = "uid://d1mht1k84568t"

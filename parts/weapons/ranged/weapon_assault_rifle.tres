@@ -15,4 +15,5 @@ part_icons = Array[Texture2D]([ExtResource("1_445rb"), ExtResource("2_5db6o"), E
 part_description = "[b]ASSAULT RIFLE (RNG: 2-3 // DMG: 2)[/b]
 [b]Full Auto:[/b] Make 3 hit rolls.
 [b]Crit:[/b] +1 DMG."
+part_tab = "Assault Rifle"
 metadata/_custom_type_script = "uid://d1mht1k84568t"
