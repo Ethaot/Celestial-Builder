@@ -3,11 +3,12 @@ class_name AppScrollContainer
 
 @export var snap_speed: float = 0.3
 @export var main_scene: MainScene
+@export var main_hbox: HBoxContainer
 var dragging: bool = false
 var page_width: float = 0.0
 
 func _ready() -> void:
-	page_width = get_window().size.x
+	get_window().size_changed.connect(setup)
 	get_h_scroll_bar().gui_input.connect(_on_scrollbar_input)
 
 func _process(_delta: float) -> void:
@@ -41,7 +42,20 @@ func _on_drag_ended() -> void:
 	var tween = create_tween().set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tween.tween_property(self, "scroll_horizontal", target_scroll, snap_speed)
 
-func go_to_page(idx: int) -> void:
+func setup() -> void:
+	var screen_size: Vector2i = DisplayServer.screen_get_size(DisplayServer.SCREEN_PRIMARY)
+	get_window().size = screen_size
+	get_window().content_scale_size = screen_size
+	
+	if !OS.has_feature("mobile"):
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+	page_width = screen_size.x
+	for child:ScrollContainer in main_hbox.get_children():
+		child.custom_minimum_size.x = page_width
+
+func go_to_page(idx: int, delayed: bool = false) -> void:
+	if delayed and !main_scene.done_loading:
+		await get_tree().process_frame
 	enable_buttons(idx)
 	var target_page = idx
 	var target_scroll = target_page * page_width
@@ -56,13 +70,21 @@ func enable_buttons(target_page: int) -> void:
 	match target_page:
 		0:
 			main_scene.menu_tab_button.disabled = true
+			main_scene.lamplighter_tab_button.disabled = false
 			main_scene.frames_tab_button.disabled = false
 			main_scene.parts_tab_button.disabled = false
 		1:
 			main_scene.menu_tab_button.disabled = false
-			main_scene.frames_tab_button.disabled = true
+			main_scene.lamplighter_tab_button.disabled = true
+			main_scene.frames_tab_button.disabled = false
 			main_scene.parts_tab_button.disabled = false
 		2:
 			main_scene.menu_tab_button.disabled = false
+			main_scene.lamplighter_tab_button.disabled = false
+			main_scene.frames_tab_button.disabled = true
+			main_scene.parts_tab_button.disabled = false
+		3:
+			main_scene.menu_tab_button.disabled = false
+			main_scene.lamplighter_tab_button.disabled = false
 			main_scene.frames_tab_button.disabled = false
 			main_scene.parts_tab_button.disabled = true

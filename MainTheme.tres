@@ -6,17 +6,13 @@
 [ext_resource type="FontFile" uid="uid://clxaxe666gut2" path="res://fonts/Cousine-Italic.ttf" id="3_u23kh"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u23kh"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0.1, 0.1, 0.1, 0.3)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
+bg_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 expand_margin_top = 12.0
+expand_margin_bottom = 4.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ogfsw"]
 content_margin_left = 4.0
@@ -25,19 +21,17 @@ content_margin_right = 4.0
 content_margin_bottom = 4.0
 bg_color = Color(1, 1, 1, 0.75)
 draw_center = false
-border_width_left = 2
-border_width_top = 2
+border_width_left = 4
+border_width_top = 4
 border_width_right = 2
-border_width_bottom = 2
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
-expand_margin_left = 2.0
-expand_margin_top = 14.0
-expand_margin_right = 2.0
-expand_margin_bottom = 2.0
+border_width_bottom = 4
+border_color = Color(0.9098039, 0, 0.54901963, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_top = 12.0
+expand_margin_bottom = 4.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6qad1"]
 content_margin_left = 4.0
@@ -45,25 +39,31 @@ content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
 bg_color = Color(0.225, 0.225, 0.225, 0.6)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 expand_margin_top = 12.0
+expand_margin_bottom = 4.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8twj1"]
 content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
-bg_color = Color(0.1, 0.1, 0.1, 0.6)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
+bg_color = Color(0, 0, 0, 0.6)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.24115598, 0.2411561, 0.24115601, 1)
+border_blend = true
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 expand_margin_top = 12.0
+expand_margin_bottom = 4.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nwvi7"]
 content_margin_left = 4.0
@@ -71,12 +71,12 @@ content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
 bg_color = Color(0, 0, 0, 0.6)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 expand_margin_top = 12.0
+expand_margin_bottom = 4.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u23kh"]
 content_margin_top = 12.0
@@ -86,32 +86,22 @@ content_margin_top = 12.0
 
 [resource]
 default_font = ExtResource("1_yhag5")
-default_font_size = 18
-Button/font_sizes/font_size = 64
+default_font_size = 64
 Button/fonts/font = ExtResource("1_yhag5")
 Button/styles/disabled = SubResource("StyleBoxFlat_u23kh")
 Button/styles/focus = SubResource("StyleBoxFlat_ogfsw")
 Button/styles/hover = SubResource("StyleBoxFlat_6qad1")
 Button/styles/normal = SubResource("StyleBoxFlat_8twj1")
 Button/styles/pressed = SubResource("StyleBoxFlat_nwvi7")
-Label/font_sizes/font_size = 64
 Label/fonts/font = ExtResource("1_yhag5")
 Label/styles/normal = SubResource("StyleBoxEmpty_u23kh")
-LineEdit/font_sizes/font_size = 64
 LineEdit/fonts/font = ExtResource("1_yhag5")
-OptionButton/font_sizes/font_size = 64
 OptionButton/fonts/font = ExtResource("1_yhag5")
 PopupMenu/font_sizes/font_separator_size = 64
-PopupMenu/font_sizes/font_size = 64
 PopupMenu/font_sizes/title_font_size = 64
 PopupMenu/fonts/font = ExtResource("1_yhag5")
 PopupMenu/fonts/font_separator = ExtResource("1_yhag5")
 PopupMenu/fonts/title_font = ExtResource("1_yhag5")
-RichTextLabel/font_sizes/bold_font_size = 64
-RichTextLabel/font_sizes/bold_italics_font_size = 64
-RichTextLabel/font_sizes/italics_font_size = 64
-RichTextLabel/font_sizes/mono_font_size = 64
-RichTextLabel/font_sizes/normal_font_size = 64
 RichTextLabel/fonts/bold_font = ExtResource("2_rfn4m")
 RichTextLabel/fonts/bold_italics_font = ExtResource("3_ogfsw")
 RichTextLabel/fonts/italics_font = ExtResource("3_u23kh")

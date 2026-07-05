@@ -9,3 +9,4 @@ class_name Frame
 @export var frame_hp: int
 @export var frame_armor_slots: Array[Vector2i]
 @export var frame_reinforced_armor_slots: Array[Vector2i]
+@export var frame_size: Constants.Size

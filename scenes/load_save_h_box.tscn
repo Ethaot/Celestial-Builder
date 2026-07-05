@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://c816sa2m84iba"]
+
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_e6qxk"]
+[ext_resource type="Script" uid="uid://515068ti6n4q" path="res://scripts/load_save_h_box.gd" id="1_k30vr"]
+[ext_resource type="FontFile" uid="uid://dpjfpo24ilp7l" path="res://fonts/Cousine-Bold.ttf" id="3_k2so0"]
+
+[node name="LoadSaveHBox" type="HBoxContainer" unique_id=288175848 node_paths=PackedStringArray("load_save_button", "delete_button")]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+script = ExtResource("1_k30vr")
+load_save_button = NodePath("LoadSaveButton")
+delete_button = NodePath("DeleteButton")
+
+[node name="LoadSaveButton" type="Button" parent="." unique_id=1527941587]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_e6qxk")
+
+[node name="DeleteButton" type="Button" parent="." unique_id=194998429]
+layout_mode = 2
+theme = ExtResource("1_e6qxk")
+theme_override_colors/font_color = Color(0.78431374, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_k2so0")
+text = "X"

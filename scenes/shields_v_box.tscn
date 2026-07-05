@@ -1,10 +1,17 @@
 [gd_scene format=3 uid="uid://kfrtocrmdq4l"]
 
 [ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_np4tb"]
+[ext_resource type="Script" uid="uid://d2vn0jjbu3g06" path="res://scripts/shields_v_box.gd" id="1_w8ifs"]
 
-[node name="ShieldsVBox" type="VBoxContainer" unique_id=2113031562]
+[node name="ShieldsVBox" type="VBoxContainer" unique_id=2113031562 node_paths=PackedStringArray("name_label", "up_button", "capacity_label", "down_button")]
 offset_right = 580.0
 offset_bottom = 240.0
+theme_override_constants/separation = 16
+script = ExtResource("1_w8ifs")
+name_label = NodePath("Label")
+up_button = NodePath("Button")
+capacity_label = NodePath("Label2")
+down_button = NodePath("Button2")
 
 [node name="Label" type="Label" parent="." unique_id=1006234886]
 layout_mode = 2

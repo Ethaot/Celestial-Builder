@@ -1,15 +1,16 @@
-[gd_resource type="Resource" script_class="Part" format=3 uid="uid://bcxm4xxpikeiu"]
+[gd_resource type="Resource" script_class="Reactor" format=3 uid="uid://bcxm4xxpikeiu"]
 
-[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_qqhc6"]
 [ext_resource type="Texture2D" uid="uid://bft3fhwhnjhlh" path="res://assets/parts/reactors/h_reactor0.png" id="1_t0gai"]
 [ext_resource type="Texture2D" uid="uid://biok8vp6daokj" path="res://assets/parts/reactors/h_reactor1.png" id="2_0fkwe"]
 [ext_resource type="Texture2D" uid="uid://ptm7wbjyf53e" path="res://assets/parts/reactors/h_reactor2.png" id="3_tbhcn"]
 [ext_resource type="Texture2D" uid="uid://ctvhqnx63p3ke" path="res://assets/parts/reactors/h_reactor3.png" id="4_vq48e"]
 [ext_resource type="Texture2D" uid="uid://is4d6fbbo5xw" path="res://assets/parts/reactors/h_reactor4.png" id="5_ytcmk"]
 [ext_resource type="Texture2D" uid="uid://b21wuif6651xy" path="res://assets/parts/reactors/h_reactor5.png" id="6_juyeb"]
+[ext_resource type="Script" uid="uid://cc4forck2ygdd" path="res://scripts/resource_scripts/reactor.gd" id="7_t0gai"]
 
 [resource]
-script = ExtResource("1_qqhc6")
+script = ExtResource("7_t0gai")
+size = 3
 part_name = "H Reactor"
 part_id = "part_h_reactor"
 part_type = 5

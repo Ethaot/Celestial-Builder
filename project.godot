@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="celestialbuilder"
+config/version="0.1.0"
 run/main_scene="uid://d2twsscusvcdc"
 config/features=PackedStringArray("4.6", "Forward Plus")
 boot_splash/show_image=false
@@ -19,6 +20,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Constants="*uid://cg7t8sxtwujfr"
+DataManager="*uid://v6sckr0m5gkp"
 ResourceManager="*uid://qcnojtaw58rn"
 UuidGenerator="*uid://b2kic866u0xqp"
 ArmorSheets="*uid://c5gfqrh41exrg"
@@ -26,7 +28,7 @@ ArmorSheets="*uid://c5gfqrh41exrg"
 [display]
 
 window/size/viewport_width=1080
-window/size/viewport_height=2400
+window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
 window/handheld/orientation=1
 

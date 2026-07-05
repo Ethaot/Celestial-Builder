@@ -12,6 +12,7 @@ script = ExtResource("1_mc7kj")
 part_name = "Stun Needle Launcher"
 part_id = "weapon_stun_needle_launcher"
 part_type = 3
+powered = true
 part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2), Vector2i(0, 3), Vector2i(0, 4)])
 part_icons = Array[Texture2D]([ExtResource("1_illr4"), ExtResource("2_10wlw"), ExtResource("3_671n2"), ExtResource("4_6t2r3"), ExtResource("5_j84br")])
 part_description = "[b]STUN NEEDLE LAUNCHER (RNG: 4-5 // DMG: 1 // DUR: 1)[/b]

@@ -10,6 +10,7 @@ script = ExtResource("1_43023")
 part_name = "ECM Generator"
 part_id = "weapon_ecm_generator"
 part_type = 3
+powered = true
 part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2)])
 part_icons = Array[Texture2D]([ExtResource("1_k61dw"), ExtResource("2_qdo54"), ExtResource("3_ac268")])
 part_description = "[b]ECM GENERATOR (RNG: 3-5 // TARGET: ZONE // DUR: 1)[/b]

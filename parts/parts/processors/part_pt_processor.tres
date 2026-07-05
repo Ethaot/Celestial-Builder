@@ -8,6 +8,7 @@ script = ExtResource("1_gs6mo")
 part_name = "PT Processor"
 part_id = "part_pt_processor"
 part_type = 7
+powered = true
 part_configuration = Array[Vector2i]([Vector2i(0, 0)])
 part_icons = Array[Texture2D]([ExtResource("1_qxrcb")])
 part_description = "[b]PT PROCESSOR[/b]

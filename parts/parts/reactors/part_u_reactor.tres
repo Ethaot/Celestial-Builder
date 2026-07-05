@@ -1,7 +1,6 @@
-[gd_resource type="Resource" script_class="Part" format=3 uid="uid://r33ax2hy7t2d"]
+[gd_resource type="Resource" script_class="Reactor" format=3 uid="uid://r33ax2hy7t2d"]
 
 [ext_resource type="Texture2D" uid="uid://be5rxy7615swr" path="res://assets/parts/reactors/u_reactor0.png" id="1_ml746"]
-[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_tv0mp"]
 [ext_resource type="Texture2D" uid="uid://so8ir23dy0ke" path="res://assets/parts/reactors/u_reactor1.png" id="2_r3dw8"]
 [ext_resource type="Texture2D" uid="uid://buddyqmd2p1ri" path="res://assets/parts/reactors/u_reactor2.png" id="3_88rgl"]
 [ext_resource type="Texture2D" uid="uid://deul5p37gx0yg" path="res://assets/parts/reactors/u_reactor3.png" id="4_lvvjq"]
@@ -9,9 +8,11 @@
 [ext_resource type="Texture2D" uid="uid://cp310pfghbp3f" path="res://assets/parts/reactors/u_reactor5.png" id="6_d84yt"]
 [ext_resource type="Texture2D" uid="uid://bwee4ahs3ido4" path="res://assets/parts/reactors/u_reactor6.png" id="7_uxx4q"]
 [ext_resource type="Texture2D" uid="uid://cf20bt8xrrorw" path="res://assets/parts/reactors/u_reactor7.png" id="8_8l1p7"]
+[ext_resource type="Script" uid="uid://cc4forck2ygdd" path="res://scripts/resource_scripts/reactor.gd" id="9_ml746"]
 
 [resource]
-script = ExtResource("1_tv0mp")
+script = ExtResource("9_ml746")
+size = 4
 part_name = "U Reactor"
 part_id = "part_u_reactor"
 part_type = 5

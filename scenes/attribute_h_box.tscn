@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://bgfrdd3pp80ne"]
+
+[ext_resource type="Script" uid="uid://brcr643wrvjgk" path="res://scripts/attribute_h_box.gd" id="1_huhdr"]
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="2_1xgn8"]
+
+[node name="AttributeHBox" type="HBoxContainer" unique_id=1567067405 node_paths=PackedStringArray("attribute_name_label", "attribute_up_button", "attribute_total_label", "attribute_down_button", "attribute_bonus_label", "attribute_bonus_vbox", "attribute_bonus_up_button", "attribute_bonus_amount_label", "attribute_bonus_down_button")]
+theme_override_constants/separation = 32
+script = ExtResource("1_huhdr")
+attribute_name_label = NodePath("AttributeNameLabel")
+attribute_up_button = NodePath("AttributeVBox/AttributeUpButton")
+attribute_total_label = NodePath("AttributeVBox/AttributeAmountLabel")
+attribute_down_button = NodePath("AttributeVBox/AttributeDownButton")
+attribute_bonus_label = NodePath("AttributeBonusLabel")
+attribute_bonus_vbox = NodePath("BonusVBox")
+attribute_bonus_up_button = NodePath("BonusVBox/AttributeUpButton")
+attribute_bonus_amount_label = NodePath("BonusVBox/AttributeAmountLabel")
+attribute_bonus_down_button = NodePath("BonusVBox/AttributeDownButton")
+
+[node name="AttributeNameLabel" type="Label" parent="." unique_id=223963427]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_1xgn8")
+text = "Attribute"
+
+[node name="AttributeVBox" type="VBoxContainer" parent="." unique_id=1604955991]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="AttributeUpButton" type="Button" parent="AttributeVBox" unique_id=70496714]
+layout_mode = 2
+theme = ExtResource("2_1xgn8")
+text = "^"
+
+[node name="AttributeAmountLabel" type="Label" parent="AttributeVBox" unique_id=1135318741]
+layout_mode = 2
+theme = ExtResource("2_1xgn8")
+text = "0/0"
+horizontal_alignment = 1
+
+[node name="AttributeDownButton" type="Button" parent="AttributeVBox" unique_id=2110263405]
+layout_mode = 2
+theme = ExtResource("2_1xgn8")
+text = "v"
+
+[node name="AttributeBonusLabel" type="Label" parent="." unique_id=319716452]
+visible = false
+layout_mode = 2
+theme = ExtResource("2_1xgn8")
+text = "Bonus"
+
+[node name="BonusVBox" type="VBoxContainer" parent="." unique_id=1256644038]
+visible = false
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="AttributeUpButton" type="Button" parent="BonusVBox" unique_id=878483598]
+layout_mode = 2
+theme = ExtResource("2_1xgn8")
+text = "^"
+
+[node name="AttributeAmountLabel" type="Label" parent="BonusVBox" unique_id=1633670037]
+layout_mode = 2
+theme = ExtResource("2_1xgn8")
+text = "0/0"
+horizontal_alignment = 1
+
+[node name="AttributeDownButton" type="Button" parent="BonusVBox" unique_id=252607815]
+layout_mode = 2
+theme = ExtResource("2_1xgn8")
+text = "v"

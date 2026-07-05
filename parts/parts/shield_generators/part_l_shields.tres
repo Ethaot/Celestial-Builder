@@ -1,17 +1,20 @@
-[gd_resource type="Resource" script_class="Part" format=3 uid="uid://b7gb6kx8ekhq5"]
+[gd_resource type="Resource" script_class="Shield" format=3 uid="uid://b7gb6kx8ekhq5"]
 
 [ext_resource type="Texture2D" uid="uid://cb242u1ienitr" path="res://assets/parts/shields/l_shields.png" id="1_aq15q"]
-[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_dw6xg"]
+[ext_resource type="Script" uid="uid://b2sheyj6ccop4" path="res://scripts/resource_scripts/shield.gd" id="2_aq15q"]
 
 [resource]
-script = ExtResource("1_dw6xg")
+script = ExtResource("2_aq15q")
+size = 1
+capacity = 5
+capacity_modifier = 1
 part_name = "L Shields"
 part_id = "part_l_shields"
 part_type = 8
+powered = true
 part_configuration = Array[Vector2i]([Vector2i(0, 0)])
 part_icons = Array[Texture2D]([ExtResource("1_aq15q")])
 part_description = "[b]L SHIELDS (CPC: 5)[/b]
 +/- 1 CPC if the mech is over/underpowered."
 part_tab = "L Shields"
-shield_amount = 5
 metadata/_custom_type_script = "uid://d1mht1k84568t"

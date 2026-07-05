@@ -1,20 +1,23 @@
-[gd_resource type="Resource" script_class="Part" format=3 uid="uid://drcd00aqra0li"]
+[gd_resource type="Resource" script_class="Shield" format=3 uid="uid://drcd00aqra0li"]
 
 [ext_resource type="Texture2D" uid="uid://bco6andgb4wka" path="res://assets/parts/shields/u_shields0.png" id="1_cjjqm"]
-[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_nrd2y"]
 [ext_resource type="Texture2D" uid="uid://dycblxhumdpu1" path="res://assets/parts/shields/u_shields1.png" id="2_0pykq"]
 [ext_resource type="Texture2D" uid="uid://c210ackqotg11" path="res://assets/parts/shields/u_shields2.png" id="3_ropja"]
 [ext_resource type="Texture2D" uid="uid://bd4qpcub3sg4r" path="res://assets/parts/shields/u_shields3.png" id="4_47ebi"]
+[ext_resource type="Script" uid="uid://b2sheyj6ccop4" path="res://scripts/resource_scripts/shield.gd" id="5_cjjqm"]
 
 [resource]
-script = ExtResource("1_nrd2y")
+script = ExtResource("5_cjjqm")
+size = 4
+capacity = 20
+capacity_modifier = 4
 part_name = "U Shields"
 part_id = "part_u_shields"
 part_type = 8
+powered = true
 part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2), Vector2i(0, 3)])
 part_icons = Array[Texture2D]([ExtResource("1_cjjqm"), ExtResource("2_0pykq"), ExtResource("3_ropja"), ExtResource("4_47ebi")])
 part_description = "[b]U SHIELDS (CPC: 20)[/b]
 +/- 4 CPC if the mech is over/underpowered."
 part_tab = "U Shields"
-shield_amount = 20
 metadata/_custom_type_script = "uid://d1mht1k84568t"

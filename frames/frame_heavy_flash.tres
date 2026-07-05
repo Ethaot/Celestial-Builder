@@ -12,4 +12,5 @@ frame_feature_text = "Add +1 to the number of Full Auto hit rolls, or +2 if the 
 frame_hp = 24
 frame_armor_slots = Array[Vector2i]([Vector2i(1, 1), Vector2i(4, 1), Vector2i(1, 2), Vector2i(4, 2)])
 frame_reinforced_armor_slots = Array[Vector2i]([Vector2i(2, 1), Vector2i(3, 1), Vector2i(2, 2), Vector2i(3, 2)])
+frame_size = 3
 metadata/_custom_type_script = "uid://bxyavh1gp883h"

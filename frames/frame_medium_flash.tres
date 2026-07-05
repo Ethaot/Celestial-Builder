@@ -11,4 +11,5 @@ frame_feature_name = "Armored"
 frame_feature_text = "Unlike other Med Frames, this Frame has armor on the squares noted."
 frame_hp = 20
 frame_armor_slots = Array[Vector2i]([Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1), Vector2i(1, 2), Vector2i(2, 2), Vector2i(3, 2)])
+frame_size = 2
 metadata/_custom_type_script = "uid://bxyavh1gp883h"

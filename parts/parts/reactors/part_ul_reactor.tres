@@ -1,10 +1,10 @@
-[gd_resource type="Resource" script_class="Part" format=3 uid="uid://drgaeeuvvhe2v"]
+[gd_resource type="Resource" script_class="Reactor" format=3 uid="uid://drgaeeuvvhe2v"]
 
-[ext_resource type="Script" uid="uid://d1mht1k84568t" path="res://scripts/resource_scripts/part.gd" id="1_chqm5"]
 [ext_resource type="Texture2D" uid="uid://cdjxjh8342a28" path="res://assets/parts/reactors/ul_reactor.png" id="1_ye48q"]
+[ext_resource type="Script" uid="uid://cc4forck2ygdd" path="res://scripts/resource_scripts/reactor.gd" id="2_ye48q"]
 
 [resource]
-script = ExtResource("1_chqm5")
+script = ExtResource("2_ye48q")
 part_name = "UL Reactor"
 part_id = "part_ul_reactor"
 part_type = 5

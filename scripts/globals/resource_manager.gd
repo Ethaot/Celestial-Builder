@@ -1,5 +1,7 @@
 extends Node
 
+var main_theme_res: Theme = preload("res://MainTheme.tres")
+
 var weapons_ranged: Array[Part]
 var weapons_explosive: Array[Part]
 var weapons_melee: Array[Part]
@@ -17,6 +19,9 @@ var part_dict: Dictionary[String, Part]
 var frame_dict: Dictionary[String, Frame]
 
 func _ready() -> void:
+	if !OS.has_feature("mobile"):
+		main_theme_res.default_font_size = 32
+	
 	var parts_array: Array[Part] = import_parts("res://parts/", ".tres")
 	part_dict = construct_parts_dict(parts_array)
 	assign_parts_array(parse_parts(parts_array))
@@ -140,7 +145,6 @@ func import_frame_builds(path: String, extension: String) -> Array[FrameBuild]:
 				var res: Resource = load(clean_path)
 				if res is FrameBuild:
 					loaded_builds.append(res)
-					print(res.frame_build_name)
 		
 		file_name = dir.get_next()
 	return loaded_builds

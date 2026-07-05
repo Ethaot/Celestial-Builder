@@ -10,6 +10,7 @@ script = ExtResource("1_daasn")
 part_name = "Virus Probe"
 part_id = "weapon_virus_probe"
 part_type = 3
+powered = true
 part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2)])
 part_icons = Array[Texture2D]([ExtResource("1_n0waa"), ExtResource("2_7gtrf"), ExtResource("3_4shqj")])
 part_description = "[b]VIRUS PROBE (RNG: 2-3 // DMG: 0 // DUR: 1)[/b]

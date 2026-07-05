@@ -3,8 +3,10 @@
 [ext_resource type="Texture2D" uid="uid://j8aslsoao6vh" path="res://assets/ui/EmptyGridSpace.png" id="1_rn1jo"]
 [ext_resource type="Script" uid="uid://diijoqi7xqspr" path="res://scripts/grid_texture_button.gd" id="2_veu7m"]
 [ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="2_vfxww"]
+[ext_resource type="FontFile" uid="uid://dpjfpo24ilp7l" path="res://fonts/Cousine-Bold.ttf" id="4_fjv78"]
+[ext_resource type="Texture2D" uid="uid://cii5fa51i2qs8" path="res://assets/ui/power_arrow.png" id="4_i1h2w"]
 
-[node name="TextureButton" type="TextureButton" unique_id=726394561 node_paths=PackedStringArray("texrect", "damage_label", "disabled_label")]
+[node name="TextureButton" type="TextureButton" unique_id=726394561 node_paths=PackedStringArray("texrect", "damage_label", "disabled_label", "power_texrects")]
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = ExtResource("1_rn1jo")
@@ -13,6 +15,7 @@ script = ExtResource("2_veu7m")
 texrect = NodePath("CenterContainer/Control/TextureRect")
 damage_label = NodePath("CenterContainer/DamageLabel")
 disabled_label = NodePath("CenterContainer/DisabledLabel")
+power_texrects = [NodePath("power_arrow_left"), NodePath("power_arrow_top"), NodePath("power_arrow_right"), NodePath("power_arrow_bottom")]
 
 [node name="CenterContainer" type="AspectRatioContainer" parent="." unique_id=1420050203]
 layout_mode = 1
@@ -45,6 +48,7 @@ visible = false
 layout_mode = 2
 theme = ExtResource("2_vfxww")
 theme_override_colors/font_color = Color(0.78431374, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_fjv78")
 theme_override_font_sizes/font_size = 96
 text = "X"
 horizontal_alignment = 1
@@ -55,7 +59,63 @@ visible = false
 layout_mode = 2
 theme = ExtResource("2_vfxww")
 theme_override_colors/font_color = Color(0, 0, 0.78431374, 1)
+theme_override_fonts/font = ExtResource("4_fjv78")
 theme_override_font_sizes/font_size = 96
 text = "O"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="power_arrow_left" type="TextureRect" parent="." unique_id=1014804714]
+visible = false
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("4_i1h2w")
+
+[node name="power_arrow_top" type="TextureRect" parent="." unique_id=60435378]
+visible = false
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 1.5707964
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("4_i1h2w")
+
+[node name="power_arrow_right" type="TextureRect" parent="." unique_id=1404486713]
+visible = false
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 3.1415927
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("4_i1h2w")
+
+[node name="power_arrow_bottom" type="TextureRect" parent="." unique_id=2007520382]
+visible = false
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 4.712389
+pivot_offset_ratio = Vector2(0.5, 0.5)
+texture = ExtResource("4_i1h2w")

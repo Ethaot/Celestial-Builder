@@ -12,4 +12,5 @@ frame_feature_text = "Add +1 ACC to Single-Shot, Full Auto, Explosive and Melee 
 frame_hp = 30
 frame_armor_slots = Array[Vector2i]([Vector2i(1, 1), Vector2i(4, 1), Vector2i(1, 2), Vector2i(4, 2), Vector2i(1, 3), Vector2i(4, 3)])
 frame_reinforced_armor_slots = Array[Vector2i]([Vector2i(2, 1), Vector2i(3, 1), Vector2i(2, 2), Vector2i(3, 2), Vector2i(2, 3), Vector2i(3, 3)])
+frame_size = 4
 metadata/_custom_type_script = "uid://bxyavh1gp883h"

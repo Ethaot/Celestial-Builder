@@ -8,6 +8,7 @@ script = ExtResource("1_lacbt")
 part_name = "EW Processor"
 part_id = "part_ew_processor"
 part_type = 7
+powered = true
 part_configuration = Array[Vector2i]([Vector2i(0, 0)])
 part_icons = Array[Texture2D]([ExtResource("1_xs7xm")])
 part_description = "[b]EW PROCESSOR[/b]

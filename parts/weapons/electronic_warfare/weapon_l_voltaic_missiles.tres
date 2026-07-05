@@ -10,6 +10,7 @@ script = ExtResource("4_yjq7q")
 part_name = "S Voltaic Missiles"
 part_id = "weapon_l_voltaic_missiles"
 part_type = 3
+powered = true
 part_configuration = Array[Vector2i]([Vector2i(0, 0), Vector2i(0, 1), Vector2i(0, 2)])
 part_icons = Array[Texture2D]([ExtResource("1_y7q54"), ExtResource("2_cgura"), ExtResource("3_f2fyc")])
 part_description = "[b]S VOLTAIC MISSILES (QTY: 3 // DMG: 1 // DUR: 1)[/b]
