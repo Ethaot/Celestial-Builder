@@ -75,7 +75,7 @@ func _on_attribute_up_button_clicked() -> void:
 				ATTRIBUTE.Nerve:
 					DataManager.save_data.character.attributes_current[0] += 1
 				ATTRIBUTE.Flash:
-					DataManager.save_data.characterattributes_current[1] += 1
+					DataManager.save_data.character.attributes_current[1] += 1
 				ATTRIBUTE.Precision:
 					DataManager.save_data.character.attributes_current[2] += 1
 				ATTRIBUTE.Force:
