@@ -25,15 +25,25 @@ func _process(delta: float) -> void:
 func save_config() -> void:
 	if !DirAccess.dir_exists_absolute(CONFIG_DIR):
 		DirAccess.make_dir_absolute(CONFIG_DIR)
-	ResourceSaver.save(config, CONFIG_DIR + "config.tres")
+	var cfg_dict: Dictionary[String, String] = {"last_loaded_save_id": config.last_loaded_save_id}
+	var file = FileAccess.open(CONFIG_DIR + "config.json", FileAccess.WRITE)
+	var cfg_string: String = JSON.stringify(cfg_dict, "\t")
+	file.store_line(cfg_string)
+	file.close()
 	
 func load_config() -> void:
 	save_save_data()
 	if DirAccess.dir_exists_absolute(CONFIG_DIR):
-		if FileAccess.file_exists(CONFIG_DIR + "config.tres"):
-			var res: Resource = ResourceLoader.load(CONFIG_DIR + "config.tres")
-			if res is Config:
-				config = res
+		if FileAccess.file_exists(CONFIG_DIR + "config.json"):
+			var file = FileAccess.open(CONFIG_DIR + "config.json", FileAccess.READ)
+			var cfg_string: String = file.get_as_text()
+			var json_string = JSON.parse_string(cfg_string)
+			if json_string is Dictionary:
+				var loaded_cfg: Config = Config.new()
+				if json_string["last_loaded_save_id"].length() > 0:
+					loaded_cfg.last_loaded_save_id = json_string["last_loaded_save_id"]
+				config = loaded_cfg
+			file.close()
 		else:
 			config = Config.new()
 			save_config()
@@ -43,24 +53,33 @@ func load_config() -> void:
 
 func save_save_data() -> void:
 	if is_instance_valid(save_data):
-		if save_data.lamplighter_name != "":
+		if save_data.character.lamplighter_name != "":
 			if save_data.save_id == "":
 				save_data.save_id = UuidGenerator.generate_uuid()
 			if !DirAccess.dir_exists_absolute(SAVE_DIR):
 				DirAccess.make_dir_absolute(SAVE_DIR)
-			ResourceSaver.save(save_data, SAVE_DIR + save_data.save_id + ".tres")
+			var sd_dict: Dictionary = save_data.to_dict()
+			var file = FileAccess.open(SAVE_DIR + save_data.save_id + ".json", FileAccess.WRITE)
+			var json_string = JSON.stringify(sd_dict, "\t")
+			file.store_line(json_string)
+			file.close()
 			data_changed = false
 			print("Data Saved. (data_manager)")
 
 func load_save_data(save_id: String) -> void:
 	if DirAccess.dir_exists_absolute(SAVE_DIR):
-		if FileAccess.file_exists(SAVE_DIR + save_id + ".tres"):
-			var res: Resource = ResourceLoader.load(SAVE_DIR + save_id + ".tres")
-			if res is SaveData:
-				save_data = res
+		if FileAccess.file_exists(SAVE_DIR + save_id + ".json"):
+			var file = FileAccess.open(SAVE_DIR + save_id + ".json", FileAccess.READ)
+			var json_string: String = file.get_as_text()
+			var parsed_data = JSON.parse_string(json_string)
+			if parsed_data is Dictionary:
+				var sd: SaveData = SaveData.new()
+				sd.from_dict(parsed_data)
+				save_data = sd
 				config.last_loaded_save_id = save_id
 				save_config()
 				save_data_loaded.emit()
+			file.close()
 		else:
 			save_data = SaveData.new()
 	else:
@@ -70,11 +89,14 @@ func load_save_data(save_id: String) -> void:
 
 func delete_save_data(save_id: String) -> void:
 	if DirAccess.dir_exists_absolute(SAVE_DIR):
-		if FileAccess.file_exists(SAVE_DIR + save_id + ".tres"):
-			var res: Resource = ResourceLoader.load(SAVE_DIR + save_id + ".tres")
-			if res is SaveData:
-				if res.save_id == save_id:
-					DirAccess.remove_absolute(SAVE_DIR + save_id + ".tres")
+		if FileAccess.file_exists(SAVE_DIR + save_id + ".json"):
+			var file = FileAccess.open(SAVE_DIR + save_id + ".json",FileAccess.READ)
+			var json_string: String = file.get_as_text()
+			var data = JSON.parse_string(json_string)
+			if data is Dictionary:
+				if data["save_id"] == save_id:
+					DirAccess.remove_absolute(SAVE_DIR + save_id + ".json")
+			file.close()
 
 func get_saves_dicts() -> Array[Dictionary]:
 	var saves_dict_array: Array[Dictionary] = []
@@ -89,9 +111,11 @@ func get_saves_dicts() -> Array[Dictionary]:
 		if file_name != "":
 			var full_path: String = SAVE_DIR.path_join(file_name)
 			var clean_path = full_path.replace(".remap", "")
-			if clean_path.ends_with(".tres"):
-				var res: Resource = load(clean_path)
-				if res is SaveData:
-					var dict: Dictionary[String, String] = {res.save_id: res.lamplighter_name}
+			if clean_path.ends_with(".json"):
+				var file = FileAccess.open(clean_path, FileAccess.READ)
+				var json_string: String = file.get_as_text()
+				var data = JSON.parse_string(json_string)
+				if data is Dictionary:
+					var dict: Dictionary[String, String] = {data["save_id"]: data["character"]["lamplighter_name"]}
 					saves_dict_array.append(dict)
 	return saves_dict_array

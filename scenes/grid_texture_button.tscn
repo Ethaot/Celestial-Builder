@@ -6,7 +6,7 @@
 [ext_resource type="FontFile" uid="uid://dpjfpo24ilp7l" path="res://fonts/Cousine-Bold.ttf" id="4_fjv78"]
 [ext_resource type="Texture2D" uid="uid://cii5fa51i2qs8" path="res://assets/ui/power_arrow.png" id="4_i1h2w"]
 
-[node name="TextureButton" type="TextureButton" unique_id=726394561 node_paths=PackedStringArray("texrect", "damage_label", "disabled_label", "power_texrects")]
+[node name="TextureButton" type="TextureButton" unique_id=726394561 node_paths=PackedStringArray("texrect", "damage_label", "disabled_label", "power_texrects", "grid_clipping_rect", "grid_gradient_rect")]
 size_flags_horizontal = 3
 size_flags_vertical = 3
 texture_normal = ExtResource("1_rn1jo")
@@ -16,6 +16,29 @@ texrect = NodePath("CenterContainer/Control/TextureRect")
 damage_label = NodePath("CenterContainer/DamageLabel")
 disabled_label = NodePath("CenterContainer/DisabledLabel")
 power_texrects = [NodePath("power_arrow_left"), NodePath("power_arrow_top"), NodePath("power_arrow_right"), NodePath("power_arrow_bottom")]
+grid_clipping_rect = NodePath("ClippingRect")
+grid_gradient_rect = NodePath("ClippingRect/GridGradientRect")
+
+[node name="ClippingRect" type="ColorRect" parent="." unique_id=1223426456]
+clip_children = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="GridGradientRect" type="TextureRect" parent="ClippingRect" unique_id=1463342396]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 3
 
 [node name="CenterContainer" type="AspectRatioContainer" parent="." unique_id=1420050203]
 layout_mode = 1

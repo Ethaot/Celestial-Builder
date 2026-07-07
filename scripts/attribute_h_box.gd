@@ -41,64 +41,64 @@ func display_attribute_amount() -> void:
 		MODE.Normal:
 			match attribute_type:
 				ATTRIBUTE.Nerve:
-					attribute_total_label.text = str(DataManager.save_data.attributes_current[0]) + "/" + str(DataManager.save_data.attributes[0] + DataManager.save_data.attribute_bonuses[0])
+					attribute_total_label.text = str(DataManager.save_data.character.attributes_current[0]) + "/" + str(DataManager.save_data.character.attributes[0] + DataManager.save_data.character.attribute_bonuses[0])
 				ATTRIBUTE.Flash:
-					attribute_total_label.text = str(DataManager.save_data.attributes_current[1]) + "/" + str(DataManager.save_data.attributes[1] + DataManager.save_data.attribute_bonuses[1])
+					attribute_total_label.text = str(DataManager.save_data.character.attributes_current[1]) + "/" + str(DataManager.save_data.character.attributes[1] + DataManager.save_data.character.attribute_bonuses[1])
 				ATTRIBUTE.Precision:
-					attribute_total_label.text = str(DataManager.save_data.attributes_current[2]) + "/" + str(DataManager.save_data.attributes[2] + DataManager.save_data.attribute_bonuses[2])
+					attribute_total_label.text = str(DataManager.save_data.character.attributes_current[2]) + "/" + str(DataManager.save_data.character.attributes[2] + DataManager.save_data.character.attribute_bonuses[2])
 				ATTRIBUTE.Force:
-					attribute_total_label.text = str(DataManager.save_data.attributes_current[3]) + "/" + str(DataManager.save_data.attributes[3] + DataManager.save_data.attribute_bonuses[3])
+					attribute_total_label.text = str(DataManager.save_data.character.attributes_current[3]) + "/" + str(DataManager.save_data.character.attributes[3] + DataManager.save_data.character.attribute_bonuses[3])
 				ATTRIBUTE.Psychic:
-					attribute_total_label.text = str(DataManager.save_data.attributes_current[4]) + "/" + str(DataManager.save_data.attributes[4] + DataManager.save_data.attribute_bonuses[4])
+					attribute_total_label.text = str(DataManager.save_data.character.attributes_current[4]) + "/" + str(DataManager.save_data.character.attributes[4] + DataManager.save_data.character.attribute_bonuses[4])
 		MODE.Edit:
 			match attribute_type:
 				ATTRIBUTE.Nerve:
-					attribute_total_label.text = str(DataManager.save_data.attributes[0])
-					attribute_bonus_amount_label.text = str(DataManager.save_data.attribute_bonuses[0])
+					attribute_total_label.text = str(DataManager.save_data.character.attributes[0])
+					attribute_bonus_amount_label.text = str(DataManager.save_data.character.attribute_bonuses[0])
 				ATTRIBUTE.Flash:
-					attribute_total_label.text = str(DataManager.save_data.attributes[1])
-					attribute_bonus_amount_label.text = str(DataManager.save_data.attribute_bonuses[1])
+					attribute_total_label.text = str(DataManager.save_data.character.attributes[1])
+					attribute_bonus_amount_label.text = str(DataManager.save_data.character.attribute_bonuses[1])
 				ATTRIBUTE.Precision:
-					attribute_total_label.text = str(DataManager.save_data.attributes[2])
-					attribute_bonus_amount_label.text = str(DataManager.save_data.attribute_bonuses[2])
+					attribute_total_label.text = str(DataManager.save_data.character.attributes[2])
+					attribute_bonus_amount_label.text = str(DataManager.save_data.character.attribute_bonuses[2])
 				ATTRIBUTE.Force:
-					attribute_total_label.text = str(DataManager.save_data.attributes[3])
-					attribute_bonus_amount_label.text = str(DataManager.save_data.attribute_bonuses[3])
+					attribute_total_label.text = str(DataManager.save_data.character.attributes[3])
+					attribute_bonus_amount_label.text = str(DataManager.save_data.character.attribute_bonuses[3])
 				ATTRIBUTE.Psychic:
-					attribute_total_label.text = str(DataManager.save_data.attributes[4])
-					attribute_bonus_amount_label.text = str(DataManager.save_data.attribute_bonuses[4])
+					attribute_total_label.text = str(DataManager.save_data.character.attributes[4])
+					attribute_bonus_amount_label.text = str(DataManager.save_data.character.attribute_bonuses[4])
 
 func _on_attribute_up_button_clicked() -> void:
 	match current_mode:
 		MODE.Normal:
 			match attribute_type:
 				ATTRIBUTE.Nerve:
-					DataManager.save_data.attributes_current[0] += 1
+					DataManager.save_data.character.attributes_current[0] += 1
 				ATTRIBUTE.Flash:
-					DataManager.save_data.attributes_current[1] += 1
+					DataManager.save_data.characterattributes_current[1] += 1
 				ATTRIBUTE.Precision:
-					DataManager.save_data.attributes_current[2] += 1
+					DataManager.save_data.character.attributes_current[2] += 1
 				ATTRIBUTE.Force:
-					DataManager.save_data.attributes_current[3] += 1
+					DataManager.save_data.character.attributes_current[3] += 1
 				ATTRIBUTE.Psychic:
-					DataManager.save_data.attributes_current[4] += 1
+					DataManager.save_data.character.attributes_current[4] += 1
 		MODE.Edit:
 			match attribute_type:
 				ATTRIBUTE.Nerve:
-					DataManager.save_data.attributes[0] += 1
-					DataManager.save_data.attributes_current[0] += 1
+					DataManager.save_data.character.attributes[0] += 1
+					DataManager.save_data.character.attributes_current[0] += 1
 				ATTRIBUTE.Flash:
-					DataManager.save_data.attributes[1] += 1
-					DataManager.save_data.attributes_current[1] += 1
+					DataManager.save_data.character.attributes[1] += 1
+					DataManager.save_data.character.attributes_current[1] += 1
 				ATTRIBUTE.Precision:
-					DataManager.save_data.attributes[2] += 1
-					DataManager.save_data.attributes_current[2] += 1
+					DataManager.save_data.character.attributes[2] += 1
+					DataManager.save_data.character.attributes_current[2] += 1
 				ATTRIBUTE.Force:
-					DataManager.save_data.attributes[3] += 1
-					DataManager.save_data.attributes_current[3] += 1
+					DataManager.save_data.character.attributes[3] += 1
+					DataManager.save_data.character.attributes_current[3] += 1
 				ATTRIBUTE.Psychic:
-					DataManager.save_data.attributes[4] += 1
-					DataManager.save_data.attributes_current[4] += 1
+					DataManager.save_data.character.attributes[4] += 1
+					DataManager.save_data.character.attributes_current[4] += 1
 			attribute_edited.emit()
 	display_attribute_amount()
 	DataManager.data_changed = true
@@ -108,32 +108,32 @@ func _on_attribute_down_button_clicked() -> void:
 		MODE.Normal:
 			match attribute_type:
 				ATTRIBUTE.Nerve:
-					DataManager.save_data.attributes_current[0] -= 1
+					DataManager.save_data.character.attributes_current[0] -= 1
 				ATTRIBUTE.Flash:
-					DataManager.save_data.attributes_current[1] -= 1
+					DataManager.save_data.character.attributes_current[1] -= 1
 				ATTRIBUTE.Precision:
-					DataManager.save_data.attributes_current[2] -= 1
+					DataManager.save_data.character.attributes_current[2] -= 1
 				ATTRIBUTE.Force:
-					DataManager.save_data.attributes_current[3] -= 1
+					DataManager.save_data.character.attributes_current[3] -= 1
 				ATTRIBUTE.Psychic:
-					DataManager.save_data.attributes_current[4] -= 1
+					DataManager.save_data.character.attributes_current[4] -= 1
 		MODE.Edit:
 			match attribute_type:
 				ATTRIBUTE.Nerve:
-					DataManager.save_data.attributes[0] -= 1
-					DataManager.save_data.attributes_current[0] -= 1
+					DataManager.save_data.character.attributes[0] -= 1
+					DataManager.save_data.character.attributes_current[0] -= 1
 				ATTRIBUTE.Flash:
-					DataManager.save_data.attributes[1] -= 1
-					DataManager.save_data.attributes_current[1] -= 1
+					DataManager.save_data.character.attributes[1] -= 1
+					DataManager.save_data.character.attributes_current[1] -= 1
 				ATTRIBUTE.Precision:
-					DataManager.save_data.attributes[2] -= 1
-					DataManager.save_data.attributes_current[2] -= 1
+					DataManager.save_data.character.attributes[2] -= 1
+					DataManager.save_data.character.attributes_current[2] -= 1
 				ATTRIBUTE.Force:
-					DataManager.save_data.attributes[3] -= 1
-					DataManager.save_data.attributes_current[3] -= 1
+					DataManager.save_data.character.attributes[3] -= 1
+					DataManager.save_data.character.attributes_current[3] -= 1
 				ATTRIBUTE.Psychic:
-					DataManager.save_data.attributes[4] -= 1
-					DataManager.save_data.attributes_current[4] -= 1
+					DataManager.save_data.character.attributes[4] -= 1
+					DataManager.save_data.character.attributes_current[4] -= 1
 			attribute_edited.emit()
 	display_attribute_amount()
 	DataManager.data_changed = true
@@ -141,29 +141,29 @@ func _on_attribute_down_button_clicked() -> void:
 func _on_attribute_bonus_up_button_clicked() -> void:
 	match attribute_type:
 		ATTRIBUTE.Nerve:
-			DataManager.save_data.attribute_bonuses[0] += 1
+			DataManager.save_data.character.attribute_bonuses[0] += 1
 		ATTRIBUTE.Flash:
-			DataManager.save_data.attribute_bonuses[1] += 1
+			DataManager.save_data.character.attribute_bonuses[1] += 1
 		ATTRIBUTE.Precision:
-			DataManager.save_data.attribute_bonuses[2] += 1
+			DataManager.save_data.character.attribute_bonuses[2] += 1
 		ATTRIBUTE.Force:
-			DataManager.save_data.attribute_bonuses[3] += 1
+			DataManager.save_data.character.attribute_bonuses[3] += 1
 		ATTRIBUTE.Psychic:
-			DataManager.save_data.attribute_bonuses[4] += 1
+			DataManager.save_data.character.attribute_bonuses[4] += 1
 	display_attribute_amount()
 	DataManager.data_changed = true
 
 func _on_attribute_bonus_down_button_clicked() -> void:
 	match attribute_type:
 		ATTRIBUTE.Nerve:
-			DataManager.save_data.attribute_bonuses[0] -= 1
+			DataManager.save_data.character.attribute_bonuses[0] -= 1
 		ATTRIBUTE.Flash:
-			DataManager.save_data.attribute_bonuses[1] -= 1
+			DataManager.save_data.character.attribute_bonuses[1] -= 1
 		ATTRIBUTE.Precision:
-			DataManager.save_data.attribute_bonuses[2] -= 1
+			DataManager.save_data.character.attribute_bonuses[2] -= 1
 		ATTRIBUTE.Force:
-			DataManager.save_data.attribute_bonuses[3] -= 1
+			DataManager.save_data.character.attribute_bonuses[3] -= 1
 		ATTRIBUTE.Psychic:
-			DataManager.save_data.attribute_bonuses[4] -= 1
+			DataManager.save_data.character.attribute_bonuses[4] -= 1
 	display_attribute_amount()
 	DataManager.data_changed = true

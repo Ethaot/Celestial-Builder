@@ -13,6 +13,10 @@ func _input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if !event.pressed:
 				clear_part()
+	if event is InputEventScreenTouch:
+		if event.index == 0:
+			if !event.pressed:
+				clear_part()
 
 func assign_part(held_part: HeldPart) -> void:
 	var num_columns: int = 0

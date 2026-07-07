@@ -21,15 +21,15 @@ func set_shield_max_amount(shield_name: String, amt: int) -> void:
 	#capacity_label.text = str(current_shield_amount) + "/" + str(shield_max_amount)
 
 func set_shield_current_amount(amt: int) -> void:
-	DataManager.save_data.current_shields[shield_index] = amt
-	capacity_label.text = str(DataManager.save_data.current_shields[shield_index]) + "/" + str(shield_max_amount)
+	DataManager.save_data.character.current_shields[shield_index] = amt
+	capacity_label.text = str(DataManager.save_data.character.current_shields[shield_index]) + "/" + str(shield_max_amount)
 	
 func _on_up_button_pressed() -> void:
-	DataManager.save_data.current_shields[shield_index] += 1
-	capacity_label.text = str(DataManager.save_data.current_shields[shield_index]) + "/" + str(shield_max_amount)
+	DataManager.save_data.character.current_shields[shield_index] += 1
+	capacity_label.text = str(DataManager.save_data.character.current_shields[shield_index]) + "/" + str(shield_max_amount)
 	DataManager.data_changed = true
 
 func _on_down_button_pressed() -> void:
-	DataManager.save_data.current_shields[shield_index] -= 1
-	capacity_label.text = str(DataManager.save_data.current_shields[shield_index]) + "/" + str(shield_max_amount)
+	DataManager.save_data.character.current_shields[shield_index] -= 1
+	capacity_label.text = str(DataManager.save_data.character.current_shields[shield_index]) + "/" + str(shield_max_amount)
 	DataManager.data_changed = true

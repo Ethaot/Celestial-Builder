@@ -13,8 +13,20 @@
 [sub_resource type="GDScript" id="GDScript_pu3yx"]
 script/source = "extends ScrollContainer
 
+var is_dragging: bool = false
+var swipe_speed = 1.0
+
 func _ready() -> void:
-	custom_minimum_size.x = get_window().size.x
+	pass
+	#custom_minimum_size.x = get_window().size.x
+
+func _gui_input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch:
+		if event.index == 0:
+			is_dragging = event.pressed
+	if event is InputEventScreenDrag:
+		if is_dragging:
+			scroll_vertical -= event.relative.y * swipe_speed
 "
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e1cbu"]
@@ -125,6 +137,7 @@ offset_top = 96.0
 offset_bottom = -128.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 follow_focus = true
 horizontal_scroll_mode = 3
 vertical_scroll_mode = 0
@@ -393,11 +406,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 3
+scroll_deadzone = 48
 script = SubResource("GDScript_pu3yx")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer" unique_id=460806789]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 theme_override_constants/separation = 16
 
 [node name="FrameOptionButton" type="OptionButton" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer" unique_id=1699439432]

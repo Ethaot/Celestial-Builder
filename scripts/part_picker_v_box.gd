@@ -12,3 +12,7 @@ func _gui_input(event: InputEvent) -> void:
 			if event.pressed:
 				part_picker_button_down.emit()
 				#accept_event()
+	if event is InputEventScreenTouch:
+		if event.index == 0:
+			if event.pressed:
+				part_picker_button_down.emit()

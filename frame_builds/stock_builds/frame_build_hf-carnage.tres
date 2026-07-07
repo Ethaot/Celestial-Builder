@@ -1,12 +1,11 @@
-[gd_resource type="Resource" script_class="FrameBuild" format=3]
+[gd_resource type="Resource" script_class="FrameBuild" format=3 uid="uid://b5wwms3nu04nm"]
 
-[ext_resource type="Script" path="res://scripts/resource_scripts/part_instance.gd" id="1_ruhe5"]
-[ext_resource type="Script" path="res://scripts/resource_scripts/frame_build.gd" id="2_8f03i"]
+[ext_resource type="Script" uid="uid://cmpk3f1dx1ucy" path="res://scripts/resource_scripts/part_instance.gd" id="1_ruhe5"]
+[ext_resource type="Script" uid="uid://cqxb8ni3n6r2c" path="res://scripts/resource_scripts/frame_build.gd" id="2_8f03i"]
 
 [sub_resource type="Resource" id="Resource_f6hgf"]
 script = ExtResource("1_ruhe5")
 part_instance_name = "H Thrusters"
-part_instance_id = "32691215760809751736978639922320"
 part_id = "part_h_thrusters"
 part_instance_slots = Array[int]([0, 6, 12])
 times_rotated = 1
@@ -14,28 +13,24 @@ times_rotated = 1
 [sub_resource type="Resource" id="Resource_n0kk3"]
 script = ExtResource("1_ruhe5")
 part_instance_name = "Enormous Axe"
-part_instance_id = "88312057532987516987907994936808"
 part_id = "weapon_enormous_axe"
 part_instance_slots = Array[int]([1, 2, 3, 4, 5, 10, 11])
 
 [sub_resource type="Resource" id="Resource_p1yxr"]
 script = ExtResource("1_ruhe5")
 part_instance_name = "M Reactor"
-part_instance_id = "16204917472599419561051189563184"
 part_id = "part_m_reactor"
 part_instance_slots = Array[int]([7, 8, 13, 14])
 
 [sub_resource type="Resource" id="Resource_ta2ko"]
 script = ExtResource("1_ruhe5")
 part_instance_name = "RC Processor"
-part_instance_id = "94735628048415540586952899113007"
 part_id = "part_rc_processor"
 part_instance_slots = Array[int]([9])
 
 [sub_resource type="Resource" id="Resource_2woq8"]
 script = ExtResource("1_ruhe5")
 part_instance_name = "Big Fucking Gun"
-part_instance_id = "63278981100630545601113458084735"
 part_id = "weapon_bfg"
 part_instance_slots = Array[int]([15, 16, 17, 21, 22, 23])
 mirrored_h = true
@@ -43,7 +38,6 @@ mirrored_h = true
 [sub_resource type="Resource" id="Resource_iulr5"]
 script = ExtResource("1_ruhe5")
 part_instance_name = "H Shields"
-part_instance_id = "69815448962128725519919233713056"
 part_id = "part_h_shields"
 part_instance_slots = Array[int]([18, 19, 20])
 times_rotated = 3

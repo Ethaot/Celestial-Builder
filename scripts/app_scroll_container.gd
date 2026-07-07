@@ -44,10 +44,10 @@ func _on_drag_ended() -> void:
 
 func setup() -> void:
 	var screen_size: Vector2i = DisplayServer.screen_get_size(DisplayServer.SCREEN_PRIMARY)
-	get_window().size = screen_size
+	#get_window().size = screen_size
 	get_window().content_scale_size = screen_size
 	
-	if !OS.has_feature("mobile"):
+	if !OS.has_feature("mobile") and !OS.has_feature("web_android") and !OS.has_feature("web_ios"):
 		mouse_filter = Control.MOUSE_FILTER_IGNORE
 	page_width = screen_size.x
 	for child:ScrollContainer in main_hbox.get_children():

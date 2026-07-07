@@ -89,6 +89,9 @@ var selecting_part_from_parts: bool = false
 func _ready() -> void:
 	app_scroll_container.setup()
 	
+	if !ResourceManager.prepared:
+		await ResourceManager.prepared_signal
+	
 	populate_frame_option_button()
 	frame_option_button.item_selected.connect(_on_frame_option_chosen)
 	frame_option_button.select(0)
@@ -150,9 +153,27 @@ func _input(event: InputEvent) -> void:
 						button_held = false
 						start_part_pickup = false
 						selecting_part_from_parts = false
+			if event is InputEventScreenTouch:
+				if event.index == 0:
+					if event.pressed:
+						button_held = true
+						mouse_button_pressed_timer = 0.0
+					else:
+						button_held = false
+						start_part_pickup = false
+						selecting_part_from_parts = false
 		Mode.Edit:
 			if event is InputEventMouseButton:
 				if event.button_index == MOUSE_BUTTON_LEFT:
+					if !event.pressed:
+						if hovered_grids.size() > 0:
+							pass
+							#_on_part_dropped(hovered_grids[0])
+						else:
+							_on_part_cleared()
+						button_held = false
+			if event is InputEventScreenTouch:
+				if event.index == 0:
 					if !event.pressed:
 						if hovered_grids.size() > 0:
 							pass
@@ -184,7 +205,7 @@ func populate_frame_option_button() -> void:
 		frame_option_dict[i] = ResourceManager.frames[i].frame_id
 
 func populate_grid() -> void:
-	var f: Frame = ResourceManager.frame_dict[DataManager.save_data.current_frame_build.frame_id]
+	var f: Frame = ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id]
 	for child in grid_grid_container.get_children():
 		child.queue_free()
 	grid_container_texture_buttons.clear()
@@ -211,6 +232,7 @@ func populate_grid() -> void:
 			b.grid_texture_button_up.connect(_on_part_dropped.bind((i - 1) * 6 + n))
 			b.grid_index = (i-1)*6+n
 			b.texrect.pivot_offset_ratio = Vector2(0.5, 0.5)
+			b.grid_gradient_rect.texture = ResourceManager.player_grid_gradient_atlastextures[(i-1)*6+n]
 			grid_container_texture_buttons.append(b)
 
 func show_parts_screen(part_type: Constants.PartType) -> void:
@@ -260,7 +282,7 @@ func populate_parts_screen(part_type: Constants.PartType) -> void:
 		var held_part: HeldPart = HeldPart.new()
 		held_part.part_id = part.part_id
 		held_part.slots = part.part_configuration
-		held_part.part_icons = part.part_icons
+		held_part.part_icons = ResourceManager.part_image_dict[part.part_id]
 		match part.part_type:
 			Constants.PartType.PartProcessor:
 				target_parent.add_child(draw_part(held_part, false, false, 0))
@@ -344,9 +366,9 @@ func draw_part(hp: HeldPart, mirrored_horizontally: bool, mirrored_vertically: b
 func mirror_slots_horizontally(hp: HeldPart) -> HeldPart:
 	#var p: HeldPart = hp.duplicate(true)
 	var part_size: Vector2i
-	var new_part_icons: Array[Texture2D]
+	var new_part_icons: Array[AtlasTexture]
 	var new_slots: Array[Vector2i]
-	var slot_icon_dict: Dictionary[Vector2i, Texture2D]
+	var slot_icon_dict: Dictionary[Vector2i, AtlasTexture]
 	for slot in hp.slots:
 		if slot.x > part_size.x:
 			part_size.x = slot.x
@@ -384,9 +406,9 @@ func mirror_slots_horizontally(hp: HeldPart) -> HeldPart:
 func mirror_slots_vertically(hp: HeldPart) -> HeldPart:
 	#var p: HeldPart = hp.duplicate(true)
 	var part_size: Vector2i
-	var new_part_icons: Array[Texture2D]
+	var new_part_icons: Array[AtlasTexture]
 	var new_slots: Array[Vector2i]
-	var slot_icon_dict: Dictionary[Vector2i, Texture2D]
+	var slot_icon_dict: Dictionary[Vector2i, AtlasTexture]
 	for slot in hp.slots:
 		if slot.x > part_size.x:
 			part_size.x = slot.x
@@ -420,8 +442,8 @@ func rotate_slots(hp: HeldPart) -> HeldPart:
 	var new_slots: Array[Vector2i]
 	#var p: HeldPart = hp.duplicate(true)
 	var part_size: Vector2i
-	var slot_icon_dict: Dictionary[Vector2i, Texture2D]
-	var new_part_icons: Array[Texture2D]
+	var slot_icon_dict: Dictionary[Vector2i, AtlasTexture]
+	var new_part_icons: Array[AtlasTexture]
 	for i in range(hp.slots.size()):
 		if hp.slots[i].x > part_size.x:
 			part_size.x = hp.slots[i].x
@@ -456,7 +478,7 @@ func set_part_to_grid_cell(hp: HeldPart) -> void:
 		if selected_cell_pos.x + offset.x > 5 or selected_cell_pos.y + offset.y > 5:
 			return
 		# Make sure we're placing in a legal grid space for our frame
-		if !ResourceManager.frame_dict[DataManager.save_data.current_frame_build.frame_id].frame_available_slots.has(selected_cell_pos + offset):
+		if !ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_available_slots.has(selected_cell_pos + offset):
 			return
 		indices.append((selected_cell_pos.y + offset.y) * 6 + offset.x + selected_cell_pos.x)
 	pi.part_instance_slots = indices
@@ -465,20 +487,25 @@ func set_part_to_grid_cell(hp: HeldPart) -> void:
 	pi.mirrored_h = hp.mirrored_h
 	pi.mirrored_v = hp.mirrored_v
 	pi.times_rotated = hp.times_rotated
-	pi.part_instance_id = UuidGenerator.generate_uuid()
 	
 	for slot in pi.part_instance_slots:
-		for i in range(DataManager.save_data.current_frame_build.frame_build_configuration.size()):
-			if DataManager.save_data.current_frame_build.frame_build_configuration[i].part_instance_slots.has(slot):
-				DataManager.save_data.current_frame_build.frame_build_configuration.remove_at(i)
+		for i in range(DataManager.save_data.character.current_frame_build.frame_build_configuration.size()):
+			if DataManager.save_data.character.current_frame_build.frame_build_configuration[i].part_instance_slots.has(slot):
+				DataManager.save_data.character.current_frame_build.frame_build_configuration.remove_at(i)
 				break
-	DataManager.save_data.current_frame_build.frame_build_configuration.append(pi)
+	DataManager.save_data.character.current_frame_build.frame_build_configuration.append(pi)
 	DataManager.data_changed = true
 	draw_grid_cells()
 
 func draw_grid_cells() -> void:
-	var f: Frame = ResourceManager.frame_dict[DataManager.save_data.current_frame_build.frame_id]
+	var contiguous_neighbor_offsets: Array[Vector2i] = [Vector2i(-1, 0), Vector2i(0, -1), Vector2i(1, 0), Vector2i(0, 1)]
+	var f: Frame = ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id]
+	#var margin_size: int = 0
+	#if grid_container_texture_buttons.size() > 0:
+		#margin_size = floori(grid_container_texture_buttons[0].size.x / 16.0)
 	for i in range(grid_container_texture_buttons.size()):
+		grid_container_texture_buttons[i].self_modulate = Color.WHITE
+		grid_container_texture_buttons[i].grid_gradient_rect.visible = false
 		grid_container_texture_buttons[i].texture_normal = selectable_grid_frame
 		grid_container_texture_buttons[i].texrect.texture = null
 		if !f.frame_available_slots.has(Vector2i(i % 6, floori(float(i) / 6.0))):
@@ -487,10 +514,10 @@ func draw_grid_cells() -> void:
 		else:
 			grid_container_texture_buttons[i].self_modulate = Color.WHITE
 			grid_container_texture_buttons[i].disabled = false
-	for pi in DataManager.save_data.current_frame_build.frame_build_configuration:
+	for pi in DataManager.save_data.character.current_frame_build.frame_build_configuration:
 		var hp: HeldPart = HeldPart.new()
 		var p: Part = ResourceManager.part_dict[pi.part_id]
-		hp.part_icons = p.part_icons
+		hp.part_icons = ResourceManager.part_image_dict[p.part_id]
 		hp.slots = p.part_configuration
 		if pi.mirrored_h:
 			hp = mirror_slots_horizontally(hp)
@@ -500,6 +527,32 @@ func draw_grid_cells() -> void:
 			hp = rotate_slots(hp)
 		for i in range(pi.part_instance_slots.size()):
 			#grid_container_texture_buttons[pi.part_instance_slots[i]].texture_normal = hp.part_icons[i]
+			var margin_size = floori(grid_container_texture_buttons[pi.part_instance_slots[i]].grid_clipping_rect.size.x / 16.0)
+			var vec: Vector2i = Vector2i(pi.part_instance_slots[i] % 6, floori(float(pi.part_instance_slots[i]) / 6.0)) 
+			var margins: Vector4i = Vector4i(margin_size, margin_size, margin_size, margin_size)
+			for n in range(contiguous_neighbor_offsets.size()):
+				var neighbor_vec: Vector2i = vec + contiguous_neighbor_offsets[n]
+				if neighbor_vec.x < 6 and neighbor_vec.x >= 0 and neighbor_vec.y < 6 and neighbor_vec.y >= 0:
+					var neighbor: int = (neighbor_vec.y) * 6 + neighbor_vec.x
+					if pi.part_instance_slots.has(neighbor):
+						match n:
+							0:
+								margins.w = 0
+							1:
+								margins.x = 0
+							2:
+								margins.y = 0
+							3:
+								margins.z = 0
+								
+								
+			grid_container_texture_buttons[pi.part_instance_slots[i]].grid_clipping_rect.position = Vector2.ZERO
+			grid_container_texture_buttons[pi.part_instance_slots[i]].grid_clipping_rect.offset_left = margins.w
+			grid_container_texture_buttons[pi.part_instance_slots[i]].grid_clipping_rect.offset_top = margins.x
+			grid_container_texture_buttons[pi.part_instance_slots[i]].grid_clipping_rect.offset_right = -margins.y
+			grid_container_texture_buttons[pi.part_instance_slots[i]].grid_clipping_rect.offset_bottom = -margins.z
+			grid_container_texture_buttons[pi.part_instance_slots[i]].grid_gradient_rect.visible = true
+			grid_container_texture_buttons[pi.part_instance_slots[i]].self_modulate = Color.BLACK
 			grid_container_texture_buttons[pi.part_instance_slots[i]].texrect.texture = hp.part_icons[i]
 			if hp.mirrored_h: 
 				#grid_container_texture_buttons[pi.part_instance_slots[i]].flip_h = true
@@ -523,7 +576,7 @@ func check_power() -> void:
 		for texr in b.power_texrects:
 			texr.visible = false
 	var orthogonal_neighbors: Array[Vector2i] = [Vector2i(-1,0), Vector2i(0,-1), Vector2i(1,0), Vector2i(0,1)]
-	for pi in DataManager.save_data.current_frame_build.frame_build_configuration:
+	for pi in DataManager.save_data.character.current_frame_build.frame_build_configuration:
 		var part: Part = ResourceManager.part_dict[pi.part_id]
 		if part.part_type == Constants.PartType.PartReactor:
 			var cells_to_check: Array[Vector2i]
@@ -537,7 +590,7 @@ func check_power() -> void:
 					for i in range(orthogonal_neighbors.size()):
 						var checked_cell: Vector2i = cell + orthogonal_neighbors[i]
 						if checked_cell.x >= 0 and checked_cell.y >= 0:
-							for p_inst in DataManager.save_data.current_frame_build.frame_build_configuration:
+							for p_inst in DataManager.save_data.character.current_frame_build.frame_build_configuration:
 								var slot = checked_cell.y*6+checked_cell.x
 								if p_inst.part_instance_slots.has(slot):
 									if ResourceManager.part_dict[p_inst.part_id].powered:
@@ -554,15 +607,15 @@ func draw_power_arrow(slot: int, dir: int) -> void:
 	grid_container_texture_buttons[slot].power_texrects[dir].visible = true
 
 func create_shields_interfaces() -> void:
-	var old_shields: Array[int] = DataManager.save_data.current_shields.duplicate()
-	DataManager.save_data.current_shields.clear()
+	var old_shields: Array[int] = DataManager.save_data.character.current_shields.duplicate()
+	DataManager.save_data.character.current_shields.clear()
 	for si in shields_interfaces:
 		si.queue_free()
 	shields_interfaces.clear()
-	var frame: Frame = ResourceManager.frame_dict[DataManager.save_data.current_frame_build.frame_id]
+	var frame: Frame = ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id]
 	var has_reactor: bool = false
 	var largest_reactor_size: Constants.Size = Constants.Size.Ultralight
-	for pi in DataManager.save_data.current_frame_build.frame_build_configuration:
+	for pi in DataManager.save_data.character.current_frame_build.frame_build_configuration:
 		var part: Part = ResourceManager.part_dict[pi.part_id]
 		if part.part_type == Constants.PartType.PartReactor:
 			has_reactor = true
@@ -570,7 +623,7 @@ func create_shields_interfaces() -> void:
 				largest_reactor_size = part.size
 				
 	var iter: int = 0
-	for pi in DataManager.save_data.current_frame_build.frame_build_configuration:
+	for pi in DataManager.save_data.character.current_frame_build.frame_build_configuration:
 		var part: Part = ResourceManager.part_dict[pi.part_id]
 		if part.part_type == Constants.PartType.PartShield and part is Shield:
 			var svb: ShieldsVBox = shields_vbox_prefab.instantiate()
@@ -586,9 +639,9 @@ func create_shields_interfaces() -> void:
 				
 			svb.shield_index = iter
 			if old_shields.size() > iter:
-				DataManager.save_data.current_shields.append(old_shields[iter])
+				DataManager.save_data.character.current_shields.append(old_shields[iter])
 			else:
-				DataManager.save_data.current_shields.append(shield_capacity)
+				DataManager.save_data.character.current_shields.append(shield_capacity)
 			svb.set_shield_max_amount(part.part_name, shield_capacity)
 			if old_shields.size() > iter:
 				svb.set_shield_current_amount(old_shields[iter])
@@ -600,7 +653,7 @@ func populate_part_labels() -> void:
 	for child in part_effects_vbox.get_children():
 		child.queue_free()
 	
-	var frame: Frame = ResourceManager.frame_dict[DataManager.save_data.current_frame_build.frame_id]
+	var frame: Frame = ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id]
 	if frame.frame_feature_name != "":
 		var ffl: RichTextLabel = part_effect_label_prefab.instantiate()
 		ffl.text = "[b]" + frame.frame_feature_name + ":[/b] " + frame.frame_feature_text
@@ -608,7 +661,7 @@ func populate_part_labels() -> void:
 	
 	var weapons: Array[Part]
 	var parts: Array[Part]
-	for p in DataManager.save_data.current_frame_build.frame_build_configuration:
+	for p in DataManager.save_data.character.current_frame_build.frame_build_configuration:
 		var part: Part = ResourceManager.part_dict[p.part_id]
 		match part.part_type:
 			Constants.PartType.WeaponRanged, Constants.PartType.WeaponExplosive, Constants.PartType.WeaponMelee, Constants.PartType.WeaponEW, Constants.PartType.WeaponMissile:
@@ -629,7 +682,7 @@ func populate_part_labels() -> void:
 func draw_armor_grids() -> void:
 	for child in armor_grid_container.get_children():
 		child.queue_free()
-	var frame: Frame = ResourceManager.frame_dict[DataManager.save_data.current_frame_build.frame_id]
+	var frame: Frame = ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id]
 	for y in range(7):
 		for x in range(7):
 			if y == 0 or x == 0:
@@ -689,13 +742,13 @@ func change_mode(new_mode: Mode) -> void:
 func pickup_placed_part(idx: int) -> void:
 	var part: Part
 	var iter: int = 0
-	for pi in DataManager.save_data.current_frame_build.frame_build_configuration:
+	for pi in DataManager.save_data.character.current_frame_build.frame_build_configuration:
 		if pi.part_instance_slots.has(idx):
 			change_mode(Mode.Edit)
 			part = ResourceManager.part_dict[pi.part_id]
 			current_held_part = HeldPart.new()
 			current_held_part.part_id = part.part_id
-			current_held_part.part_icons = part.part_icons
+			current_held_part.part_icons = ResourceManager.part_image_dict[part.part_id]
 			current_held_part.slots = part.part_configuration
 			if pi.mirrored_h:
 				current_held_part = mirror_slots_horizontally(current_held_part)
@@ -705,7 +758,7 @@ func pickup_placed_part(idx: int) -> void:
 				current_held_part = rotate_slots(current_held_part)
 			
 			dragged_part.assign_part(current_held_part)
-			DataManager.save_data.current_frame_build.frame_build_configuration.remove_at(iter)
+			DataManager.save_data.character.current_frame_build.frame_build_configuration.remove_at(iter)
 			draw_grid_cells()
 			break
 		else:
@@ -713,7 +766,7 @@ func pickup_placed_part(idx: int) -> void:
 			
 
 func update_prem_amt_label() -> void:
-	prem_amt_label.text = str(DataManager.save_data.premonitions)
+	prem_amt_label.text = str(DataManager.save_data.character.premonitions)
 
 func _on_new_lamplighter_button_pressed() -> void:
 	DataManager.save_save_data()
@@ -753,25 +806,27 @@ func _on_save_load_button_pressed(save_id: String) -> void:
 	app_scroll_container.go_to_page(1)
 
 func _on_lamplighter_loaded() -> void:
-	character_name_line_edit.text = DataManager.save_data.lamplighter_name
-	character_callsign_line_edit.text = DataManager.save_data.callsign
+	character_name_line_edit.text = DataManager.save_data.character.lamplighter_name
+	character_callsign_line_edit.text = DataManager.save_data.character.callsign
+	for i in range(attribute_hboxes.size()):
+		attribute_hboxes[i].display_attribute_amount()
 	for i in range(ResourceManager.frames.size()):
-		if ResourceManager.frames[i].frame_id == DataManager.save_data.current_frame_build.frame_id:
+		if ResourceManager.frames[i].frame_id == DataManager.save_data.character.current_frame_build.frame_id:
 			frame_option_button.select(i)
-			hp_label.text = str(ResourceManager.frame_dict[DataManager.save_data.current_frame_build.frame_id].frame_hp)
+			hp_label.text = str(ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_hp)
 			#draw_grid_cells()
 			break
-	frame_name_line_edit.text = DataManager.save_data.current_frame_build.frame_build_name
+	frame_name_line_edit.text = DataManager.save_data.character.current_frame_build.frame_build_name
 	draw_grid_cells()
-	hp_label.text = str(DataManager.save_data.current_hp) + "/" + str(ResourceManager.frame_dict[DataManager.save_data.current_frame_build.frame_id].frame_hp)
+	hp_label.text = str(DataManager.save_data.character.current_hp) + "/" + str(ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_hp)
 	for i in range(shields_interfaces.size()):
-		if DataManager.save_data.current_shields.size() > i:
-			shields_interfaces[i].set_shield_current_amount(DataManager.save_data.current_shields[i])
-	for i in range(DataManager.save_data.current_damage.size()):
+		if DataManager.save_data.character.current_shields.size() > i:
+			shields_interfaces[i].set_shield_current_amount(DataManager.save_data.character.current_shields[i])
+	for i in range(DataManager.save_data.character.current_damage.size()):
 		grid_container_texture_buttons[i].current_mode = GridTextureButton.Mode.Normal
 		grid_container_texture_buttons[i].damage_label.visible = false
 		grid_container_texture_buttons[i].disabled_label.visible = false
-		for n in range(DataManager.save_data.current_damage[i]):
+		for n in range(DataManager.save_data.character.current_damage[i]):
 			grid_container_texture_buttons[i].cycle_labels()
 	app_scroll_container.go_to_page(1, true)
 
@@ -780,11 +835,11 @@ func _on_save_delete_button_pressed(save_id: String) -> void:
 	_on_load_lamplighter_button_pressed()
 
 func _on_frame_option_chosen(idx: int) -> void:
-	DataManager.save_data.current_frame_build = FrameBuild.new()
-	DataManager.save_data.current_frame_build.frame_id = frame_option_dict[idx]
+	DataManager.save_data.character.current_frame_build = FrameBuild.new()
+	DataManager.save_data.character.current_frame_build.frame_id = frame_option_dict[idx]
 	_reset_frame_damage()
-	DataManager.save_data.current_shields.clear()
-	hp_label.text = str(DataManager.save_data.current_hp) + "/" + str(ResourceManager.frame_dict[DataManager.save_data.current_frame_build.frame_id].frame_hp)
+	DataManager.save_data.character.current_shields.clear()
+	hp_label.text = str(DataManager.save_data.character.current_hp) + "/" + str(ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_hp)
 	DataManager.data_changed = true
 	draw_grid_cells()
 
@@ -838,12 +893,12 @@ func _on_save_frame_build_button_pressed() -> void:
 		var saved_fb: bool = false
 		for fb in DataManager.save_data.frame_builds:
 			if fb.frame_build_name == frame_name_line_edit.text:
-				fb = DataManager.save_data.current_frame_build
+				fb = DataManager.save_data.character.current_frame_build
 				saved_fb = true
 				break
 		if !saved_fb:
-			DataManager.save_data.current_frame_build.frame_build_name = frame_name_line_edit.text
-			DataManager.save_data.frame_builds.append(DataManager.save_data.current_frame_build.duplicate(true))
+			DataManager.save_data.character.current_frame_build.frame_build_name = frame_name_line_edit.text
+			DataManager.save_data.frame_builds.append(DataManager.save_data.character.current_frame_build.duplicate(true))
 		DataManager.data_changed = true
 
 func _on_load_frame_build_button_pressed() -> void:
@@ -874,29 +929,29 @@ func _on_frame_build_load(fb: FrameBuild) -> void:
 			frame_idx = i
 			break
 	frame_option_button.select(frame_idx)
-	DataManager.save_data.current_frame_build = fb
+	DataManager.save_data.character.current_frame_build = fb
 	_reset_frame_damage()
-	hp_label.text = str(DataManager.save_data.current_hp) + "/" + str(ResourceManager.frame_dict[DataManager.save_data.current_frame_build.frame_id].frame_hp)
+	hp_label.text = str(DataManager.save_data.character.current_hp) + "/" + str(ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_hp)
 	draw_grid_cells()
 	load_frame_build_menu.visible = false
 	DataManager.data_changed = true
 
 func _on_hp_up_button_pressed() -> void:
-	DataManager.save_data.current_hp += 1
-	hp_label.text = str(DataManager.save_data.current_hp) + "/" + str(ResourceManager.frame_dict[DataManager.save_data.current_frame_build.frame_id].frame_hp)
+	DataManager.save_data.character.current_hp += 1
+	hp_label.text = str(DataManager.save_data.character.current_hp) + "/" + str(ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_hp)
 	DataManager.data_changed = true
 
 func _on_hp_down_button_pressed() -> void:
-	DataManager.save_data.current_hp -= 1
-	hp_label.text = str(DataManager.save_data.current_hp) + "/" + str(ResourceManager.frame_dict[DataManager.save_data.current_frame_build.frame_id].frame_hp)
+	DataManager.save_data.character.current_hp -= 1
+	hp_label.text = str(DataManager.save_data.character.current_hp) + "/" + str(ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_hp)
 	DataManager.data_changed = true
 
 func _on_lamplighter_name_line_edit_changed(s: String) -> void:
-	DataManager.save_data.lamplighter_name = s
+	DataManager.save_data.character.lamplighter_name = s
 	DataManager.data_changed = true
 
 func _on_callsign_line_edit_changed(s: String) -> void:
-	DataManager.save_data.callsign = s
+	DataManager.save_data.character.callsign = s
 	DataManager.data_changed = true
 
 func _on_edit_attributes_button_pressed() -> void:
@@ -911,27 +966,27 @@ func _on_edit_attributes_button_pressed() -> void:
 
 func _on_attribute_edited() -> void:
 	var total_points_spent: int = 0
-	for attr in DataManager.save_data.attributes:
+	for attr in DataManager.save_data.character.attributes:
 		total_points_spent += attr
 	remaining_attribute_points_label.text = "Remaining Attribute Points: " + str(10 - total_points_spent)
 
 func _on_prem_up_button_pressed() -> void:
-	DataManager.save_data.premonitions += 1
+	DataManager.save_data.character.premonitions += 1
 	DataManager.data_changed = true
 	update_prem_amt_label()
 
 func _on_prem_down_button_pressed() -> void:
-	DataManager.save_data.premonitions -= 1
+	DataManager.save_data.character.premonitions -= 1
 	DataManager.data_changed = true
 	update_prem_amt_label()
 
 func _reset_frame_damage() -> void:
-	DataManager.save_data.current_damage = SaveData.DEFAULT_DAMAGE_ARRAY.duplicate()
-	DataManager.save_data.current_hp = ResourceManager.frame_dict[DataManager.save_data.current_frame_build.frame_id].frame_hp
-	var frame: Frame = ResourceManager.frame_dict[DataManager.save_data.current_frame_build.frame_id]
+	DataManager.save_data.character.current_damage = SaveData.DEFAULT_DAMAGE_ARRAY.duplicate()
+	DataManager.save_data.character.current_hp = ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_hp
+	var frame: Frame = ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id]
 	var has_reactor: bool = false
 	var largest_reactor_size: Constants.Size = Constants.Size.Ultralight
-	for pi in DataManager.save_data.current_frame_build.frame_build_configuration:
+	for pi in DataManager.save_data.character.current_frame_build.frame_build_configuration:
 		var part: Part = ResourceManager.part_dict[pi.part_id]
 		if part.part_type == Constants.PartType.PartReactor:
 			has_reactor = true
@@ -939,7 +994,7 @@ func _reset_frame_damage() -> void:
 				largest_reactor_size = part.size
 				
 	var iter: int = 0
-	for pi in DataManager.save_data.current_frame_build.frame_build_configuration:
+	for pi in DataManager.save_data.character.current_frame_build.frame_build_configuration:
 		var part: Part = ResourceManager.part_dict[pi.part_id]
 		if part.part_type == Constants.PartType.PartShield and part is Shield:
 			var shield_capacity: int
@@ -951,28 +1006,28 @@ func _reset_frame_damage() -> void:
 				shield_capacity = part.capacity
 			else:
 				shield_capacity = part.capacity + part.capacity_modifier
-			if DataManager.save_data.current_shields.size() > iter:
-				DataManager.save_data.current_shields[iter] = shield_capacity
+			if DataManager.save_data.character.current_shields.size() > iter:
+				DataManager.save_data.character.current_shields[iter] = shield_capacity
 			else:
-				DataManager.save_data.current_shields.append(shield_capacity)
+				DataManager.save_data.character.current_shields.append(shield_capacity)
 			iter += 1
-	for i in range(DataManager.save_data.current_damage.size()):
+	for i in range(DataManager.save_data.character.current_damage.size()):
 		if grid_container_texture_buttons.size() > i:
 			grid_container_texture_buttons[i].current_mode = GridTextureButton.Mode.Normal
 			grid_container_texture_buttons[i].damage_label.visible = false
 			grid_container_texture_buttons[i].disabled_label.visible = false
-	hp_label.text = str(DataManager.save_data.current_hp) + "/" + str(ResourceManager.frame_dict[DataManager.save_data.current_frame_build.frame_id].frame_hp)
+	hp_label.text = str(DataManager.save_data.character.current_hp) + "/" + str(ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_hp)
 	for i in range(shields_interfaces.size()):
-		if DataManager.save_data.current_shields.size() > i:
-			shields_interfaces[i].set_shield_current_amount(DataManager.save_data.current_shields[i])
+		if DataManager.save_data.character.current_shields.size() > i:
+			shields_interfaces[i].set_shield_current_amount(DataManager.save_data.character.current_shields[i])
 
 func _on_ready() -> void:
 	done_loading = true
 
 func _debug_save_stock_build() -> void:
 	if frame_name_line_edit.text != "":
-		DataManager.save_data.current_frame_build.frame_build_name = frame_name_line_edit.text
-		ResourceSaver.save(DataManager.save_data.current_frame_build, "res://frame_builds/stock_builds/frame_build_" + DataManager.save_data.current_frame_build.frame_build_name.to_lower() + ".tres")
+		DataManager.save_data.character.current_frame_build.frame_build_name = frame_name_line_edit.text
+		ResourceSaver.save(DataManager.save_data.character.current_frame_build, "res://frame_builds/stock_builds/frame_build_" + DataManager.save_data.character.current_frame_build.frame_build_name.to_lower() + ".tres")
 
 func _debug_grid_button_clicked() -> void:
 	var p: Part = ResourceManager.weapons_melee[0]
@@ -980,6 +1035,6 @@ func _debug_grid_button_clicked() -> void:
 	for offset in p.part_configuration:
 		indices.append(offset.y * 6 + offset.x)
 	for i in range(indices.size()):
-		grid_container_texture_buttons[indices[i]].texture_normal = p.part_icons[i]
+		grid_container_texture_buttons[indices[i]].texture_normal = ResourceManager.part_image_dict[p.part_id][i]
 		#grid_container_texture_buttons[indices[i]].pivot_offset_ratio = Vector2(0.5, 0.5)
 		#grid_container_texture_buttons[indices[i]].rotation_degrees = 90.0

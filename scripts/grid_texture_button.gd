@@ -9,6 +9,8 @@ signal grid_texture_button_up
 @export var damage_label: Label
 @export var disabled_label: Label
 @export var power_texrects: Array[TextureRect]
+@export var grid_clipping_rect: ColorRect
+@export var grid_gradient_rect: TextureRect
 
 var grid_index: int
 var current_mode: Mode = Mode.Normal
@@ -34,6 +36,10 @@ func _input(event: InputEvent) -> void:
 				if !event.pressed:
 					grid_texture_button_up.emit()
 					#accept_event()
+		if event is InputEventScreenTouch:
+			if event.index == 0:
+				if !event.pressed:
+					grid_texture_button_up.emit()
 
 func cycle_labels() -> void:
 	match current_mode:
@@ -41,22 +47,22 @@ func cycle_labels() -> void:
 			damage_label.visible = true
 			disabled_label.visible = false
 			current_mode = Mode.Damaged
-			DataManager.save_data.current_damage[grid_index] = 1
+			DataManager.save_data.character.current_damage[grid_index] = 1
 		Mode.Damaged:
 			damage_label.visible = false
 			disabled_label.visible = true
 			current_mode = Mode.Disabled
-			DataManager.save_data.current_damage[grid_index] = 2
+			DataManager.save_data.character.current_damage[grid_index] = 2
 		Mode.Disabled:
 			damage_label.visible = true
 			disabled_label.visible = true
 			current_mode = Mode.Both
-			DataManager.save_data.current_damage[grid_index] = 3
+			DataManager.save_data.character.current_damage[grid_index] = 3
 		Mode.Both:
 			damage_label.visible = false
 			disabled_label.visible = false
 			current_mode = Mode.Normal
-			DataManager.save_data.current_damage[grid_index] = 0
+			DataManager.save_data.character.current_damage[grid_index] = 0
 	DataManager.data_changed = true
 
 func _on_resized() -> void:
