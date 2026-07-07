@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://dwxq6xyo184in"]
+
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_yixpy"]
+[ext_resource type="Script" uid="uid://cpgh50vyu1bvu" path="res://scripts/frame_select_dropdown_button.gd" id="2_gu18s"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6wevv"]
+content_margin_top = 12.0
+content_margin_bottom = 4.0
+bg_color = Color(0.05882353, 0.05882353, 0.05882353, 0.5882353)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.9098039, 0, 0.54901963, 1)
+
+[node name="FrameSelectDropdownButton" type="Button" unique_id=1086298471]
+offset_right = 8.0
+offset_bottom = 8.0
+theme = ExtResource("1_yixpy")
+theme_override_styles/normal = SubResource("StyleBoxFlat_6wevv")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_6wevv")
+theme_override_styles/hover = SubResource("StyleBoxFlat_6wevv")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_6wevv")
+theme_override_styles/focus = SubResource("StyleBoxFlat_6wevv")
+text = "Dropdown Option"
+script = ExtResource("2_gu18s")

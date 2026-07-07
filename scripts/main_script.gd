@@ -5,6 +5,7 @@ const LONG_PRESS_TIMER: float = 0.75
 
 enum Mode {Normal, Edit}
 
+var frame_select_dropdown_button_prefab: PackedScene = preload("res://scenes/frame_select_dropdown_button.tscn")
 var label_prefab: PackedScene = preload("res://scenes/grid_label.tscn")
 var grid_texture_button_prefab: PackedScene = preload("res://scenes/grid_texture_button.tscn")
 var empty_grid_frame: Texture2D = preload("res://assets/empty_grid_frame.png")
@@ -16,6 +17,7 @@ var load_frame_build_button_prefab: PackedScene = preload("res://scenes/load_fra
 var shields_vbox_prefab: PackedScene = preload("res://scenes/shields_v_box.tscn")
 var load_save_hbox_prefab: PackedScene = preload("res://scenes/load_save_h_box.tscn")
 
+@export var loading_screen: Panel
 @export var app_scroll_container: AppScrollContainer
 @export_group("Menu")
 @export var menu_scroll_container: ScrollContainer
@@ -35,6 +37,9 @@ var load_save_hbox_prefab: PackedScene = preload("res://scenes/load_save_h_box.t
 @export_group("Main Screen")
 @export var main_scroll_container: ScrollContainer
 @export var frame_option_button: OptionButton
+@export var frame_dropdown_button: Button
+@export var frame_dropdown_panel_container: PanelContainer
+@export var frame_dropdown_vbox: VBoxContainer
 @export var frame_name_line_edit: LineEdit
 @export var grid_grid_container: GridContainer
 @export var armor_grid_container: GridContainer
@@ -81,6 +86,7 @@ var done_loading: bool = false
 
 var frame_option_dict: Dictionary[int, String]
 
+var frame_select_panel_open: bool = false
 var button_held: bool = false
 var mouse_button_pressed_timer: float = 0.0
 var start_part_pickup: bool = false
@@ -92,11 +98,18 @@ func _ready() -> void:
 	if !ResourceManager.prepared:
 		await ResourceManager.prepared_signal
 	
+	loading_screen.visible = false
+	
 	populate_frame_option_button()
-	frame_option_button.item_selected.connect(_on_frame_option_chosen)
-	frame_option_button.select(0)
+	#frame_option_button.item_selected.connect(_on_frame_option_chosen)
+	#frame_option_button.select(0)
+	
+	frame_dropdown_button.button_up.connect(_on_frame_select_button_clicked)
+	_on_frame_option_chosen(0)
+	
 	if DataManager.save_data.save_id == "":
-		frame_option_button.item_selected.emit(0)
+		#frame_option_button.item_selected.emit(0)
+		_on_frame_option_chosen(0)
 	populate_grid()
 	
 	if DataManager.save_data.save_id != "":
@@ -142,6 +155,12 @@ func _ready() -> void:
 	ready.connect(_on_ready)
 
 func _input(event: InputEvent) -> void:
+	if frame_select_panel_open:
+		if event is InputEventMouseButton:
+			if event.button_index == MOUSE_BUTTON_LEFT and !event.pressed:
+				close_frame_select_panel()
+				get_viewport().set_input_as_handled()
+			
 	match current_mode:
 		Mode.Normal:
 			if event is InputEventMouseButton:
@@ -200,9 +219,18 @@ func _process(delta: float) -> void:
 						selecting_part_from_parts = false
 
 func populate_frame_option_button() -> void:
+	for child in frame_dropdown_vbox.get_children():
+		child.queue_free()
+	frame_option_dict.clear()
 	for i in range(ResourceManager.frames.size()):
-		frame_option_button.add_item(ResourceManager.frames[i].frame_name, i)
+		#frame_option_button.add_item(ResourceManager.frames[i].frame_name, i)
 		frame_option_dict[i] = ResourceManager.frames[i].frame_id
+		
+		var fsdb: FrameSelectDropdownButton = frame_select_dropdown_button_prefab.instantiate()
+		fsdb.text = ResourceManager.frames[i].frame_name
+		fsdb.idx = i
+		fsdb.frame_chosen.connect(_on_frame_option_chosen)
+		frame_dropdown_vbox.add_child(fsdb)
 
 func populate_grid() -> void:
 	var f: Frame = ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id]
@@ -774,9 +802,10 @@ func _on_new_lamplighter_button_pressed() -> void:
 	character_name_line_edit.text = ""
 	character_callsign_line_edit.text = ""
 	frame_name_line_edit.text = ""
-	frame_option_button.select(0)
 	_on_frame_option_chosen(0)
-	#DataManager.save_data.current_frame_build = FrameBuild.new()
+	for i in range(attribute_hboxes.size()):
+		attribute_hboxes[i].display_attribute_amount()
+	prem_amt_label.text = str(DataManager.save_data.character.premonitions)
 	draw_grid_cells()
 
 func _on_load_lamplighter_button_pressed() -> void:
@@ -810,9 +839,11 @@ func _on_lamplighter_loaded() -> void:
 	character_callsign_line_edit.text = DataManager.save_data.character.callsign
 	for i in range(attribute_hboxes.size()):
 		attribute_hboxes[i].display_attribute_amount()
+	prem_amt_label.text = str(DataManager.save_data.character.premonitions)
 	for i in range(ResourceManager.frames.size()):
 		if ResourceManager.frames[i].frame_id == DataManager.save_data.character.current_frame_build.frame_id:
-			frame_option_button.select(i)
+			#frame_option_button.select(i)
+			_on_frame_option_chosen(i)
 			hp_label.text = str(ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_hp)
 			#draw_grid_cells()
 			break
@@ -832,16 +863,35 @@ func _on_lamplighter_loaded() -> void:
 
 func _on_save_delete_button_pressed(save_id: String) -> void:
 	DataManager.delete_save_data(save_id)
+	_on_new_lamplighter_button_pressed()
 	_on_load_lamplighter_button_pressed()
 
+func _on_frame_select_button_clicked() -> void:
+	if frame_dropdown_panel_container.visible:
+		close_frame_select_panel()
+	else:
+		open_frame_select_panel()
+
 func _on_frame_option_chosen(idx: int) -> void:
+	close_frame_select_panel()
 	DataManager.save_data.character.current_frame_build = FrameBuild.new()
 	DataManager.save_data.character.current_frame_build.frame_id = frame_option_dict[idx]
 	_reset_frame_damage()
 	DataManager.save_data.character.current_shields.clear()
 	hp_label.text = str(DataManager.save_data.character.current_hp) + "/" + str(ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_hp)
 	DataManager.data_changed = true
+	frame_dropdown_button.text = ResourceManager.frame_dict[frame_option_dict[idx]].frame_name
 	draw_grid_cells()
+
+func open_frame_select_panel() -> void:
+	frame_dropdown_panel_container.size = Vector2(frame_dropdown_button.size.x, frame_dropdown_vbox.size.y)
+	frame_dropdown_panel_container.position = Vector2(frame_dropdown_button.global_position.x, frame_dropdown_button.size.y + frame_dropdown_button.global_position.y)
+	frame_dropdown_panel_container.visible = true
+	frame_select_panel_open = true
+
+func close_frame_select_panel() -> void:
+	frame_dropdown_panel_container.visible = false
+	frame_select_panel_open = false
 
 func _on_grid_button_clicked(index: int) -> void:
 	selected_grid = index
@@ -928,7 +978,8 @@ func _on_frame_build_load(fb: FrameBuild) -> void:
 		if ResourceManager.frames[i].frame_id == fb.frame_id:
 			frame_idx = i
 			break
-	frame_option_button.select(frame_idx)
+	#frame_option_button.select(frame_idx)
+	_on_frame_option_chosen(frame_idx)
 	DataManager.save_data.character.current_frame_build = fb
 	_reset_frame_damage()
 	hp_label.text = str(DataManager.save_data.character.current_hp) + "/" + str(ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_hp)

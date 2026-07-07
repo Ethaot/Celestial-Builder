@@ -93,10 +93,10 @@ func delete_save_data(save_id: String) -> void:
 			var file = FileAccess.open(SAVE_DIR + save_id + ".json",FileAccess.READ)
 			var json_string: String = file.get_as_text()
 			var data = JSON.parse_string(json_string)
+			file.close()
 			if data is Dictionary:
 				if data["save_id"] == save_id:
 					DirAccess.remove_absolute(SAVE_DIR + save_id + ".json")
-			file.close()
 
 func get_saves_dicts() -> Array[Dictionary]:
 	var saves_dict_array: Array[Dictionary] = []

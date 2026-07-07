@@ -6,7 +6,9 @@
 [ext_resource type="Script" uid="uid://b5es3k3xamepu" path="res://scripts/app_scroll_container.gd" id="2_gubc5"]
 [ext_resource type="FontFile" uid="uid://dpjfpo24ilp7l" path="res://fonts/Cousine-Bold.ttf" id="4_c1pb6"]
 [ext_resource type="PackedScene" uid="uid://bgfrdd3pp80ne" path="res://scenes/attribute_h_box.tscn" id="4_rt2n2"]
+[ext_resource type="Script" uid="uid://ls2155haq4yb" path="res://scripts/frame_option_button.gd" id="6_6wevv"]
 [ext_resource type="FontFile" uid="uid://clxaxe666gut2" path="res://fonts/Cousine-Italic.ttf" id="6_18nlu"]
+[ext_resource type="PackedScene" uid="uid://dwxq6xyo184in" path="res://scenes/frame_select_dropdown_button.tscn" id="6_e1cbu"]
 [ext_resource type="PackedScene" uid="uid://cg66ksdd4jth" path="res://scenes/dragged_part.tscn" id="6_rt2n2"]
 [ext_resource type="StyleBox" uid="uid://chgyajxu7nuva" path="res://assets/ui/styles/tab_button_style_box_normal.tres" id="7_c1pb6"]
 
@@ -72,7 +74,32 @@ corner_radius_bottom_right = 12
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6wevv"]
 bg_color = Color(0, 0, 0, 1)
 
-[node name="MainScene" type="ColorRect" unique_id=289542231 node_paths=PackedStringArray("app_scroll_container", "menu_scroll_container", "menu_options_vbox", "menu_new_pilot_button", "menu_load_button", "load_lamplighter_vbox", "character_name_line_edit", "character_callsign_line_edit", "attribute_hboxes", "edit_attributes_button", "remaining_attribute_points_label", "prem_up_button", "prem_amt_label", "prem_down_button", "main_scroll_container", "frame_option_button", "frame_name_line_edit", "grid_grid_container", "armor_grid_container", "defenses_hbox", "hp_up_button", "hp_label", "hp_down_button", "part_effects_vbox", "save_frame_build_button", "load_frame_build_button", "reset_frame_damage_button", "parts_scroll_container", "part_tabs_vbox", "parts_grid_container", "weapons_ranged_tab_button", "weapons_explosive_tab_button", "weapons_melee_tab_button", "weapons_ew_tab_button", "weapons_missiles_tab_button", "parts_reactors_tab_button", "parts_thrusters_tab_button", "parts_processors_tab_button", "parts_shields_tab_button", "dragged_part", "menu_tab_button", "lamplighter_tab_button", "frames_tab_button", "parts_tab_button", "load_frame_build_menu", "load_frame_build_vbox")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4d01l"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gn8jn"]
+bg_color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+border_width_left = 16
+border_width_top = 16
+border_width_right = 16
+border_width_bottom = 16
+border_color = Color(0.9098039, 0, 0.54901963, 1)
+
+[sub_resource type="GDScript" id="GDScript_4d01l"]
+script/source = "extends RichTextLabel
+
+@export var show_text_timer: float = 3.0
+var clock: float = 0.0
+
+func _process(delta: float) -> void:
+	if visible:
+		clock += delta
+		visible_ratio = clock / show_text_timer
+		if clock > show_text_timer:
+			clock = 0.0
+"
+
+[node name="MainScene" type="ColorRect" unique_id=289542231 node_paths=PackedStringArray("loading_screen", "app_scroll_container", "menu_scroll_container", "menu_options_vbox", "menu_new_pilot_button", "menu_load_button", "load_lamplighter_vbox", "character_name_line_edit", "character_callsign_line_edit", "attribute_hboxes", "edit_attributes_button", "remaining_attribute_points_label", "prem_up_button", "prem_amt_label", "prem_down_button", "main_scroll_container", "frame_option_button", "frame_dropdown_button", "frame_dropdown_panel_container", "frame_dropdown_vbox", "frame_name_line_edit", "grid_grid_container", "armor_grid_container", "defenses_hbox", "hp_up_button", "hp_label", "hp_down_button", "part_effects_vbox", "save_frame_build_button", "load_frame_build_button", "reset_frame_damage_button", "parts_scroll_container", "part_tabs_vbox", "parts_grid_container", "weapons_ranged_tab_button", "weapons_explosive_tab_button", "weapons_melee_tab_button", "weapons_ew_tab_button", "weapons_missiles_tab_button", "parts_reactors_tab_button", "parts_thrusters_tab_button", "parts_processors_tab_button", "parts_shields_tab_button", "dragged_part", "menu_tab_button", "lamplighter_tab_button", "frames_tab_button", "parts_tab_button", "load_frame_build_menu", "load_frame_build_vbox")]
 texture_filter = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -81,6 +108,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.15686275, 0.15686275, 0.15686275, 1)
 script = ExtResource("1_gubc5")
+loading_screen = NodePath("LoadingPanel")
 app_scroll_container = NodePath("AppScreenScrollContainer")
 menu_scroll_container = NodePath("AppScreenScrollContainer/HBoxContainer/MenuScrollContainer")
 menu_options_vbox = NodePath("AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/MenuOptionsVBox")
@@ -97,6 +125,9 @@ prem_amt_label = NodePath("AppScreenScrollContainer/HBoxContainer/LamplighterScr
 prem_down_button = NodePath("AppScreenScrollContainer/HBoxContainer/LamplighterScrollContainer/VBoxContainer/PremonitionsHBox/VBoxContainer/PremDownButton")
 main_scroll_container = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer")
 frame_option_button = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/FrameOptionButton")
+frame_dropdown_button = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/FrameSelectButton")
+frame_dropdown_panel_container = NodePath("FrameSelectPanelContainer")
+frame_dropdown_vbox = NodePath("FrameSelectPanelContainer/FrameSelectVBoxContainer")
 frame_name_line_edit = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/FrameNameLineEdit")
 grid_grid_container = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/MarginContainer/AspectRatioContainer/GridContainer")
 armor_grid_container = NodePath("AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer/MarginContainer/AspectRatioContainer/ArmorGridContainer")
@@ -415,9 +446,16 @@ size_flags_horizontal = 3
 mouse_filter = 2
 theme_override_constants/separation = 16
 
-[node name="FrameOptionButton" type="OptionButton" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer" unique_id=1699439432]
+[node name="FrameSelectButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer" unique_id=1326549197]
 layout_mode = 2
 theme = ExtResource("1_w2twt")
+text = "Select Frame"
+
+[node name="FrameOptionButton" type="OptionButton" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer" unique_id=1699439432]
+visible = false
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+script = ExtResource("6_6wevv")
 
 [node name="FrameNameLineEdit" type="LineEdit" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer" unique_id=1802610658]
 layout_mode = 2
@@ -694,6 +732,7 @@ layout_mode = 1
 
 [node name="LoadFrameBuildMenu" type="ColorRect" parent="." unique_id=203744107]
 visible = false
+z_index = 2
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -715,3 +754,50 @@ grow_vertical = 2
 [node name="LoadFrameBuildVBox" type="VBoxContainer" parent="LoadFrameBuildMenu/ScrollContainer" unique_id=1581653521]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="FrameSelectPanelContainer" type="PanelContainer" parent="." unique_id=960837371]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_right = 584.0
+offset_bottom = 142.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4d01l")
+
+[node name="FrameSelectVBoxContainer" type="VBoxContainer" parent="FrameSelectPanelContainer" unique_id=1127752198]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="FrameSelectDropdownButton" parent="FrameSelectPanelContainer/FrameSelectVBoxContainer" unique_id=1086298471 instance=ExtResource("6_e1cbu")]
+layout_mode = 2
+
+[node name="FrameSelectDropdownButton2" parent="FrameSelectPanelContainer/FrameSelectVBoxContainer" unique_id=1142693216 instance=ExtResource("6_e1cbu")]
+layout_mode = 2
+
+[node name="LoadingPanel" type="Panel" parent="." unique_id=855662297]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_gn8jn")
+
+[node name="CenterContainer" type="CenterContainer" parent="LoadingPanel" unique_id=355823925]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="LoadingPanel/CenterContainer" unique_id=1513142974]
+custom_minimum_size = Vector2(1080, 0)
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+theme_override_colors/default_color = Color(0.9098039, 0, 0.54901963, 1)
+bbcode_enabled = true
+text = "Loading Packages..."
+fit_content = true
+horizontal_alignment = 1
+script = SubResource("GDScript_4d01l")
