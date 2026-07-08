@@ -461,6 +461,7 @@ script = ExtResource("6_6wevv")
 layout_mode = 2
 theme = ExtResource("1_w2twt")
 placeholder_text = "Frame Name"
+alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer" unique_id=2141348350]
 layout_mode = 2

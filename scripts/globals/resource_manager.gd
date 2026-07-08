@@ -146,7 +146,6 @@ func get_data_packs() -> void:
 		#http_request.download_file = TEMP_FOLDER + "tmp" + str(i) + ".zip"
 		currently_checked_etag = manifests[i]["etag"]
 		current_package_id = manifests[i]["package_id"]
-		#current_package_url = "http://api.allorigins.win/get?url=" + manifests[i]["package_url"].uri_encode()
 		current_package_url = manifests[i]["package_url"]
 		print("Checking package " + manifests[i]["package_id"])
 		var err: Error = http_checker.request(current_package_url, [], HTTPClient.METHOD_HEAD)
@@ -612,7 +611,7 @@ func _on_http_check_completed(result: int, response_code: int, headers: PackedSt
 			current_modified = header.trim_prefix("Last-Modified: ").strip_edges()
 	#if current_modified != currently_checked_modified:
 	if response_code != 404:
-		if response_code != 304:
+		if currently_checked_etag != current_etag:
 			print("File has changed. Adding to download queue.")
 			packages_to_download[current_package_id] = current_package_url
 		else:

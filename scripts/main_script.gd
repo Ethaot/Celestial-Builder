@@ -579,6 +579,16 @@ func draw_grid_cells() -> void:
 			grid_container_texture_buttons[pi.part_instance_slots[i]].grid_clipping_rect.offset_top = margins.x
 			grid_container_texture_buttons[pi.part_instance_slots[i]].grid_clipping_rect.offset_right = -margins.y
 			grid_container_texture_buttons[pi.part_instance_slots[i]].grid_clipping_rect.offset_bottom = -margins.z
+			
+			match p.part_type:
+				Constants.PartType.PartReactor:
+					grid_container_texture_buttons[pi.part_instance_slots[i]].grid_gradient_rect.self_modulate = Color("8e24aa")
+				Constants.PartType.PartThruster:
+					grid_container_texture_buttons[pi.part_instance_slots[i]].grid_gradient_rect.self_modulate = Color("d01716")
+				Constants.PartType.PartShield:
+					grid_container_texture_buttons[pi.part_instance_slots[i]].grid_gradient_rect.self_modulate = Color("03a9f4")
+				_:
+					grid_container_texture_buttons[pi.part_instance_slots[i]].grid_gradient_rect.self_modulate = Color("e8008c")
 			grid_container_texture_buttons[pi.part_instance_slots[i]].grid_gradient_rect.visible = true
 			grid_container_texture_buttons[pi.part_instance_slots[i]].self_modulate = Color.BLACK
 			grid_container_texture_buttons[pi.part_instance_slots[i]].texrect.texture = hp.part_icons[i]
@@ -659,11 +669,11 @@ func create_shields_interfaces() -> void:
 			if !has_reactor:
 				shield_capacity = 0
 			elif largest_reactor_size < frame.frame_size:
-				shield_capacity = part.capacity - part.capacity_modifier
+				shield_capacity = part.capacity - part.capacity_modifier_negative
 			elif largest_reactor_size == frame.frame_size:
 				shield_capacity = part.capacity
 			else:
-				shield_capacity = part.capacity + part.capacity_modifier
+				shield_capacity = part.capacity + part.capacity_modifier_positive
 				
 			svb.shield_index = iter
 			if old_shields.size() > iter:
