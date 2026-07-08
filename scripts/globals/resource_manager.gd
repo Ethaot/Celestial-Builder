@@ -102,6 +102,9 @@ func get_data_pack_manifest() -> Array[Dictionary]:
 				if parsed_data.size() > 0:
 					for d in parsed_data:
 						if d is Dictionary:
+							if d["package_id"] == "celestial-bodies-core":
+								if d["package_url"] != "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core.zip":
+									d["package_url"] = "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core.zip"
 							data_pack_manifest_data.append(d)
 				else:
 					var core_data: Dictionary[String, String] = {
@@ -627,11 +630,11 @@ func _on_request_completed(result, _response_code, _headers, body):
 		push_error("Data Pack could not be downloaded. (resource_manager)")
 		return
 	
-	if OS.has_feature("web"):
-		var file = FileAccess.open(TEMP_FOLDER + "tmp" + str(current_tmp_file) + ".zip", FileAccess.WRITE)
-		if file:
-			file.store_buffer(body)
-			file.close()
+	#if OS.has_feature("web"):
+	var tmp_file = FileAccess.open(TEMP_FOLDER + "tmp" + str(current_tmp_file) + ".zip", FileAccess.WRITE)
+	if tmp_file:
+		tmp_file.store_buffer(body)
+		tmp_file.close()
 	
 	print("Preparing to unzip tmp file " + str(current_tmp_file) + "...")
 	var reader: ZIPReader = ZIPReader.new()
@@ -647,6 +650,8 @@ func _on_request_completed(result, _response_code, _headers, body):
 			file.store_buffer(data)
 		reader.close()
 		print("File unzipped successfully.")
+		DirAccess.remove_absolute(TEMP_FOLDER + "tmp" + str(current_tmp_file) + ".zip")
+		print("Temporary file deleted.")
 	current_tmp_file += 1
 	download_complete.emit()
 	
