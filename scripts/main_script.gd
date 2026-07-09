@@ -616,27 +616,48 @@ func check_power() -> void:
 	var orthogonal_neighbors: Array[Vector2i] = [Vector2i(-1,0), Vector2i(0,-1), Vector2i(1,0), Vector2i(0,1)]
 	for pi in DataManager.save_data.character.current_frame_build.frame_build_configuration:
 		var part: Part = ResourceManager.part_dict[pi.part_id]
-		if part.part_type == Constants.PartType.PartReactor:
+		var connected_tags: Array[String] = part.connected_tags
+		if part.tags.has("reactor"):
 			var cells_to_check: Array[Vector2i]
 			var cells_to_check_next: Array[Vector2i]
 			var checked_cells: Array[Vector2i]
+			var current_pi: PartInstance
+			var current_part: Part
 			for cell in pi.part_instance_slots:
 				var vector: Vector2i = Vector2i(cell % 6, floori(float(cell) / 6.0))
 				cells_to_check.append(vector)
 			while cells_to_check.size() > 0:
 				for cell in cells_to_check:
+					for p_inst in DataManager.save_data.character.current_frame_build.frame_build_configuration:
+						if p_inst.part_instance_slots.has(cell.y*6+cell.x):
+							current_pi = p_inst
+							current_part = ResourceManager.part_dict[p_inst.part_id]
+							break
 					for i in range(orthogonal_neighbors.size()):
 						var checked_cell: Vector2i = cell + orthogonal_neighbors[i]
-						if checked_cell.x >= 0 and checked_cell.y >= 0:
+						if checked_cell.x >= 0 and checked_cell.y >= 0 and checked_cell.x < 6 and checked_cell.y < 6:
 							for p_inst in DataManager.save_data.character.current_frame_build.frame_build_configuration:
-								var slot = checked_cell.y*6+checked_cell.x
-								if p_inst.part_instance_slots.has(slot):
-									if ResourceManager.part_dict[p_inst.part_id].powered:
-										if ResourceManager.part_dict[p_inst.part_id].part_type == Constants.PartType.PartProcessor:
-											if !checked_cells.has(checked_cell):
-												cells_to_check_next.append(checked_cell)
-										draw_power_arrow(slot, (i+2)%4)
-										break
+								if p_inst != current_pi:
+									var slot = checked_cell.y*6+checked_cell.x
+									if p_inst.part_instance_slots.has(slot):
+										var checked_part: Part = ResourceManager.part_dict[p_inst.part_id]
+										var anti_tags: Array[String]
+										for tag in checked_part.tags:
+											if tag.begins_with("-"):
+												anti_tags.append(tag.lstrip("-"))
+										var anti_tagged: bool = false
+										for ct in current_part.connected_tags:
+											if anti_tags.has(ct):
+												anti_tagged = true
+												break
+										if !anti_tagged:
+											for ct in current_part.connected_tags:
+												if checked_part.tags.has(ct):
+													if checked_part.tags.has("processor"):
+														if !checked_cells.has(checked_cell):
+															cells_to_check_next.append(checked_cell)
+													draw_power_arrow(slot, (i+2)%4)
+													break
 					checked_cells.append(cell)
 				cells_to_check = cells_to_check_next.duplicate()
 				cells_to_check_next.clear()

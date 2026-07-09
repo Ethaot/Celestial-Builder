@@ -91,7 +91,7 @@ func check_create_directories() -> void:
 func get_data_pack_manifest() -> Array[Dictionary]:
 	print("Retrieving data pack manifests...")
 	var data_pack_manifest_data: Array[Dictionary] = []
-	#DirAccess.remove_absolute(DATA_PACKS_PATH + "data_packs_manifest.json")
+	DirAccess.remove_absolute(DATA_PACKS_PATH + "data_packs_manifest.json")
 	if DirAccess.dir_exists_absolute(DATA_PACKS_PATH):
 		if FileAccess.file_exists(DATA_PACKS_PATH + "data_packs_manifest.json"):
 			print("Manifest file found. Loading data packs...")
@@ -110,7 +110,6 @@ func get_data_pack_manifest() -> Array[Dictionary]:
 					var core_data: Dictionary[String, String] = {
 						"package_name": "Celestial Bodies Core",
 						"package_id": "celestial-bodies-core",
-						#"package_url": "https://drive.google.com/uc?export=download&id=1ljWT3lqiRA-prXqxJZVfp-YE9WA3XRSl",
 						"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core.zip",
 						"author": "Binary Star Games",
 						"version": "0.0.1",
@@ -284,26 +283,13 @@ func import_parts_dicts(path: String) -> Array[Part]:
 						part = Shield.new()
 					else:
 						part = Part.new()
-					part.part_name = d["part_name"]
-					part.part_id = d["part_id"]
-					part.part_type = d["part_type"]
-					part.powered = d["powered"]
-					var regex = RegEx.new()
-					regex.compile("-?\\d+")
-					for i in range(d["part_configuration"].size()):
-						var matches = regex.search_all(d["part_configuration"][i])
-						var x: int = matches[0].get_string().to_int()
-						var y: int = matches[1].get_string().to_int()
-						part.part_configuration.append(Vector2i(x, y))
-					part.part_icon = d["part_icon"]
-					part.part_description = d["part_description"]
-					part.requirements = d["requirements"]
-					part.part_tab = d["part_tab"]
+					part.from_dict(d)
 					if part.part_type == Constants.PartType.PartReactor:
 						part.size = d["size"]
 					if part.part_type == Constants.PartType.PartShield:
 						part.capacity = d["capacity"]
-						part.capacity_modifier = d["capacity_modifier"]
+						part.capacity_modifier_positive = d["capacity_modifier_positive"]
+						part.capacity_modifier_negative = d["capacity_modifier_negative"]
 					loaded_parts.append(part)
 	print("Parts imported.")
 	return loaded_parts

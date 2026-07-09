@@ -12,7 +12,7 @@ config_version=5
 
 config/name="celestialbuilder"
 config/description="A character sheet application for the Celestial Bodies TTRPG."
-config/version="0.0.2"
+config/version="0.0.3"
 run/main_scene="uid://d2twsscusvcdc"
 config/features=PackedStringArray("4.7", "Forward Plus")
 boot_splash/show_image=false
