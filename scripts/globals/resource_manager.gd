@@ -91,7 +91,7 @@ func check_create_directories() -> void:
 func get_data_pack_manifest() -> Array[Dictionary]:
 	print("Retrieving data pack manifests...")
 	var data_pack_manifest_data: Array[Dictionary] = []
-	DirAccess.remove_absolute(DATA_PACKS_PATH + "data_packs_manifest.json")
+	#DirAccess.remove_absolute(DATA_PACKS_PATH + "data_packs_manifest.json")
 	if DirAccess.dir_exists_absolute(DATA_PACKS_PATH):
 		if FileAccess.file_exists(DATA_PACKS_PATH + "data_packs_manifest.json"):
 			print("Manifest file found. Loading data packs...")
@@ -111,7 +111,9 @@ func get_data_pack_manifest() -> Array[Dictionary]:
 						"package_name": "Celestial Bodies Core",
 						"package_id": "celestial-bodies-core",
 						"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core.zip",
-						"author": "Binary Star Games",
+						"author": "Binary Star & Charlotte Laskowski",
+						"source_name": "Celestial Bodies Technical Handbook",
+						"source_url": "https://selkie.itch.io/celestial-bodies",
 						"version": "0.0.1",
 						"etag": "ETag: big_empy"
 					}
@@ -124,7 +126,9 @@ func get_data_pack_manifest() -> Array[Dictionary]:
 				"package_id": "celestial-bodies-core",
 				#"package_url": "https://drive.google.com/uc?export=download&id=1ljWT3lqiRA-prXqxJZVfp-YE9WA3XRSl",
 				"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core.zip",
-				"author": "Binary Star Games",
+				"author": "Binary Star & Charlotte Laskowski",
+				"source_name": "Celestial Bodies Technical Handbook",
+				"source_url": "https://selkie.itch.io/celestial-bodies",
 				"version": "0.0.1",
 				"etag": "ETag: big_empy"
 				}

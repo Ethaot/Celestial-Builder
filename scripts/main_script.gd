@@ -642,11 +642,11 @@ func check_power() -> void:
 									if p_inst.part_instance_slots.has(slot):
 										var checked_part: Part = ResourceManager.part_dict[p_inst.part_id]
 										var anti_tags: Array[String]
-										for tag in checked_part.tags:
+										for tag in current_part.connected_tags:
 											if tag.begins_with("-"):
-												anti_tags.append(tag.lstrip("-"))
+												anti_tags.append(tag.trim_prefix("-"))
 										var anti_tagged: bool = false
-										for ct in current_part.connected_tags:
+										for ct in checked_part.tags:
 											if anti_tags.has(ct):
 												anti_tagged = true
 												break
