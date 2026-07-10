@@ -151,7 +151,7 @@ func get_data_packs() -> void:
 		current_package_id = manifests[i]["package_id"]
 		current_package_url = manifests[i]["package_url"]
 		print("Checking package " + manifests[i]["package_id"])
-		var err: Error = http_checker.request(current_package_url, [], HTTPClient.METHOD_HEAD)
+		var err: Error = http_checker.request(current_package_url + "?timestamp=" + str(Time.get_unix_time_from_system()), [], HTTPClient.METHOD_HEAD)
 		if err == OK:
 			await _await_response_with_timeout(check_complete, 5.0)
 			manifests[i]["etag"] = currently_checked_etag
@@ -161,7 +161,7 @@ func get_data_packs() -> void:
 	
 	for package_id in packages_to_download:
 		print("Downloading package " + package_id)
-		var err: Error = http_request.request_raw(packages_to_download[package_id])
+		var err: Error = http_request.request_raw(packages_to_download[package_id] + "?timestamp=" + str(Time.get_unix_time_from_system()))
 		if err == OK:
 			await _await_response_with_timeout(download_complete, 15.0)
 			#await download_complete
@@ -171,17 +171,6 @@ func get_data_packs() -> void:
 	print("Package downloads complete.")
 	all_downloads_complete.emit()
 	downloads_complete = true
-	#if DirAccess.dir_exists_absolute(DATA_PACKS_PATH + "celestial-bodies-core/"):
-		#if !FileAccess.file_exists(DATA_PACKS_PATH + "celestial-bodies-core/manifest.json"):
-			#var err: Error = http_request.request("https://drive.google.com/uc?export=download&id=1ljWT3lqiRA-prXqxJZVfp-YE9WA3XRSl")
-			#if err != OK:
-				#push_error("Error downloading data pack. Error code: ", err)
-	#else:
-		#DirAccess.make_dir_absolute(DATA_PACKS_PATH + "celestial-bodies-core/")
-		#if !FileAccess.file_exists(DATA_PACKS_PATH + "celestial-bodies-core/manifest.json"):
-			#var err: Error = http_request.request("https://drive.google.com/uc?export=download&id=1ljWT3lqiRA-prXqxJZVfp-YE9WA3XRSl")
-			#if err != OK:
-				#push_error("Error downloading data pack. Error code: ", err)
 
 func update_manifest() -> void:
 	print("Updating manifests...")
@@ -604,6 +593,11 @@ func _on_http_check_completed(result: int, response_code: int, headers: PackedSt
 		if currently_checked_etag != current_etag:
 			print("File has changed. Adding to download queue.")
 			packages_to_download[current_package_id] = current_package_url
+		elif current_etag == "":
+			print("No etag passed from the repository.")
+			packages_to_download[current_package_id] = current_package_url
+			check_complete.emit()
+			return
 		else:
 			print("File has not changed. Continuing.")
 			check_complete.emit()
@@ -614,10 +608,18 @@ func _on_http_check_completed(result: int, response_code: int, headers: PackedSt
 		push_error("Manifest URL returned 404.")
 	check_complete.emit()
 
-func _on_request_completed(result, _response_code, _headers, body):
+func _on_request_completed(result, _response_code, headers, body):
 	if result != HTTPRequest.RESULT_SUCCESS:
 		push_error("Data Pack could not be downloaded. (resource_manager)")
 		return
+	
+	var current_etag: String = ""
+	for header in headers:
+		if header.to_lower().begins_with("etag:"):
+			current_etag = header.split(":", false, 1)[1].strip_edges()
+			print("ETag found: " + current_etag)
+			currently_checked_etag = current_etag
+			break
 	
 	#if OS.has_feature("web"):
 	var tmp_file = FileAccess.open(TEMP_FOLDER + "tmp" + str(current_tmp_file) + ".zip", FileAccess.WRITE)
