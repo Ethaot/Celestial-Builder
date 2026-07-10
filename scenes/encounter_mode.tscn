@@ -1,0 +1,140 @@
+[gd_scene format=3 uid="uid://1okcqbygy5cx"]
+
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_e3kmf"]
+[ext_resource type="FontFile" uid="uid://clxaxe666gut2" path="res://fonts/Cousine-Italic.ttf" id="2_ts6i7"]
+[ext_resource type="StyleBox" uid="uid://chgyajxu7nuva" path="res://assets/ui/styles/tab_button_style_box_normal.tres" id="3_r318m"]
+[ext_resource type="Script" uid="uid://ejyupbjr8brq" path="res://scripts/encounter_mode/encounter_data_manager.gd" id="4_ts6i7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qxmiq"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="EncounterMode" type="ColorRect" unique_id=285261895]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+
+[node name="EncounterModeScrollContainer" type="ScrollContainer" parent="." unique_id=36828864]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -128.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="EncounterModeScrollContainer" unique_id=1523686026]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Control" type="Control" parent="EncounterModeScrollContainer/VBoxContainer" unique_id=1727543119]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="EncounterModeScrollContainer/VBoxContainer" unique_id=1784508131]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer" unique_id=1476353731]
+custom_minimum_size = Vector2(1080, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/ScrollContainer" unique_id=551334499]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer" unique_id=957539368]
+layout_mode = 2
+theme = ExtResource("1_e3kmf")
+text = "Encounter Mode"
+horizontal_alignment = 1
+
+[node name="LoadEncounterButton" type="Button" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer" unique_id=241579362]
+layout_mode = 2
+theme = ExtResource("1_e3kmf")
+text = "Load Encounter"
+autowrap_mode = 3
+
+[node name="NewEncounterButton" type="Button" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer" unique_id=1905869001]
+layout_mode = 2
+theme = ExtResource("1_e3kmf")
+text = "New Encounter"
+autowrap_mode = 3
+
+[node name="CharacterSheetModeButton" type="Button" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer" unique_id=331000521]
+layout_mode = 2
+theme = ExtResource("1_e3kmf")
+text = "Switch to Character Sheet Mode"
+autowrap_mode = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=666134862]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -128.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_qxmiq")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=423282533]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer" unique_id=685618269]
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+theme_override_constants/separation = -4
+
+[node name="MenuTabButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=698168838]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_e3kmf")
+theme_override_colors/font_disabled_color = Color(0.9098039, 0, 0.54901963, 1)
+theme_override_fonts/font = ExtResource("2_ts6i7")
+theme_override_styles/normal = ExtResource("3_r318m")
+theme_override_styles/pressed = ExtResource("3_r318m")
+theme_override_styles/hover = ExtResource("3_r318m")
+theme_override_styles/disabled = ExtResource("3_r318m")
+theme_override_styles/focus = ExtResource("3_r318m")
+disabled = true
+text = "Menu"
+
+[node name="EncounterTabButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=676725639]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_e3kmf")
+theme_override_colors/font_disabled_color = Color(0.9098039, 0, 0.54901963, 1)
+theme_override_fonts/font = ExtResource("2_ts6i7")
+theme_override_styles/normal = ExtResource("3_r318m")
+theme_override_styles/pressed = ExtResource("3_r318m")
+theme_override_styles/hover = ExtResource("3_r318m")
+theme_override_styles/disabled = ExtResource("3_r318m")
+theme_override_styles/focus = ExtResource("3_r318m")
+text = "Encounter"
+
+[node name="PartsTabButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=1463507415]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_e3kmf")
+theme_override_colors/font_disabled_color = Color(0.9098039, 0, 0.54901963, 1)
+theme_override_fonts/font = ExtResource("2_ts6i7")
+theme_override_styles/normal = ExtResource("3_r318m")
+theme_override_styles/pressed = ExtResource("3_r318m")
+theme_override_styles/hover = ExtResource("3_r318m")
+theme_override_styles/disabled = ExtResource("3_r318m")
+theme_override_styles/focus = ExtResource("3_r318m")
+text = "Parts"
+
+[node name="EncounterDataManager" type="Node" parent="." unique_id=605458277]
+script = ExtResource("4_ts6i7")

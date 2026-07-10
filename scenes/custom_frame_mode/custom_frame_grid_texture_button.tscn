@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://bpljqv1x1cguf"]
+
+[ext_resource type="Texture2D" uid="uid://j8aslsoao6vh" path="res://assets/ui/EmptyGridSpace.png" id="1_6pkl3"]
+[ext_resource type="Script" uid="uid://ukojjcq0car3" path="res://scripts/custom_frame_mode/custom_frame_grid_texture_button.gd" id="2_jqqwn"]
+
+[node name="TextureButton" type="TextureButton" unique_id=726394561 node_paths=PackedStringArray("grid_clipping_rect", "grid_gradient_rect")]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = ExtResource("1_6pkl3")
+stretch_mode = 4
+script = ExtResource("2_jqqwn")
+grid_clipping_rect = NodePath("ClippingRect")
+grid_gradient_rect = NodePath("ClippingRect/GridGradientRect")
+
+[node name="ClippingRect" type="ColorRect" parent="." unique_id=1223426456]
+clip_children = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="GridGradientRect" type="TextureRect" parent="ClippingRect" unique_id=1463342396]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 3

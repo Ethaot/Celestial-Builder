@@ -224,13 +224,14 @@ func populate_frame_option_button() -> void:
 	frame_option_dict.clear()
 	for i in range(ResourceManager.frames.size()):
 		#frame_option_button.add_item(ResourceManager.frames[i].frame_name, i)
-		frame_option_dict[i] = ResourceManager.frames[i].frame_id
-		
-		var fsdb: FrameSelectDropdownButton = frame_select_dropdown_button_prefab.instantiate()
-		fsdb.text = ResourceManager.frames[i].frame_name
-		fsdb.idx = i
-		fsdb.frame_chosen.connect(_on_frame_option_chosen)
-		frame_dropdown_vbox.add_child(fsdb)
+		if !ResourceManager.frames[i].unusual:
+			frame_option_dict[i] = ResourceManager.frames[i].frame_id
+			
+			var fsdb: FrameSelectDropdownButton = frame_select_dropdown_button_prefab.instantiate()
+			fsdb.text = ResourceManager.frames[i].frame_name
+			fsdb.idx = i
+			fsdb.frame_chosen.connect(_on_frame_option_chosen)
+			frame_dropdown_vbox.add_child(fsdb)
 
 func populate_grid() -> void:
 	var f: Frame = ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id]

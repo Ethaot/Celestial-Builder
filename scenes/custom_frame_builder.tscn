@@ -1,0 +1,258 @@
+[gd_scene format=3 uid="uid://btlfiu8cjflam"]
+
+[ext_resource type="Script" uid="uid://wwsbe6qdyhes" path="res://scripts/custom_frame_mode/custom_frame_main_script.gd" id="1_27ifd"]
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="2_7xyhl"]
+[ext_resource type="Script" uid="uid://chgjg4cfqjfww" path="res://scripts/alt_aspect_ratio_container.gd" id="3_7xyhl"]
+[ext_resource type="Script" uid="uid://dccyiis4a0dhf" path="res://scripts/custom_frame_mode/custom_frame_mode_signal_bus.gd" id="4_28umx"]
+
+[sub_resource type="GDScript" id="GDScript_28umx"]
+script/source = "extends Button
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	SceneManager.switch_scene(SceneManager.MAIN_SCENE)
+"
+
+[node name="CustomFrameBuilder" type="ColorRect" unique_id=547921195 node_paths=PackedStringArray("signal_bus", "scroll_container", "frame_name_line_edit", "frame_id_line_edit", "frame_size_button", "frame_size_popup_panel", "frame_size_vbox", "frame_size_light_button", "frame_size_medium_button", "frame_size_heavy_button", "frame_size_ultra_button", "grid", "armor_grid", "customize_armor_toggle_button", "frame_hp_label", "frame_hp_down_button", "frame_hp_up_button", "frame_titan_toggle", "frame_unusual_toggle", "frame_ability_name_line_edit", "frame_ability_description_text_edit", "save_frame_button", "load_frame_button", "reset_frame_button")]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+script = ExtResource("1_27ifd")
+signal_bus = NodePath("SignalBus")
+scroll_container = NodePath("ScrollContainer")
+frame_name_line_edit = NodePath("ScrollContainer/MainVBox/FrameNameLineEdit")
+frame_id_line_edit = NodePath("ScrollContainer/MainVBox/FrameIDLineEdit")
+frame_size_button = NodePath("ScrollContainer/MainVBox/FrameSizeButton")
+frame_size_popup_panel = NodePath("FrameSizePanelContainer")
+frame_size_vbox = NodePath("FrameSizePanelContainer/ScrollContainer/FrameSizeVBox")
+frame_size_light_button = NodePath("FrameSizePanelContainer/ScrollContainer/FrameSizeVBox/LightButton")
+frame_size_medium_button = NodePath("FrameSizePanelContainer/ScrollContainer/FrameSizeVBox/MediumButton")
+frame_size_heavy_button = NodePath("FrameSizePanelContainer/ScrollContainer/FrameSizeVBox/HeavyButton")
+frame_size_ultra_button = NodePath("FrameSizePanelContainer/ScrollContainer/FrameSizeVBox/UltraButton")
+grid = NodePath("ScrollContainer/MainVBox/MarginContainer/AspectRatioContainer/GridContainer")
+armor_grid = NodePath("ScrollContainer/MainVBox/MarginContainer/AspectRatioContainer/ArmorGridContainer")
+customize_armor_toggle_button = NodePath("ScrollContainer/MainVBox/CustomizeArmorToggleButton")
+frame_hp_label = NodePath("ScrollContainer/MainVBox/FrameHPHBox/FrameHPLabel")
+frame_hp_down_button = NodePath("ScrollContainer/MainVBox/FrameHPHBox/FrameHPDownButton")
+frame_hp_up_button = NodePath("ScrollContainer/MainVBox/FrameHPHBox/FrameHPUpButton")
+frame_titan_toggle = NodePath("ScrollContainer/MainVBox/CheckboxesHBox/TitanToggle")
+frame_unusual_toggle = NodePath("ScrollContainer/MainVBox/CheckboxesHBox/EnemyToggle")
+frame_ability_name_line_edit = NodePath("ScrollContainer/MainVBox/FrameAbilityHBox/FrameAbilityNameLineEdit")
+frame_ability_description_text_edit = NodePath("ScrollContainer/MainVBox/FrameAbilityTextEdit")
+save_frame_button = NodePath("ScrollContainer/MainVBox/MenuButtonsHBox/SaveFrameButton")
+load_frame_button = NodePath("ScrollContainer/MainVBox/MenuButtonsHBox/LoadFrameButton")
+reset_frame_button = NodePath("ScrollContainer/MainVBox/ResetFrameButton")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=2006330063]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainVBox" type="VBoxContainer" parent="ScrollContainer" unique_id=1503159074]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="Padding" type="Control" parent="ScrollContainer/MainVBox" unique_id=934678296]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+
+[node name="FrameNameLineEdit" type="LineEdit" parent="ScrollContainer/MainVBox" unique_id=2073980306]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+placeholder_text = "Frame Name"
+alignment = 1
+
+[node name="FrameIDLineEdit" type="LineEdit" parent="ScrollContainer/MainVBox" unique_id=857127033]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+placeholder_text = "Frame ID"
+alignment = 1
+
+[node name="FrameSizeButton" type="Button" parent="ScrollContainer/MainVBox" unique_id=1165514885]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+text = "Frame Size: Light"
+
+[node name="Label" type="Label" parent="ScrollContainer/MainVBox" unique_id=1365120259]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+theme_override_font_sizes/font_size = 16
+text = "!! ID should be unique !!"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/MainVBox" unique_id=1198381669]
+layout_mode = 2
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="ScrollContainer/MainVBox/MarginContainer" unique_id=1379574542]
+layout_mode = 2
+stretch_mode = 0
+alignment_vertical = 0
+script = ExtResource("3_7xyhl")
+
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/MainVBox/MarginContainer/AspectRatioContainer" unique_id=1388916194]
+layout_mode = 2
+color = Color(0.9098039, 0, 0.54901963, 1)
+
+[node name="ColorRect" type="ColorRect" parent="ScrollContainer/MainVBox/MarginContainer/AspectRatioContainer/ColorRect" unique_id=1910678551]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.3137255, 0.3137255, 0.3137255, 1)
+
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer/MainVBox/MarginContainer/AspectRatioContainer" unique_id=1361565871]
+layout_mode = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 7
+
+[node name="ArmorGridContainer" type="GridContainer" parent="ScrollContainer/MainVBox/MarginContainer/AspectRatioContainer" unique_id=585934172]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 7
+
+[node name="CustomizeArmorToggleButton" type="Button" parent="ScrollContainer/MainVBox" unique_id=1329176612]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+text = "Customize Armor"
+
+[node name="FrameHPHBox" type="HBoxContainer" parent="ScrollContainer/MainVBox" unique_id=1149874143]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/MainVBox/FrameHPHBox" unique_id=551586367]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+text = "HP: "
+
+[node name="FrameHPDownButton" type="Button" parent="ScrollContainer/MainVBox/FrameHPHBox" unique_id=1900487174]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+text = "<"
+
+[node name="FrameHPLabel" type="Label" parent="ScrollContainer/MainVBox/FrameHPHBox" unique_id=1359265121]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+text = "0"
+horizontal_alignment = 1
+
+[node name="FrameHPUpButton" type="Button" parent="ScrollContainer/MainVBox/FrameHPHBox" unique_id=210997064]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+text = ">"
+
+[node name="CheckboxesHBox" type="HBoxContainer" parent="ScrollContainer/MainVBox" unique_id=30809155]
+layout_mode = 2
+
+[node name="TitanToggle" type="CheckButton" parent="ScrollContainer/MainVBox/CheckboxesHBox" unique_id=401278922]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_7xyhl")
+text = "Titan Frame"
+
+[node name="EnemyToggle" type="CheckButton" parent="ScrollContainer/MainVBox/CheckboxesHBox" unique_id=105373103]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_7xyhl")
+text = "Enemy Only"
+
+[node name="FrameAbilityHBox" type="HBoxContainer" parent="ScrollContainer/MainVBox" unique_id=1658690447]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/MainVBox/FrameAbilityHBox" unique_id=1136065025]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+text = "Frame Ability:"
+
+[node name="FrameAbilityNameLineEdit" type="LineEdit" parent="ScrollContainer/MainVBox/FrameAbilityHBox" unique_id=1641413188]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_7xyhl")
+placeholder_text = "Ability Name"
+
+[node name="FrameAbilityTextEdit" type="TextEdit" parent="ScrollContainer/MainVBox" unique_id=1344370730]
+custom_minimum_size = Vector2(0, 360)
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+placeholder_text = "Ability Text (BBCode Supported)"
+wrap_mode = 1
+
+[node name="MenuButtonsHBox" type="HBoxContainer" parent="ScrollContainer/MainVBox" unique_id=454417739]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="SaveFrameButton" type="Button" parent="ScrollContainer/MainVBox/MenuButtonsHBox" unique_id=947976287]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_7xyhl")
+text = "Save Frame"
+
+[node name="LoadFrameButton" type="Button" parent="ScrollContainer/MainVBox/MenuButtonsHBox" unique_id=1433593003]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_7xyhl")
+text = "Load Frame"
+
+[node name="ResetFrameButton" type="Button" parent="ScrollContainer/MainVBox" unique_id=1104735611]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+text = "Reset Frame"
+
+[node name="ExitFrameModeButton" type="Button" parent="ScrollContainer/MainVBox" unique_id=280387012]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+text = "Exit Custom Frame Mode"
+script = SubResource("GDScript_28umx")
+
+[node name="FrameSizePanelContainer" type="PanelContainer" parent="." unique_id=2007673183]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("2_7xyhl")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="FrameSizePanelContainer" unique_id=867819048]
+layout_mode = 2
+
+[node name="FrameSizeVBox" type="VBoxContainer" parent="FrameSizePanelContainer/ScrollContainer" unique_id=557243705]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="LightButton" type="Button" parent="FrameSizePanelContainer/ScrollContainer/FrameSizeVBox" unique_id=2136613907]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+text = "Light"
+
+[node name="MediumButton" type="Button" parent="FrameSizePanelContainer/ScrollContainer/FrameSizeVBox" unique_id=1468509519]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+text = "Medium"
+
+[node name="HeavyButton" type="Button" parent="FrameSizePanelContainer/ScrollContainer/FrameSizeVBox" unique_id=635371162]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+text = "Heavy"
+
+[node name="UltraButton" type="Button" parent="FrameSizePanelContainer/ScrollContainer/FrameSizeVBox" unique_id=1474164729]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+text = "Ultra"
+
+[node name="SignalBus" type="Node" parent="." unique_id=871445702]
+script = ExtResource("4_28umx")

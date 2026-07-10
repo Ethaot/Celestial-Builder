@@ -88,3 +88,30 @@ func get_tile_by_neighbors(tile_pos: Vector2i, frame: Frame, reinforced: bool) -
 		14: return armor_dict[CENTERLEFT]
 		15: return armor_dict[CENTER]
 	return CENTER
+
+func get_tile_by_neighbors_array(tile_pos: Vector2i, armor_array: Array[Vector2i], reinforced_armor_array: Array[Vector2i], reinforced: bool) -> int:
+	var neighbor_bit: int = 0
+	for i in range(contiguous_offsets.size()):
+		if reinforced:
+			if reinforced_armor_array.has(contiguous_offsets[i] + tile_pos):
+				neighbor_bit += neighbor_bits[i]
+		elif armor_array.has(contiguous_offsets[i] + tile_pos) or reinforced_armor_array.has(contiguous_offsets[i] + tile_pos):
+			neighbor_bit += neighbor_bits[i]
+	match neighbor_bit:
+		0: return armor_dict[CENTERSOLO]
+		1: return armor_dict[RIGHTSOLO]
+		2: return armor_dict[BOTTOMSOLO]
+		3: return armor_dict[BOTTOMRIGHT]
+		4: return armor_dict[LEFTSOLO]
+		5: return armor_dict[HORIZONTALCENTER]
+		6: return armor_dict[BOTTOMLEFT]
+		7: return armor_dict[BOTTOMCENTER]
+		8: return armor_dict[TOPSOLO]
+		9: return armor_dict[TOPRIGHT]
+		10: return armor_dict[VERTICALCENTER]
+		11: return armor_dict[CENTERRIGHT]
+		12: return armor_dict[TOPLEFT]
+		13: return armor_dict[TOPCENTER]
+		14: return armor_dict[CENTERLEFT]
+		15: return armor_dict[CENTER]
+	return CENTER

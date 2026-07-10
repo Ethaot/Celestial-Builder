@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://b5es3k3xamepu" path="res://scripts/app_scroll_container.gd" id="2_gubc5"]
 [ext_resource type="FontFile" uid="uid://dpjfpo24ilp7l" path="res://fonts/Cousine-Bold.ttf" id="4_c1pb6"]
 [ext_resource type="PackedScene" uid="uid://bgfrdd3pp80ne" path="res://scenes/attribute_h_box.tscn" id="4_rt2n2"]
+[ext_resource type="Texture2D" uid="uid://c5oybgrt48a2c" path="res://assets/ui/botg_logo_line.png" id="5_mngbo"]
 [ext_resource type="Script" uid="uid://ls2155haq4yb" path="res://scripts/frame_option_button.gd" id="6_6wevv"]
 [ext_resource type="FontFile" uid="uid://clxaxe666gut2" path="res://fonts/Cousine-Italic.ttf" id="6_18nlu"]
 [ext_resource type="PackedScene" uid="uid://dwxq6xyo184in" path="res://scenes/frame_select_dropdown_button.tscn" id="6_e1cbu"]
@@ -70,6 +71,72 @@ border_blend = true
 bg_color = Color(0.9098039, 0, 0.54901963, 1)
 skew = Vector2(0.5, 0)
 corner_radius_bottom_right = 12
+
+[sub_resource type="GDScript" id="GDScript_r6p65"]
+script/source = "extends Button
+
+@export var create_custom_panel: PanelContainer
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	create_custom_panel.visible = true
+"
+
+[sub_resource type="GDScript" id="GDScript_e1cbu"]
+script/source = "extends Button
+
+@export var license_panel_container: PanelContainer
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	license_panel_container.visible = true
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tnrwk"]
+bg_color = Color(0.078431375, 0.078431375, 0.078431375, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.9098039, 0, 0.54901963, 1)
+
+[sub_resource type="GDScript" id="GDScript_mngbo"]
+script/source = "extends Button
+
+@export var license_panel_container: PanelContainer
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	license_panel_container.visible = false
+"
+
+[sub_resource type="GDScript" id="GDScript_gn8jn"]
+script/source = "extends Button
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	SceneManager.switch_scene(SceneManager.CUSTOM_FRAME_SCENE)
+"
+
+[sub_resource type="GDScript" id="GDScript_4w45t"]
+script/source = "extends Button
+
+@export var create_custom_panel: PanelContainer
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	create_custom_panel.visible = false
+"
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6wevv"]
 bg_color = Color(0, 0, 0, 1)
@@ -321,10 +388,103 @@ layout_mode = 2
 theme = ExtResource("1_w2twt")
 text = "Load Lamplighter"
 
+[node name="CreateCustomButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/MenuOptionsVBox" unique_id=1149478536 node_paths=PackedStringArray("create_custom_panel")]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "Create Custom..."
+script = SubResource("GDScript_r6p65")
+create_custom_panel = NodePath("../../CreateCustomPanelContainer")
+
+[node name="EncounterModeButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/MenuOptionsVBox" unique_id=1080778848]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "Switch to Encounter Mode"
+
+[node name="LicenseButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/MenuOptionsVBox" unique_id=211574434 node_paths=PackedStringArray("license_panel_container")]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "License"
+script = SubResource("GDScript_e1cbu")
+license_panel_container = NodePath("../../LicensePanelContainer")
+
 [node name="LoadLampighterVBox" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer" unique_id=2069852079]
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 16
+
+[node name="LicensePanelContainer" type="PanelContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer" unique_id=389832442]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tnrwk")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/LicensePanelContainer" unique_id=866113251]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/LicensePanelContainer/ScrollContainer" unique_id=185132099]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/LicensePanelContainer/ScrollContainer/VBoxContainer" unique_id=505243279]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("5_mngbo")
+expand_mode = 5
+
+[node name="Label" type="Label" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/LicensePanelContainer/ScrollContainer/VBoxContainer" unique_id=20410248]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "This is software by Ari Kaffl designed for use with Celestial Bodies by Binary Star Games and Dreamware Press, licensed under Built on the Grid. It is in no way affiliated with Binary Star Games or Dreamware Press. This project was created without the use of AI."
+autowrap_mode = 3
+
+[node name="LicenseCloseButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/LicensePanelContainer/ScrollContainer/VBoxContainer" unique_id=523250886 node_paths=PackedStringArray("license_panel_container")]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "Okay"
+script = SubResource("GDScript_mngbo")
+license_panel_container = NodePath("../../..")
+
+[node name="CreateCustomPanelContainer" type="PanelContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer" unique_id=799757502]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tnrwk")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer" unique_id=2030274513]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer/ScrollContainer" unique_id=921493599]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer/ScrollContainer/VBoxContainer" unique_id=1647344527]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "Create Custom..."
+horizontal_alignment = 1
+
+[node name="CreateCustomFrameButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer/ScrollContainer/VBoxContainer" unique_id=639630228]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "Frame"
+script = SubResource("GDScript_gn8jn")
+
+[node name="CreateCustomFrameBuildButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer/ScrollContainer/VBoxContainer" unique_id=54999800]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "Frame Build"
+
+[node name="CreateCustomPartButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer/ScrollContainer/VBoxContainer" unique_id=767720143]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "Part"
+
+[node name="CloseCreateCustomButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer/ScrollContainer/VBoxContainer" unique_id=1532798652 node_paths=PackedStringArray("create_custom_panel")]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "Back"
+script = SubResource("GDScript_4w45t")
+create_custom_panel = NodePath("../../..")
 
 [node name="LamplighterScrollContainer" type="ScrollContainer" parent="AppScreenScrollContainer/HBoxContainer" unique_id=668718151]
 custom_minimum_size = Vector2(1080, 0)

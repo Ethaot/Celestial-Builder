@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://thrs7j58yao1"]
+
+[ext_resource type="Script" uid="uid://cgg1cffpjicnj" path="res://scripts/custom_frame_mode/custom_frame_armor_grid_texture_button.gd" id="2_vwilr"]
+
+[node name="TextureButton" type="TextureButton" unique_id=726394561]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 2
+stretch_mode = 4
+script = ExtResource("2_vwilr")

@@ -1,6 +1,7 @@
 extends Node
 
 const DATA_PACKS_PATH: String = "user://data_packs/"
+const CUSTOM_PACK_PATH: String = DATA_PACKS_PATH + "custom/"
 const TEMP_FOLDER: String = "user://tmp/"
 
 signal check_complete
@@ -68,13 +69,23 @@ func _ready() -> void:
 	
 	for manifest in manifests:
 		var parts_array: Array[Part] = import_parts_dicts(DATA_PACKS_PATH + manifest["package_id"] + "/")
-		part_dict.assign(construct_parts_dict(parts_array))
+		part_dict.merge(construct_parts_dict(parts_array))
 		assign_parts_array(parse_parts(parts_array))
 		
-		frames = import_frames_dicts(DATA_PACKS_PATH + manifest["package_id"] + "/")
+		var frames_array: Array[Frame] = import_frames_dicts(DATA_PACKS_PATH + manifest["package_id"] + "/")
+		frames.append_array(frames_array)
 		
-		frame_builds = import_frame_build_dicts(DATA_PACKS_PATH + manifest["package_id"] + "/")
+		var frame_builds_array: Array[FrameBuild] = import_frame_build_dicts(DATA_PACKS_PATH + manifest["package_id"] + "/")
+		frame_builds.append_array(frame_builds_array)
 		
+	# Custom folder
+	var custom_parts_array: Array[Part] = import_parts_dicts(CUSTOM_PACK_PATH)
+	part_dict.merge(construct_parts_dict(custom_parts_array))
+	assign_parts_array(parse_parts(custom_parts_array))
+	
+	frames.append_array(import_frames_dicts(CUSTOM_PACK_PATH))
+	frame_builds.append_array(import_frame_build_dicts(CUSTOM_PACK_PATH))
+	
 	part_image_dict = get_part_images_dict()
 	frame_dict = construct_frame_dict(frames)
 	player_grid_gradient_atlastextures = create_player_grid_gradient_atlastextures()
@@ -85,6 +96,8 @@ func _ready() -> void:
 func check_create_directories() -> void:
 	if !DirAccess.dir_exists_absolute(DATA_PACKS_PATH):
 		DirAccess.make_dir_absolute(DATA_PACKS_PATH)
+	if !DirAccess.dir_exists_absolute(CUSTOM_PACK_PATH):
+		DirAccess.make_dir_absolute(CUSTOM_PACK_PATH)
 	if !DirAccess.dir_exists_absolute(TEMP_FOLDER):
 		DirAccess.make_dir_absolute(TEMP_FOLDER)
 
@@ -198,59 +211,6 @@ func update_manifest() -> void:
 	file.store_line(new_manifest_string)
 	file.close()
 	print("Manifests updated.")
-		
-
-func make_parts_json(pa: Array[Part]) -> void:
-	var dict_array: Array[Dictionary]
-	for p in pa:
-		var pd: Dictionary = {
-			"part_name": p.part_name,
-			"part_id": p.part_id,
-			"part_type": p.part_type,
-			"powered": p.powered,
-			"part_configuration": p.part_configuration,
-			"part_icon": p.part_id,
-			"part_description": p.part_description,
-			"requirements": p.requirements,
-			"part_tab": p.part_tab
-		}
-		dict_array.append(pd)
-	if !DirAccess.dir_exists_absolute(DATA_PACKS_PATH + "celestial-bodies-core/"):
-		DirAccess.make_dir_absolute(DATA_PACKS_PATH + "celestial-bodies-core/")
-	var file = FileAccess.open(DATA_PACKS_PATH + "celestial-bodies-core/parts.json", FileAccess.WRITE)
-	var json_string: String = JSON.stringify(dict_array, "\t")
-	if file:
-		file.store_line(json_string)
-		file.close()
-	else:
-		push_error("Couldn't make the parts json. Error code: ", FileAccess.get_open_error())
-
-func make_frames_json(fa: Array[Frame]) -> void:
-	var dict_array: Array[Dictionary]
-	for f in fa:
-		var fd: Dictionary = {
-			"frame_name": f.frame_name,
-			"frame_id": f.frame_id,
-			"frame_available_slots": f.frame_available_slots,
-			"frame_feature_name": f.frame_feature_name,
-			"frame_feature_text": f.frame_feature_text,
-			"frame_hp": f.frame_hp,
-			"frame_armor_slots": f.frame_armor_slots,
-			"frame_reinforced_armor_slots": f.frame_reinforced_armor_slots,
-			"frame_size": f.frame_size,
-			"titan": false,
-			"unusual": false
-		}
-		dict_array.append(fd)
-	if !DirAccess.dir_exists_absolute(DATA_PACKS_PATH + "celestial-bodies-core/"):
-		DirAccess.make_dir_absolute(DATA_PACKS_PATH + "celestial-bodies-core/")
-	var file = FileAccess.open(DATA_PACKS_PATH + "celestial-bodies-core/frames.json", FileAccess.WRITE)
-	var json_string: String = JSON.stringify(dict_array, "\t")
-	if file:
-		file.store_line(json_string)
-		file.close()
-	else:
-		push_error("Couldn't make the frames json. Error code: ", FileAccess.get_open_error())
 
 func import_parts_dicts(path: String) -> Array[Part]:
 	print("Importing parts...")
@@ -286,31 +246,6 @@ func import_parts_dicts(path: String) -> Array[Part]:
 						part.capacity_modifier_negative = d["capacity_modifier_negative"]
 					loaded_parts.append(part)
 	print("Parts imported.")
-	return loaded_parts
-		
-
-func import_parts(path: String, extension: String) -> Array[Part]:
-	var loaded_parts: Array[Part]
-	var dir: DirAccess = DirAccess.open(path)
-	if !dir:
-		push_error("Failed to open parts directory. (resource_manager)")
-		return loaded_parts
-	dir.list_dir_begin()
-	var file_name: String = dir.get_next()
-	
-	while file_name != "":
-		var full_path: String = path.path_join(file_name)
-		if dir.current_is_dir():
-			var sub_folder_path: String = full_path + "/"
-			loaded_parts.append_array(import_parts(sub_folder_path, extension))
-		else:
-			var clean_path: String = full_path.replace(".remap", "")
-			if clean_path.ends_with(extension):
-				var res: Resource = load(clean_path)
-				if res is Part:
-					loaded_parts.append(res)
-		
-		file_name = dir.get_next()
 	return loaded_parts
 	
 func construct_parts_dict(parts_array: Array[Part]) -> Dictionary[String, Part]:
@@ -385,30 +320,6 @@ func get_part_images_dict() -> Dictionary[String, Array]:
 			push_error("Couldn't load image at " + part_dict[key].part_icon)
 	return dict
 
-func import_frames(path: String, extension: String) -> Array[Frame]:
-	var loaded_frames: Array[Frame]
-	var dir: DirAccess = DirAccess.open(path)
-	if !dir:
-		push_error("Failed to open frames directory (resource_manager).")
-		return loaded_frames
-	dir.list_dir_begin()
-	var file_name: String = dir.get_next()
-	
-	while file_name != "":
-		var full_path: String = path.path_join(file_name)
-		if dir.current_is_dir():
-			var sub_folder_path: String = full_path + "/"
-			loaded_frames.append_array(import_frames(sub_folder_path, extension))
-		else:
-			var clean_path: String = full_path.replace(".remap", "")
-			if clean_path.ends_with(extension):
-				var res: Resource = load(clean_path)
-				if res is Frame:
-					loaded_frames.append(res)
-		
-		file_name = dir.get_next()
-	return loaded_frames
-
 func import_frames_dicts(path: String) -> Array[Frame]:
 	print("Importing frames...")
 	var loaded_frames: Array[Frame]
@@ -427,32 +338,8 @@ func import_frames_dicts(path: String) -> Array[Frame]:
 		if parsed_data is Array:
 			for d in parsed_data:
 				if d is Dictionary:
-					var regex = RegEx.new()
-					regex.compile("-?\\d+")
 					var f: Frame = Frame.new()
-					f.frame_name = d["frame_name"]
-					f.frame_id = d["frame_id"]
-					for i in range(d["frame_available_slots"].size()):
-						var matches = regex.search_all(d["frame_available_slots"][i])
-						var x: int = matches[0].get_string().to_int()
-						var y: int = matches[1].get_string().to_int()
-						f.frame_available_slots.append(Vector2i(x,y))
-					f.frame_feature_name = d["frame_feature_name"]
-					f.frame_feature_text = d["frame_feature_text"]
-					f.frame_hp = d["frame_hp"]
-					for i in range(d["frame_armor_slots"].size()):
-						var matches = regex.search_all(d["frame_armor_slots"][i])
-						var x: int = matches[0].get_string().to_int()
-						var y: int = matches[1].get_string().to_int()
-						f.frame_armor_slots.append(Vector2i(x,y))
-					for i in range(d["frame_reinforced_armor_slots"].size()):
-						var matches = regex.search_all(d["frame_reinforced_armor_slots"][i])
-						var x: int = matches[0].get_string().to_int()
-						var y: int = matches[1].get_string().to_int()
-						f.frame_reinforced_armor_slots.append(Vector2i(x,y))
-					f.frame_size = d["frame_size"]
-					f.titan = d["titan"]
-					f.unusual = d["unusual"]
+					f.from_dict(d)
 					loaded_frames.append(f)
 	print("Frames imported.")
 	return loaded_frames
@@ -462,30 +349,6 @@ func construct_frame_dict(fr: Array[Frame]) -> Dictionary[String, Frame]:
 	for f in fr:
 		dict[f.frame_id] = f
 	return dict
-
-func import_frame_builds(path: String, extension: String) -> Array[FrameBuild]:
-	var loaded_builds: Array[FrameBuild]
-	var dir: DirAccess = DirAccess.open(path)
-	if !dir:
-		push_error("Failed to open frame builds directory (resource_manager).")
-		return loaded_builds
-	dir.list_dir_begin()
-	var file_name: String = dir.get_next()
-	
-	while file_name != "":
-		var full_path: String = path.path_join(file_name)
-		if dir.current_is_dir():
-			var sub_folder_path: String = full_path + "/"
-			loaded_builds.append_array(import_frame_builds(sub_folder_path, extension))
-		else:
-			var clean_path: String = full_path.replace(".remap", "")
-			if clean_path.ends_with(extension):
-				var res: Resource = load(clean_path)
-				if res is FrameBuild:
-					loaded_builds.append(res)
-		
-		file_name = dir.get_next()
-	return loaded_builds
 
 func import_frame_build_dicts(path: String) -> Array[FrameBuild]:
 	print("Importing frame builds...")
@@ -505,61 +368,11 @@ func import_frame_build_dicts(path: String) -> Array[FrameBuild]:
 		if parsed_data is Array:
 			for d in parsed_data:
 				if d is Dictionary:
-					var regex = RegEx.new()
-					regex.compile("-?\\d+")
 					var fb: FrameBuild = FrameBuild.new()
-					var pi_array: Array[PartInstance] = []
-					for pid in d["frame_build_configuration"]:
-						var pi: PartInstance = PartInstance.new()
-						pi.part_instance_name = pid["part_instance_name"]
-						pi.part_id = pid["part_id"]
-						#pi.part_instance_slots = pid["part_instance_slots"]
-						for slot in pid["part_instance_slots"]:
-							pi.part_instance_slots.append(slot)
-						#for slot in pid["part_instance_slots"]:
-							#var matches = regex.search_all(slot)
-							#var x: int = matches[0].get_string().to_int()
-							#var y: int = matches[1].get_string().to_int()
-							#pi.part_instance_slots.append(Vector2i(x,y))
-						pi.mirrored_h = pid["mirrored_h"]
-						pi.mirrored_v = pid["mirrored_v"]
-						pi.times_rotated = pid["times_rotated"]
-						pi_array.append(pi)
-					fb.frame_build_name = d["frame_build_name"]
-					fb.frame_id = d["frame_id"]
-					fb.frame_build_configuration = pi_array
+					fb.from_dict(d)
 					loaded_frame_builds.append(fb)
 	print("Frame builds imported.")
 	return loaded_frame_builds
-
-func make_frame_builds_json(fba: Array[FrameBuild]) -> void:
-	var dict_array: Array[Dictionary]
-	for fb in fba:
-		var pi_dict_array: Array[Dictionary] = []
-		for pi in fb.frame_build_configuration:
-			pi_dict_array.append({
-				"part_instance_name": pi.part_instance_name,
-				"part_id": pi.part_id,
-				"part_instance_slots": pi.part_instance_slots,
-				"mirrored_h": pi.mirrored_h,
-				"mirrored_v": pi.mirrored_v,
-				"times_rotated": pi.times_rotated
-			})
-		var fd: Dictionary = {
-			"frame_build_name": fb.frame_build_name,
-			"frame_id": fb.frame_id,
-			"frame_build_configuration": pi_dict_array
-		}
-		dict_array.append(fd)
-	if !DirAccess.dir_exists_absolute(DATA_PACKS_PATH + "celestial-bodies-core/"):
-		DirAccess.make_dir_absolute(DATA_PACKS_PATH + "celestial-bodies-core/")
-	var file = FileAccess.open(DATA_PACKS_PATH + "celestial-bodies-core/frame_builds.json", FileAccess.WRITE)
-	var json_string: String = JSON.stringify(dict_array, "\t")
-	if file:
-		file.store_line(json_string)
-		file.close()
-	else:
-		push_error("Couldn't make the frame builds json. Error code: ", FileAccess.get_open_error())
 
 func create_player_grid_gradient_atlastextures() -> Array[AtlasTexture]:
 	var arr: Array[AtlasTexture] = []
@@ -572,6 +385,30 @@ func create_player_grid_gradient_atlastextures() -> Array[AtlasTexture]:
 			at.region = Rect2(pos, tile_size)
 			arr.append(at)
 	return arr
+
+func save_frame_to_frames_json(data_pack_id: String, frame: Frame) -> void:
+	if FileAccess.file_exists(DATA_PACKS_PATH + data_pack_id + "/frames.json"):
+		var file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/frames.json", FileAccess.READ_WRITE)
+		var json_string: String = file.get_as_text()
+		var data = JSON.parse_string(json_string)
+		var data_had_frame: bool = false
+		if data is Array:
+			for dict in data:
+				if dict is Dictionary:
+					if dict["frame_id"] == frame.frame_id:
+						dict.assign(frame.to_dict())
+						data_had_frame = true
+			if !data_had_frame:
+				data.append(frame.to_dict())
+		json_string = JSON.stringify(data, "\t")
+		file.store_line(json_string)
+		file.close()
+	else:
+		var file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/frames.json", FileAccess.WRITE)
+		var data: Array = [frame.to_dict()]
+		var json_string: String = JSON.stringify(data, "\t")
+		file.store_line(json_string)
+		file.close()
 
 func _on_http_check_completed(result: int, response_code: int, headers: PackedStringArray, _body: PackedByteArray) -> void:
 	print("Got response code " + str(response_code))
