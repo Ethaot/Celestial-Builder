@@ -103,14 +103,15 @@ func get_data_pack_manifest() -> Array[Dictionary]:
 					for d in parsed_data:
 						if d is Dictionary:
 							if d["package_id"] == "celestial-bodies-core":
-								if d["package_url"] != "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core.zip":
-									d["package_url"] = "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core.zip"
+								if d["package_url"] != "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-3.zip":
+									d["package_url"] = "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-3.zip"
 							data_pack_manifest_data.append(d)
 				else:
 					var core_data: Dictionary[String, String] = {
 						"package_name": "Celestial Bodies Core",
 						"package_id": "celestial-bodies-core",
-						"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core.zip",
+						#"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core.zip",
+						"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-3.zip",
 						"author": "Binary Star & Charlotte Laskowski",
 						"source_name": "Celestial Bodies Technical Handbook",
 						"source_url": "https://selkie.itch.io/celestial-bodies",
@@ -124,8 +125,8 @@ func get_data_pack_manifest() -> Array[Dictionary]:
 			var core_data: Dictionary[String, String] = {
 				"package_name": "Celestial Bodies Core",
 				"package_id": "celestial-bodies-core",
-				#"package_url": "https://drive.google.com/uc?export=download&id=1ljWT3lqiRA-prXqxJZVfp-YE9WA3XRSl",
-				"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core.zip",
+				#"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core.zip",
+				"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-3.zip",
 				"author": "Binary Star & Charlotte Laskowski",
 				"source_name": "Celestial Bodies Technical Handbook",
 				"source_url": "https://selkie.itch.io/celestial-bodies",
@@ -643,6 +644,8 @@ func _on_request_completed(result, _response_code, headers, body):
 		print("File unzipped successfully.")
 		DirAccess.remove_absolute(TEMP_FOLDER + "tmp" + str(current_tmp_file) + ".zip")
 		print("Temporary file deleted.")
+	else:
+		push_error("Couldn't unzip tmp file.")
 	current_tmp_file += 1
 	download_complete.emit()
 	
