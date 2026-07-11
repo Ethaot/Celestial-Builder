@@ -1,0 +1,424 @@
+[gd_scene format=3 uid="uid://br36nkoe2cps4"]
+
+[ext_resource type="Script" uid="uid://6lpo6yi1q5l6" path="res://scripts/scroll_container_touch_support.gd" id="1_55x64"]
+[ext_resource type="Script" uid="uid://dk4etyjbqoka8" path="res://scripts/custom_frame_build_mode/custom_frame_build_builder_main_script.gd" id="1_cybhx"]
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="2_cybhx"]
+[ext_resource type="FontFile" uid="uid://clxaxe666gut2" path="res://fonts/Cousine-Italic.ttf" id="3_1pjia"]
+[ext_resource type="StyleBox" uid="uid://chgyajxu7nuva" path="res://assets/ui/styles/tab_button_style_box_normal.tres" id="4_hbisc"]
+[ext_resource type="Script" uid="uid://c5n8cvq6rsl6o" path="res://scripts/custom_frame_build_mode/frame_tab_script.gd" id="4_hl41v"]
+[ext_resource type="Script" uid="uid://bfqwbddrfipji" path="res://scripts/data_pack_selector_panel_container.gd" id="5_hl41v"]
+[ext_resource type="Script" uid="uid://chgjg4cfqjfww" path="res://scripts/alt_aspect_ratio_container.gd" id="5_pqtcs"]
+[ext_resource type="PackedScene" uid="uid://dwxq6xyo184in" path="res://scenes/frame_select_dropdown_button.tscn" id="8_pqtcs"]
+[ext_resource type="Script" uid="uid://d1b0vmronhxko" path="res://scripts/custom_frame_build_mode/part_grid_interface.gd" id="10_pqtcs"]
+[ext_resource type="PackedScene" uid="uid://cg66ksdd4jth" path="res://scenes/dragged_part.tscn" id="11_pwrrv"]
+
+[sub_resource type="GDScript" id="GDScript_55x64"]
+script/source = "extends Button
+
+@export var data_pack_selector_panel: DataPackSelectorPanel
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	data_pack_selector_panel.popup()
+"
+
+[sub_resource type="GDScript" id="GDScript_pwrrv"]
+script/source = "extends Button
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	SceneManager.switch_scene(SceneManager.MAIN_SCENE)
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pqtcs"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pwrrv"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="CustomFrameBuildBuilder" type="ColorRect" unique_id=1591267564 node_paths=PackedStringArray("scroll_container", "main_hbox", "menu_tab_button", "frame_tab_button", "parts_tab_button")]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+script = ExtResource("1_cybhx")
+scroll_container = NodePath("MainScrollContainer")
+main_hbox = NodePath("MainScrollContainer/MainHBoxContainer")
+menu_tab_button = NodePath("MenuTabsPanelContainer/MarginContainer/HBoxContainer/MenuTabButton")
+frame_tab_button = NodePath("MenuTabsPanelContainer/MarginContainer/HBoxContainer/FrameTabButton")
+parts_tab_button = NodePath("MenuTabsPanelContainer/MarginContainer/HBoxContainer/PartsTabButton")
+
+[node name="MainScrollContainer" type="ScrollContainer" parent="." unique_id=1324318227]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 96.0
+offset_bottom = -128.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
+
+[node name="MainHBoxContainer" type="HBoxContainer" parent="MainScrollContainer" unique_id=118702332]
+custom_minimum_size = Vector2(1080, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MenuScrollContainer" type="ScrollContainer" parent="MainScrollContainer/MainHBoxContainer" unique_id=1194409073]
+custom_minimum_size = Vector2(1080, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("1_55x64")
+
+[node name="CenterContainer" type="CenterContainer" parent="MainScrollContainer/MainHBoxContainer/MenuScrollContainer" unique_id=384419718]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MenuTabVBox" type="VBoxContainer" parent="MainScrollContainer/MainHBoxContainer/MenuScrollContainer/CenterContainer" unique_id=825091074]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_cybhx")
+
+[node name="CurrentDataPackButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/MenuScrollContainer/CenterContainer/MenuTabVBox" unique_id=451425669 node_paths=PackedStringArray("data_pack_selector_panel")]
+layout_mode = 2
+theme = ExtResource("2_cybhx")
+text = "Current Data Pack: Custom"
+script = SubResource("GDScript_55x64")
+data_pack_selector_panel = NodePath("../../../../../../DataPackSelectorPanelContainer")
+
+[node name="ExitFrameBuilderModeButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/MenuScrollContainer/CenterContainer/MenuTabVBox" unique_id=1572244713]
+layout_mode = 2
+theme = ExtResource("2_cybhx")
+text = "Exit Frame Builder"
+script = SubResource("GDScript_pwrrv")
+
+[node name="FrameScrollContainer" type="ScrollContainer" parent="MainScrollContainer/MainHBoxContainer" unique_id=1367777726 node_paths=PackedStringArray("main_script", "part_grid_interface", "frame_dropdown_button", "frame_dropdown_panel_container", "frame_dropdown_vbox", "hp_label", "grid_grid_container", "armor_grid_container", "defenses_hbox", "part_effects_vbox")]
+custom_minimum_size = Vector2(1080, 0)
+layout_mode = 2
+script = ExtResource("4_hl41v")
+main_script = NodePath("../../..")
+part_grid_interface = NodePath("../../../PartGridInterface")
+frame_dropdown_button = NodePath("FrameTabVBox/FrameSelectButton")
+frame_dropdown_panel_container = NodePath("../../../FrameSelectPanelContainer")
+frame_dropdown_vbox = NodePath("../../../FrameSelectPanelContainer/FrameSelectVBoxContainer")
+hp_label = NodePath("FrameTabVBox/DefensesHBox/HPLabel")
+grid_grid_container = NodePath("FrameTabVBox/MarginContainer/AspectRatioContainer/GridGridContainer")
+armor_grid_container = NodePath("FrameTabVBox/MarginContainer/AspectRatioContainer/ArmorGridContainer")
+defenses_hbox = NodePath("FrameTabVBox/DefensesHBox")
+part_effects_vbox = NodePath("FrameTabVBox/PartEffectsVBox")
+
+[node name="FrameTabVBox" type="VBoxContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer" unique_id=2028298435]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="FrameSelectButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox" unique_id=2091967759]
+layout_mode = 2
+theme = ExtResource("2_cybhx")
+text = "Select Frame"
+
+[node name="FrameNameLineEdit" type="LineEdit" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox" unique_id=658780221]
+layout_mode = 2
+theme = ExtResource("2_cybhx")
+placeholder_text = "Frame Name"
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox" unique_id=163320388]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/MarginContainer" unique_id=1474471608]
+layout_mode = 2
+mouse_filter = 2
+stretch_mode = 0
+alignment_vertical = 0
+script = ExtResource("5_pqtcs")
+
+[node name="ColorRect" type="ColorRect" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/MarginContainer/AspectRatioContainer" unique_id=963262445]
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.9098039, 0, 0.54901963, 1)
+
+[node name="ColorRect" type="ColorRect" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/MarginContainer/AspectRatioContainer/ColorRect" unique_id=971831093]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.3137255, 0.3137255, 0.3137255, 1)
+
+[node name="GridGridContainer" type="GridContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/MarginContainer/AspectRatioContainer" unique_id=13069550]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 7
+
+[node name="ArmorGridContainer" type="GridContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/MarginContainer/AspectRatioContainer" unique_id=1770130627]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 7
+
+[node name="DefensesHBox" type="HFlowContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox" unique_id=701969562]
+layout_mode = 2
+theme_override_constants/h_separation = 32
+
+[node name="HPLabel" type="Label" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/DefensesHBox" unique_id=1648401052]
+layout_mode = 2
+theme = ExtResource("2_cybhx")
+text = "Max HP: 12"
+horizontal_alignment = 1
+
+[node name="PartEffectsVBox" type="VBoxContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox" unique_id=1901506658]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox" unique_id=68781393]
+layout_mode = 2
+
+[node name="SaveFrameBuildButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/HBoxContainer" unique_id=1094504286]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_cybhx")
+text = "Save Frame Build"
+autowrap_mode = 3
+
+[node name="LoadFrameBuildButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/HBoxContainer" unique_id=1434015282]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_cybhx")
+text = "Load Frame Build"
+autowrap_mode = 3
+
+[node name="ResetFrameDamageButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox" unique_id=135902388]
+layout_mode = 2
+theme = ExtResource("2_cybhx")
+text = "Reset Frame Damage"
+autowrap_mode = 3
+
+[node name="PartsScrollContainer" type="ScrollContainer" parent="MainScrollContainer/MainHBoxContainer" unique_id=2115693763]
+custom_minimum_size = Vector2(1080, 0)
+layout_mode = 2
+script = ExtResource("1_55x64")
+
+[node name="PartsTabVBox" type="VBoxContainer" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer" unique_id=1451309321]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="PartTabsVBox" type="VBoxContainer" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox" unique_id=145406471]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="HFlowContainer" type="HFlowContainer" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox" unique_id=914946150]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 16
+
+[node name="WeaponsRangedTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=197029518]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_cybhx")
+text = "Ranged"
+
+[node name="WeaponsExplosiveTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=619306130]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_cybhx")
+text = "Explosive"
+
+[node name="WeaponsMeleeTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=1482796939]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_cybhx")
+text = "Melee"
+
+[node name="WeaponsElectronicWarfareTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=27690178]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_cybhx")
+text = "Electronic Warfare"
+
+[node name="WeaponsMissilesTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=284421306]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_cybhx")
+text = "Missiles"
+
+[node name="PartsReactorsTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=1034350407]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_cybhx")
+text = "Reactors"
+
+[node name="PartsThrustersTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=27220767]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_cybhx")
+text = "Thrusters"
+
+[node name="PartsProcessorsTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=1735638153]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_cybhx")
+text = "Processors"
+
+[node name="PartsShieldsTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=1742931095]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_cybhx")
+text = "Shields"
+
+[node name="ColorRect" type="ColorRect" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox" unique_id=824709139]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+color = Color(0.15686275, 0.15686275, 0.15686275, 0)
+
+[node name="ColorRect2" type="ColorRect" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox" unique_id=357448333]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="ColorRect3" type="ColorRect" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox" unique_id=379684443]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+color = Color(0.15686275, 0.15686275, 0.015686275, 0)
+
+[node name="GridContainer" type="GridContainer" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox" unique_id=299464447]
+layout_mode = 2
+mouse_filter = 2
+columns = 2
+
+[node name="MenuTabsPanelContainer" type="PanelContainer" parent="." unique_id=863419163]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -128.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_pqtcs")
+
+[node name="MarginContainer" type="MarginContainer" parent="MenuTabsPanelContainer" unique_id=304837165]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuTabsPanelContainer/MarginContainer" unique_id=970361130]
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+theme_override_constants/separation = -4
+
+[node name="MenuTabButton" type="Button" parent="MenuTabsPanelContainer/MarginContainer/HBoxContainer" unique_id=218502780]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_cybhx")
+theme_override_colors/font_disabled_color = Color(0.9098039, 0, 0.54901963, 1)
+theme_override_fonts/font = ExtResource("3_1pjia")
+theme_override_styles/normal = ExtResource("4_hbisc")
+theme_override_styles/pressed = ExtResource("4_hbisc")
+theme_override_styles/hover = ExtResource("4_hbisc")
+theme_override_styles/disabled = ExtResource("4_hbisc")
+theme_override_styles/focus = ExtResource("4_hbisc")
+disabled = true
+text = "Menu"
+
+[node name="FrameTabButton" type="Button" parent="MenuTabsPanelContainer/MarginContainer/HBoxContainer" unique_id=1297255570]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_cybhx")
+theme_override_colors/font_disabled_color = Color(0.9098039, 0, 0.54901963, 1)
+theme_override_fonts/font = ExtResource("3_1pjia")
+theme_override_styles/normal = ExtResource("4_hbisc")
+theme_override_styles/pressed = ExtResource("4_hbisc")
+theme_override_styles/hover = ExtResource("4_hbisc")
+theme_override_styles/disabled = ExtResource("4_hbisc")
+theme_override_styles/focus = ExtResource("4_hbisc")
+text = "Frame"
+
+[node name="PartsTabButton" type="Button" parent="MenuTabsPanelContainer/MarginContainer/HBoxContainer" unique_id=479531623]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_cybhx")
+theme_override_colors/font_disabled_color = Color(0.9098039, 0, 0.54901963, 1)
+theme_override_fonts/font = ExtResource("3_1pjia")
+theme_override_styles/normal = ExtResource("4_hbisc")
+theme_override_styles/pressed = ExtResource("4_hbisc")
+theme_override_styles/hover = ExtResource("4_hbisc")
+theme_override_styles/disabled = ExtResource("4_hbisc")
+theme_override_styles/focus = ExtResource("4_hbisc")
+text = "Parts"
+
+[node name="FrameSelectPanelContainer" type="PanelContainer" parent="." unique_id=747904936]
+visible = false
+z_index = 2
+layout_mode = 0
+offset_right = 584.0
+offset_bottom = 142.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pwrrv")
+
+[node name="FrameSelectVBoxContainer" type="VBoxContainer" parent="FrameSelectPanelContainer" unique_id=843139691]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="FrameSelectDropdownButton" parent="FrameSelectPanelContainer/FrameSelectVBoxContainer" unique_id=1086298471 instance=ExtResource("8_pqtcs")]
+layout_mode = 2
+
+[node name="FrameSelectDropdownButton2" parent="FrameSelectPanelContainer/FrameSelectVBoxContainer" unique_id=866670583 instance=ExtResource("8_pqtcs")]
+layout_mode = 2
+
+[node name="DataPackSelectorPanelContainer" type="Panel" parent="." unique_id=26558639 node_paths=PackedStringArray("data_pack_selector_vbox")]
+visible = false
+custom_minimum_size = Vector2(960, 960)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -480.0
+offset_top = -480.0
+offset_right = 480.0
+offset_bottom = 480.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_cybhx")
+script = ExtResource("5_hl41v")
+data_pack_selector_vbox = NodePath("ScrollContainer/DataPackSelectorVBox")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="DataPackSelectorPanelContainer" unique_id=131982840]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_55x64")
+
+[node name="DataPackSelectorVBox" type="VBoxContainer" parent="DataPackSelectorPanelContainer/ScrollContainer" unique_id=1071766129]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PartGridInterface" type="Node" parent="." unique_id=1702503083]
+script = ExtResource("10_pqtcs")
+
+[node name="dragged_part" parent="." unique_id=1949268490 instance=ExtResource("11_pwrrv")]
+layout_mode = 1

@@ -4,6 +4,7 @@
 [ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_w2twt"]
 [ext_resource type="Script" uid="uid://chgjg4cfqjfww" path="res://scripts/alt_aspect_ratio_container.gd" id="2_7ykc4"]
 [ext_resource type="Script" uid="uid://b5es3k3xamepu" path="res://scripts/app_scroll_container.gd" id="2_gubc5"]
+[ext_resource type="Script" uid="uid://6lpo6yi1q5l6" path="res://scripts/scroll_container_touch_support.gd" id="3_4w45t"]
 [ext_resource type="FontFile" uid="uid://dpjfpo24ilp7l" path="res://fonts/Cousine-Bold.ttf" id="4_c1pb6"]
 [ext_resource type="PackedScene" uid="uid://bgfrdd3pp80ne" path="res://scenes/attribute_h_box.tscn" id="4_rt2n2"]
 [ext_resource type="Texture2D" uid="uid://c5oybgrt48a2c" path="res://assets/ui/botg_logo_line.png" id="5_mngbo"]
@@ -12,25 +13,6 @@
 [ext_resource type="PackedScene" uid="uid://dwxq6xyo184in" path="res://scenes/frame_select_dropdown_button.tscn" id="6_e1cbu"]
 [ext_resource type="PackedScene" uid="uid://cg66ksdd4jth" path="res://scenes/dragged_part.tscn" id="6_rt2n2"]
 [ext_resource type="StyleBox" uid="uid://chgyajxu7nuva" path="res://assets/ui/styles/tab_button_style_box_normal.tres" id="7_c1pb6"]
-
-[sub_resource type="GDScript" id="GDScript_pu3yx"]
-script/source = "extends ScrollContainer
-
-var is_dragging: bool = false
-var swipe_speed = 1.0
-
-func _ready() -> void:
-	pass
-	#custom_minimum_size.x = get_window().size.x
-
-func _gui_input(event: InputEvent) -> void:
-	if event is InputEventScreenTouch:
-		if event.index == 0:
-			is_dragging = event.pressed
-	if event is InputEventScreenDrag:
-		if is_dragging:
-			scroll_vertical -= event.relative.y * swipe_speed
-"
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e1cbu"]
 bg_color = Color(0.9098039, 0, 0.54901963, 1)
@@ -124,6 +106,16 @@ func _ready() -> void:
 
 func _on_button_pressed() -> void:
 	SceneManager.switch_scene(SceneManager.CUSTOM_FRAME_SCENE)
+"
+
+[sub_resource type="GDScript" id="GDScript_pwrrv"]
+script/source = "extends Button
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	SceneManager.switch_scene(SceneManager.CUSTOM_FRAME_BUILDER_SCENE)
 "
 
 [sub_resource type="GDScript" id="GDScript_4w45t"]
@@ -256,7 +248,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 3
-script = SubResource("GDScript_pu3yx")
+script = ExtResource("3_4w45t")
 
 [node name="CenterContainer" type="MarginContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer" unique_id=1303896139]
 layout_mode = 2
@@ -456,6 +448,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
+theme = ExtResource("1_w2twt")
 
 [node name="Label" type="Label" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer/ScrollContainer/VBoxContainer" unique_id=1647344527]
 layout_mode = 2
@@ -473,6 +466,7 @@ script = SubResource("GDScript_gn8jn")
 layout_mode = 2
 theme = ExtResource("1_w2twt")
 text = "Frame Build"
+script = SubResource("GDScript_pwrrv")
 
 [node name="CreateCustomPartButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer/ScrollContainer/VBoxContainer" unique_id=767720143]
 layout_mode = 2
@@ -598,7 +592,7 @@ size_flags_horizontal = 3
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 3
 scroll_deadzone = 48
-script = SubResource("GDScript_pu3yx")
+script = ExtResource("3_4w45t")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer" unique_id=460806789]
 layout_mode = 2
@@ -725,7 +719,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 3
-script = SubResource("GDScript_pu3yx")
+script = ExtResource("3_4w45t")
 
 [node name="PartsVBox" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer" unique_id=1955997277]
 layout_mode = 2

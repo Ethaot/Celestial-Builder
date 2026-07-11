@@ -165,13 +165,14 @@ func get_data_packs() -> void:
 		current_package_id = manifests[i]["package_id"]
 		current_package_url = manifests[i]["package_url"]
 		print("Checking package " + manifests[i]["package_id"])
-		var err: Error = http_checker.request(current_package_url + "?timestamp=" + str(Time.get_unix_time_from_system()), [], HTTPClient.METHOD_HEAD)
-		if err == OK:
-			await _await_response_with_timeout(check_complete, 5.0)
-			manifests[i]["etag"] = currently_checked_etag
-			#await check_complete
-		else:
-			push_error("Error checking package url for updates. Error code: ", err)
+		if current_package_url.length() > 0:
+			var err: Error = http_checker.request(current_package_url + "?timestamp=" + str(Time.get_unix_time_from_system()), [], HTTPClient.METHOD_HEAD)
+			if err == OK:
+				await _await_response_with_timeout(check_complete, 5.0)
+				manifests[i]["etag"] = currently_checked_etag
+				#await check_complete
+			else:
+				push_error("Error checking package url for updates. Error code: ", err)
 	
 	for package_id in packages_to_download:
 		print("Downloading package " + package_id)

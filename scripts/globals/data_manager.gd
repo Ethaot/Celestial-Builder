@@ -10,6 +10,7 @@ var save_data: SaveData
 var config: Config
 var save_clock: float = 0.0
 var data_changed: bool = false
+var currently_edited_data_pack: String = "custom"
 
 func _ready() -> void:
 	load_config()

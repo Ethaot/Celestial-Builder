@@ -393,7 +393,6 @@ func draw_part(hp: HeldPart, mirrored_horizontally: bool, mirrored_vertically: b
 	return ppvb
 
 func mirror_slots_horizontally(hp: HeldPart) -> HeldPart:
-	#var p: HeldPart = hp.duplicate(true)
 	var part_size: Vector2i
 	var new_part_icons: Array[AtlasTexture]
 	var new_slots: Array[Vector2i]
@@ -403,8 +402,6 @@ func mirror_slots_horizontally(hp: HeldPart) -> HeldPart:
 			part_size.x = slot.x
 		if slot.y > part_size.y:
 			part_size.y = slot.y
-	#for slot in hp.slots:
-		#slot.x = part_size.x - slot.x
 	for i in range(part_size.y + 1):
 		if i * (part_size.x + 1) + part_size.x + 1 > hp.slots.size():
 			var new_slot_array: Array[Vector2i]
@@ -433,7 +430,6 @@ func mirror_slots_horizontally(hp: HeldPart) -> HeldPart:
 	return hp
 
 func mirror_slots_vertically(hp: HeldPart) -> HeldPart:
-	#var p: HeldPart = hp.duplicate(true)
 	var part_size: Vector2i
 	var new_part_icons: Array[AtlasTexture]
 	var new_slots: Array[Vector2i]
@@ -469,7 +465,6 @@ func mirror_slots_vertically(hp: HeldPart) -> HeldPart:
 
 func rotate_slots(hp: HeldPart) -> HeldPart:
 	var new_slots: Array[Vector2i]
-	#var p: HeldPart = hp.duplicate(true)
 	var part_size: Vector2i
 	var slot_icon_dict: Dictionary[Vector2i, AtlasTexture]
 	var new_part_icons: Array[AtlasTexture]

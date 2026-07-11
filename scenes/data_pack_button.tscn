@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://bk7xvy51qmoew"]
+
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_6742y"]
+[ext_resource type="Script" uid="uid://dnya41dhm7uty" path="res://scripts/data_pack_button.gd" id="2_oifq0"]
+
+[node name="DataPackButton" type="Button" unique_id=1331543687]
+offset_right = 8.0
+offset_bottom = 8.0
+theme = ExtResource("1_6742y")
+text = "Data Pack"
+script = ExtResource("2_oifq0")

@@ -77,6 +77,14 @@ expand_margin_bottom = 4.0
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u23kh"]
 content_margin_top = 12.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cybhx"]
+bg_color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.9098039, 0, 0.54901963, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gn8jn"]
 bg_color = Color(0.15686275, 0.15686275, 0.15686275, 1)
 border_width_left = 4
@@ -101,6 +109,7 @@ Label/fonts/font = ExtResource("1_yhag5")
 Label/styles/normal = SubResource("StyleBoxEmpty_u23kh")
 LineEdit/fonts/font = ExtResource("1_yhag5")
 OptionButton/fonts/font = ExtResource("1_yhag5")
+Panel/styles/panel = SubResource("StyleBoxFlat_cybhx")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_gn8jn")
 PopupMenu/font_sizes/font_separator_size = 64
 PopupMenu/font_sizes/title_font_size = 64
@@ -112,3 +121,4 @@ RichTextLabel/fonts/bold_italics_font = ExtResource("3_ogfsw")
 RichTextLabel/fonts/italics_font = ExtResource("3_u23kh")
 RichTextLabel/fonts/normal_font = ExtResource("1_yhag5")
 RichTextLabel/styles/normal = SubResource("StyleBoxEmpty_ogfsw")
+VBoxContainer/constants/separation = 16

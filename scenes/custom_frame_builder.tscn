@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://wwsbe6qdyhes" path="res://scripts/custom_frame_mode/custom_frame_main_script.gd" id="1_27ifd"]
 [ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="2_7xyhl"]
+[ext_resource type="Script" uid="uid://6lpo6yi1q5l6" path="res://scripts/scroll_container_touch_support.gd" id="2_8ce3o"]
 [ext_resource type="Script" uid="uid://chgjg4cfqjfww" path="res://scripts/alt_aspect_ratio_container.gd" id="3_7xyhl"]
 [ext_resource type="Script" uid="uid://dccyiis4a0dhf" path="res://scripts/custom_frame_mode/custom_frame_mode_signal_bus.gd" id="4_28umx"]
 
@@ -56,6 +57,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("2_8ce3o")
 
 [node name="MainVBox" type="VBoxContainer" parent="ScrollContainer" unique_id=1503159074]
 layout_mode = 2
@@ -228,6 +230,7 @@ theme = ExtResource("2_7xyhl")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="FrameSizePanelContainer" unique_id=867819048]
 layout_mode = 2
+script = ExtResource("2_8ce3o")
 
 [node name="FrameSizeVBox" type="VBoxContainer" parent="FrameSizePanelContainer/ScrollContainer" unique_id=557243705]
 layout_mode = 2
