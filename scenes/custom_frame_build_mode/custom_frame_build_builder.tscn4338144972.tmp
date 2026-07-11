@@ -102,7 +102,7 @@ theme = ExtResource("2_cybhx")
 text = "Exit Frame Builder"
 script = SubResource("GDScript_pwrrv")
 
-[node name="FrameScrollContainer" type="ScrollContainer" parent="MainScrollContainer/MainHBoxContainer" unique_id=1367777726 node_paths=PackedStringArray("main_script", "part_grid_interface", "frame_dropdown_button", "frame_dropdown_panel_container", "frame_dropdown_vbox", "frame_name_line_edit", "hp_label", "grid_grid_container", "armor_grid_container", "defenses_hbox", "part_effects_vbox", "player_build_toggle", "save_frame_build_button", "load_frame_build_button", "load_frame_build_menu", "load_frame_build_vbox")]
+[node name="FrameScrollContainer" type="ScrollContainer" parent="MainScrollContainer/MainHBoxContainer" unique_id=1367777726 node_paths=PackedStringArray("main_script", "part_grid_interface", "frame_dropdown_button", "frame_dropdown_panel_container", "frame_dropdown_vbox", "frame_name_line_edit", "hp_label", "grid_grid_container", "armor_grid_container", "defenses_hbox", "part_effects_vbox", "player_build_toggle", "save_frame_build_button", "load_frame_build_button")]
 custom_minimum_size = Vector2(1080, 0)
 layout_mode = 2
 script = ExtResource("4_hl41v")
@@ -120,8 +120,6 @@ part_effects_vbox = NodePath("FrameTabVBox/PartEffectsVBox")
 player_build_toggle = NodePath("FrameTabVBox/PlayerBuildToggle")
 save_frame_build_button = NodePath("FrameTabVBox/HBoxContainer/SaveFrameBuildButton")
 load_frame_build_button = NodePath("FrameTabVBox/HBoxContainer/LoadFrameBuildButton")
-load_frame_build_menu = NodePath("../../../LoadFrameBuildMenu")
-load_frame_build_vbox = NodePath("../../../LoadFrameBuildMenu/ScrollContainer/LoadFrameBuildVBox")
 
 [node name="FrameTabVBox" type="VBoxContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer" unique_id=2028298435]
 layout_mode = 2
@@ -390,31 +388,6 @@ theme_override_styles/hover = ExtResource("4_hbisc")
 theme_override_styles/disabled = ExtResource("4_hbisc")
 theme_override_styles/focus = ExtResource("4_hbisc")
 text = "Parts"
-
-[node name="LoadFrameBuildMenu" type="ColorRect" parent="." unique_id=1422851021]
-visible = false
-z_index = 2
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.15686275, 0.15686275, 0.15686275, 1)
-
-[node name="ScrollContainer" type="ScrollContainer" parent="LoadFrameBuildMenu" unique_id=1088092436]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 128.0
-offset_bottom = 64.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="LoadFrameBuildVBox" type="VBoxContainer" parent="LoadFrameBuildMenu/ScrollContainer" unique_id=1343017198]
-layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="FrameSelectPanelContainer" type="PanelContainer" parent="." unique_id=747904936]
 visible = false

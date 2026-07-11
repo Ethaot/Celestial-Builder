@@ -173,6 +173,13 @@ size_flags_horizontal = 3
 theme = ExtResource("2_7xyhl")
 text = "Enemy Only"
 
+[node name="FrameFeatureIsEliteToggle" type="CheckButton" parent="ScrollContainer/MainVBox/CheckboxesHBox" unique_id=1284912009]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_7xyhl")
+button_pressed = true
+text = "Frame Feature is Elite"
+
 [node name="FrameAbilityHBox" type="HBoxContainer" parent="ScrollContainer/MainVBox" unique_id=1658690447]
 layout_mode = 2
 

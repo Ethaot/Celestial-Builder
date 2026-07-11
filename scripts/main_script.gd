@@ -224,9 +224,8 @@ func populate_frame_option_button() -> void:
 	frame_option_dict.clear()
 	for i in range(ResourceManager.frames.size()):
 		#frame_option_button.add_item(ResourceManager.frames[i].frame_name, i)
+		frame_option_dict[i] = ResourceManager.frames[i].frame_id
 		if !ResourceManager.frames[i].unusual:
-			frame_option_dict[i] = ResourceManager.frames[i].frame_id
-			
 			var fsdb: FrameSelectDropdownButton = frame_select_dropdown_button_prefab.instantiate()
 			fsdb.text = ResourceManager.frames[i].frame_name
 			fsdb.idx = i
@@ -985,13 +984,14 @@ func _on_load_frame_build_button_pressed() -> void:
 	for fb in DataManager.save_data.frame_builds:
 		var lfbb: Button = load_frame_build_button_prefab.instantiate()
 		lfbb.text = fb.frame_build_name
-		lfbb.button_up.connect(_on_frame_build_load.bind(fb))
-		load_frame_build_vbox.add_child(lfbb)
-	for fb in ResourceManager.frame_builds:
-		var lfbb: Button = load_frame_build_button_prefab.instantiate()
-		lfbb.text = fb.frame_build_name
 		lfbb.button_up.connect(_on_frame_build_load.bind(fb.duplicate(true)))
 		load_frame_build_vbox.add_child(lfbb)
+	for fb in ResourceManager.frame_builds:
+		if fb.player_build:
+			var lfbb: Button = load_frame_build_button_prefab.instantiate()
+			lfbb.text = fb.frame_build_name
+			lfbb.button_up.connect(_on_frame_build_load.bind(fb.duplicate(true)))
+			load_frame_build_vbox.add_child(lfbb)
 	var back_button: Button = load_frame_build_button_prefab.instantiate()
 	back_button.text = "Back"
 	back_button.button_up.connect(func() -> void: load_frame_build_menu.visible = false)
@@ -1079,11 +1079,11 @@ func _reset_frame_damage() -> void:
 			if !has_reactor:
 				shield_capacity = 0
 			elif largest_reactor_size < frame.frame_size:
-				shield_capacity = part.capacity - part.capacity_modifier
+				shield_capacity = part.capacity - part.capacity_modifier_negative
 			elif largest_reactor_size == frame.frame_size:
 				shield_capacity = part.capacity
 			else:
-				shield_capacity = part.capacity + part.capacity_modifier
+				shield_capacity = part.capacity + part.capacity_modifier_positive
 			if DataManager.save_data.character.current_shields.size() > iter:
 				DataManager.save_data.character.current_shields[iter] = shield_capacity
 			else:

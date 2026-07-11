@@ -8,6 +8,7 @@ signal check_complete
 signal download_complete
 signal all_downloads_complete
 signal prepared_signal
+signal packs_imported
 
 var main_theme_res: Theme = preload("res://MainTheme.tres")
 var player_grid_gradient: Texture2D = preload("res://assets/ui/player_grid_gradient.png")
@@ -44,6 +45,7 @@ var temp_files: Array
 
 var prepared: bool = false
 var downloads_complete: bool = false
+var packs_ready: bool = false
 
 func _ready() -> void:
 	http_request = HTTPRequest.new()
@@ -57,6 +59,34 @@ func _ready() -> void:
 	if !OS.has_feature("mobile") and !OS.has_feature("web_android") and !OS.has_feature("web_ios"):
 		main_theme_res.default_font_size = 32
 	
+	refresh_all_packs()
+	if !packs_ready:
+		await packs_imported
+	
+	player_grid_gradient_atlastextures = create_player_grid_gradient_atlastextures()
+	
+	prepared = true
+	prepared_signal.emit()
+
+func refresh_all_packs() -> void:
+	packs_ready = false
+	downloads_complete = false
+	
+	weapons_ranged.clear()
+	weapons_explosive.clear()
+	weapons_melee.clear()
+	weapons_ew.clear()
+	weapons_missiles.clear()
+	parts_reactors.clear()
+	parts_thrusters.clear()
+	parts_processors.clear()
+	parts_shields.clear()
+	frames.clear()
+	frame_builds.clear()
+	part_dict.clear()
+	part_image_dict.clear()
+	frame_dict.clear()
+	
 	check_create_directories()
 	manifests = get_data_pack_manifest()
 	get_data_packs()
@@ -68,15 +98,16 @@ func _ready() -> void:
 	#var parts_array: Array[Part] = import_parts("res://parts/", ".tres")
 	
 	for manifest in manifests:
-		var parts_array: Array[Part] = import_parts_dicts(DATA_PACKS_PATH + manifest["package_id"] + "/")
-		part_dict.merge(construct_parts_dict(parts_array))
-		assign_parts_array(parse_parts(parts_array))
-		
-		var frames_array: Array[Frame] = import_frames_dicts(DATA_PACKS_PATH + manifest["package_id"] + "/")
-		frames.append_array(frames_array)
-		
-		var frame_builds_array: Array[FrameBuild] = import_frame_build_dicts(DATA_PACKS_PATH + manifest["package_id"] + "/")
-		frame_builds.append_array(frame_builds_array)
+		if manifest["enabled"]:
+			var parts_array: Array[Part] = import_parts_dicts(DATA_PACKS_PATH + manifest["package_id"] + "/")
+			part_dict.merge(construct_parts_dict(parts_array))
+			assign_parts_array(parse_parts(parts_array))
+			
+			var frames_array: Array[Frame] = import_frames_dicts(DATA_PACKS_PATH + manifest["package_id"] + "/")
+			frames.append_array(frames_array)
+			
+			var frame_builds_array: Array[FrameBuild] = import_frame_build_dicts(DATA_PACKS_PATH + manifest["package_id"] + "/")
+			frame_builds.append_array(frame_builds_array)
 		
 	# Custom folder
 	var custom_parts_array: Array[Part] = import_parts_dicts(CUSTOM_PACK_PATH)
@@ -86,12 +117,12 @@ func _ready() -> void:
 	frames.append_array(import_frames_dicts(CUSTOM_PACK_PATH))
 	frame_builds.append_array(import_frame_build_dicts(CUSTOM_PACK_PATH))
 	
+	# Final Dict Construction
 	part_image_dict = get_part_images_dict()
 	frame_dict = construct_frame_dict(frames)
-	player_grid_gradient_atlastextures = create_player_grid_gradient_atlastextures()
 	
-	prepared = true
-	prepared_signal.emit()
+	packs_ready = true
+	packs_imported.emit()
 
 func check_create_directories() -> void:
 	if !DirAccess.dir_exists_absolute(DATA_PACKS_PATH):
@@ -118,9 +149,11 @@ func get_data_pack_manifest() -> Array[Dictionary]:
 							if d["package_id"] == "celestial-bodies-core":
 								if d["package_url"] != "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-3.zip":
 									d["package_url"] = "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-3.zip"
+								if !d.has("enabled"):
+									d["enabled"] = true
 							data_pack_manifest_data.append(d)
 				else:
-					var core_data: Dictionary[String, String] = {
+					var core_data: Dictionary = {
 						"package_name": "Celestial Bodies Core",
 						"package_id": "celestial-bodies-core",
 						#"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core.zip",
@@ -129,13 +162,14 @@ func get_data_pack_manifest() -> Array[Dictionary]:
 						"source_name": "Celestial Bodies Technical Handbook",
 						"source_url": "https://selkie.itch.io/celestial-bodies",
 						"version": "0.0.1",
-						"etag": "ETag: big_empy"
+						"etag": "ETag: big_empy",
+						"enabled": true
 					}
 					data_pack_manifest_data.append(core_data)
 			file.close()
 		else:
 			print("Manifest file not found. Creating new Core Data.")
-			var core_data: Dictionary[String, String] = {
+			var core_data: Dictionary = {
 				"package_name": "Celestial Bodies Core",
 				"package_id": "celestial-bodies-core",
 				#"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core.zip",
@@ -144,7 +178,8 @@ func get_data_pack_manifest() -> Array[Dictionary]:
 				"source_name": "Celestial Bodies Technical Handbook",
 				"source_url": "https://selkie.itch.io/celestial-bodies",
 				"version": "0.0.1",
-				"etag": "ETag: big_empy"
+				"etag": "ETag: big_empy",
+				"enabled": true
 				}
 			data_pack_manifest_data.append(core_data)
 			#var file = FileAccess.open(DATA_PACKS_PATH + "data_packs_manifest.json", FileAccess.WRITE)
@@ -203,7 +238,8 @@ func update_manifest() -> void:
 						"package_url": m_data[0]["package_url"],
 						"author": m_data[0]["author"],
 						"version": m_data[0]["version"],
-						"etag": m["etag"]
+						"etag": m["etag"],
+						"enabled": m["enabled"]
 					}
 					new_manifest_data.append(clean_dict)
 	var new_manifest_string: String = JSON.stringify(new_manifest_data, "\t")
@@ -212,6 +248,7 @@ func update_manifest() -> void:
 	file.store_line(new_manifest_string)
 	file.close()
 	print("Manifests updated.")
+			
 
 func import_parts_dicts(path: String) -> Array[Part]:
 	print("Importing parts...")
@@ -410,6 +447,58 @@ func save_frame_to_frames_json(data_pack_id: String, frame: Frame) -> void:
 		var json_string: String = JSON.stringify(data, "\t")
 		file.store_line(json_string)
 		file.close()
+
+func save_frame_build_to_frame_builds_json(data_pack_id: String, fb: FrameBuild) -> void:
+	if FileAccess.file_exists(DATA_PACKS_PATH + data_pack_id + "/frame_builds.json"):
+		var file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/frame_builds.json", FileAccess.READ_WRITE)
+		var json_string: String = file.get_as_text()
+		var data = JSON.parse_string(json_string)
+		var data_had_frame_build: bool = false
+		if data is Array:
+			for dict in data:
+				if dict is Dictionary:
+					if dict["frame_build_name"] == fb.frame_build_name:
+						dict.assign(fb.to_dict())
+						data_had_frame_build = true
+			if !data_had_frame_build:
+				data.append(fb.to_dict())
+		json_string = JSON.stringify(data, "\t")
+		file.store_line(json_string)
+		file.close()
+	else:
+		var file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/frame_builds.json", FileAccess.WRITE)
+		var data: Array = [fb.to_dict()]
+		var json_string: String = JSON.stringify(data, "\t")
+		file.store_line(json_string)
+		file.close()
+
+func get_frames_from_pack(data_pack_id: String) -> Array[Frame]:
+	var arr: Array[Frame]
+	if FileAccess.file_exists(DATA_PACKS_PATH + data_pack_id + "/frames.json"):
+		var file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/frames.json", FileAccess.READ)
+		var json_string: String = file.get_as_text()
+		var data = JSON.parse_string(json_string)
+		if data is Array:
+			for dict in data:
+				if dict is Dictionary:
+					var f: Frame = Frame.new()
+					f.from_dict(dict)
+					arr.append(f)
+	return arr
+
+func get_frame_builds_from_pack(data_pack_id: String) -> Array[FrameBuild]:
+	var arr: Array[FrameBuild]
+	if FileAccess.file_exists(DATA_PACKS_PATH + data_pack_id + "/frame_builds.json"):
+		var file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/frame_builds.json", FileAccess.READ)
+		var json_string: String = file.get_as_text()
+		var data = JSON.parse_string(json_string)
+		if data is Array:
+			for dict in data:
+				if dict is Dictionary:
+					var fb: FrameBuild = FrameBuild.new()
+					fb.from_dict(dict)
+					arr.append(fb)
+	return arr
 
 func _on_http_check_completed(result: int, response_code: int, headers: PackedStringArray, _body: PackedByteArray) -> void:
 	print("Got response code " + str(response_code))

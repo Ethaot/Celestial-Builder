@@ -1,10 +1,10 @@
 extends Resource
 class_name FrameBuild
 
-var frame_build_name: String
-var frame_id: String
-var frame_build_configuration: Array[PartInstance]
-var player_build: bool
+@export var frame_build_name: String
+@export var frame_id: String
+@export var frame_build_configuration: Array[PartInstance]
+@export var player_build: bool
 
 func to_dict() -> Dictionary:
 	var dict: Dictionary = {}
@@ -14,6 +14,7 @@ func to_dict() -> Dictionary:
 	for pi in frame_build_configuration:
 		pi_array.append(pi.to_dict())
 	dict["frame_build_configuration"] = pi_array
+	dict["player_build"] = player_build
 	return dict
 
 func from_dict(dict: Dictionary) -> void:

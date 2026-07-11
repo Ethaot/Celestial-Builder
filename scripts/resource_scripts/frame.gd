@@ -6,6 +6,7 @@ class_name Frame
 @export var frame_available_slots: Array[Vector2i]
 @export var frame_feature_name: String
 @export_multiline var frame_feature_text: String
+@export var frame_feature_is_elite: bool = true
 @export var frame_hp: int
 @export var frame_armor_slots: Array[Vector2i]
 @export var frame_reinforced_armor_slots: Array[Vector2i]
@@ -20,6 +21,7 @@ func to_dict() -> Dictionary:
 		"frame_available_slots": frame_available_slots,
 		"frame_feature_name": frame_feature_name,
 		"frame_feature_text": frame_feature_text,
+		"frame_feature_is_elite": frame_feature_is_elite,
 		"frame_hp": frame_hp,
 		"frame_armor_slots": frame_armor_slots,
 		"frame_reinforced_armor_slots": frame_reinforced_armor_slots,
@@ -42,6 +44,8 @@ func from_dict(dict: Dictionary) -> void:
 		frame_available_slots.append(Vector2i(x,y))
 	frame_feature_name = dict["frame_feature_name"]
 	frame_feature_text = dict["frame_feature_text"]
+	if dict.has("frame_feature_is_elite"):
+		frame_feature_is_elite = dict["frame_feature_is_elite"]
 	frame_hp = dict["frame_hp"]
 	frame_armor_slots.clear()
 	for slot in dict["frame_armor_slots"]:

@@ -27,6 +27,7 @@ var armor_grid_button_prefab: PackedScene = preload("res://scenes/custom_frame_m
 @export var frame_hp_up_button: Button
 @export var frame_titan_toggle: CheckButton
 @export var frame_unusual_toggle: CheckButton
+@export var frame_feature_is_elite_toggle: CheckButton
 @export var frame_ability_name_line_edit: LineEdit
 @export var frame_ability_description_text_edit: TextEdit
 @export var save_frame_button: Button
@@ -202,6 +203,7 @@ func save_frame_data() -> void:
 				frame.frame_available_slots.append(Vector2i(tb.index%6, floori(float(tb.index) / 6.0)))
 		frame.frame_feature_name = frame_ability_name_line_edit.text
 		frame.frame_feature_text = frame_ability_description_text_edit.text
+		frame.frame_feature_is_elite = frame_feature_is_elite_toggle.button_pressed
 		frame.frame_hp = frame_hp_label.text.to_int()
 		frame.frame_armor_slots = armor_pos_array
 		frame.frame_reinforced_armor_slots = reinforced_armor_pos_array

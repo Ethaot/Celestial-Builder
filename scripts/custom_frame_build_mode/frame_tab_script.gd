@@ -1,31 +1,34 @@
 extends ScrollContainer
+class_name FrameBuilderFrameTabMenu
 
 var frame_select_dropdown_button_prefab: PackedScene = preload("res://scenes/frame_select_dropdown_button.tscn")
 var label_prefab: PackedScene = preload("res://scenes/grid_label.tscn")
 var grid_texture_button_prefab: PackedScene = preload("res://scenes/grid_texture_button.tscn")
-var empty_grid_frame: Texture2D = preload("res://assets/empty_grid_frame.png")
 var selectable_grid_frame: Texture2D = preload("res://assets/ui/EmptyGridSpace.png")
 var part_effect_label_prefab: PackedScene = preload("res://scenes/part_effect_label.tscn")
+var load_frame_build_button_prefab: PackedScene = preload("res://scenes/load_frame_build_button.tscn")
 
 @export var main_script: CustomFrameBuildMode
 @export var part_grid_interface: PartGridInterface
 @export var frame_dropdown_button: Button
 @export var frame_dropdown_panel_container: PanelContainer
 @export var frame_dropdown_vbox: VBoxContainer
+@export var frame_name_line_edit: LineEdit
 @export var hp_label: Label
 @export var grid_grid_container: GridContainer
 @export var armor_grid_container: GridContainer
 @export var defenses_hbox: HFlowContainer
 @export var part_effects_vbox: VBoxContainer
+@export var player_build_toggle: CheckButton
+@export var save_frame_build_button: Button
+@export var load_frame_build_button: Button
+@export var load_frame_build_menu: ColorRect
+@export var load_frame_build_vbox: VBoxContainer
 
 var current_frame_build: FrameBuild
 
 var is_dragging: bool = false
 var swipe_speed = 1.0
-
-var hovered_grids: Array[int]
-var selected_grid: int = 0
-var start_part_pickup: bool = false
 
 var frame_option_dict: Dictionary[int, String]
 var frame_select_panel_open: bool = false
@@ -38,6 +41,10 @@ func _ready() -> void:
 	_on_frame_option_chosen(0)
 	frame_dropdown_button.button_up.connect(_on_frame_select_button_clicked)
 	populate_grid()
+	
+	frame_name_line_edit.text_changed.connect(_on_frame_name_text_changed)
+	save_frame_build_button.button_up.connect(_on_save_build_button_pressed)
+	load_frame_build_button.button_up.connect(_on_load_build_button_pressed)
 
 func _input(event: InputEvent) -> void:
 	if frame_select_panel_open:
@@ -451,7 +458,7 @@ func set_part_to_grid_cell(hp: HeldPart) -> void:
 	var pi: PartInstance = PartInstance.new()
 	var p: Part = ResourceManager.part_dict[hp.part_id]
 	var indices: Array[int] = []
-	var selected_cell_pos: Vector2i = Vector2i(selected_grid % 6, floori(float(selected_grid) / 6.0))
+	var selected_cell_pos: Vector2i = Vector2i(part_grid_interface.selected_grid % 6, floori(float(part_grid_interface.selected_grid) / 6.0))
 	for offset in hp.slots:
 		# Make sure we don't wrap around
 		if selected_cell_pos.x + offset.x > 5 or selected_cell_pos.y + offset.y > 5:
@@ -475,6 +482,62 @@ func set_part_to_grid_cell(hp: HeldPart) -> void:
 	current_frame_build.frame_build_configuration.append(pi)
 	draw_grid_cells()
 
+func pickup_placed_part(idx: int) -> void:
+	var part: Part
+	var iter: int = 0
+	for pi in current_frame_build.frame_build_configuration:
+		if pi.part_instance_slots.has(idx):
+			part_grid_interface.change_mode(part_grid_interface.Mode.Edit)
+			part = ResourceManager.part_dict[pi.part_id]
+			part_grid_interface.current_held_part = HeldPart.new()
+			part_grid_interface.current_held_part.part_id = part.part_id
+			part_grid_interface.current_held_part.part_icons = ResourceManager.part_image_dict[part.part_id]
+			part_grid_interface.current_held_part.slots = part.part_configuration
+			if pi.mirrored_h:
+				part_grid_interface.current_held_part = mirror_slots_horizontally(part_grid_interface.current_held_part)
+			if pi.mirrored_v:
+				part_grid_interface.current_held_part = mirror_slots_vertically(part_grid_interface.current_held_part)
+			for i in range(pi.times_rotated):
+				part_grid_interface.current_held_part = rotate_slots(part_grid_interface.current_held_part)
+			
+			part_grid_interface.dragged_part.assign_part(part_grid_interface.current_held_part)
+			current_frame_build.frame_build_configuration.remove_at(iter)
+			draw_grid_cells()
+			break
+		else:
+			iter += 1
+
+func save_build() -> void:
+	if frame_name_line_edit.text != "":
+		ResourceManager.save_frame_build_to_frame_builds_json(DataManager.currently_edited_data_pack, current_frame_build)
+
+func load_build(fb: FrameBuild) -> void:
+	var frame_idx: int
+	for i in range(ResourceManager.frames.size()):
+		if ResourceManager.frames[i].frame_id == fb.frame_id:
+			frame_idx = i
+			break
+	_on_frame_option_chosen(frame_idx)
+	current_frame_build = fb
+	frame_name_line_edit.text = fb.frame_build_name
+	player_build_toggle.button_pressed = fb.player_build
+	draw_grid_cells()
+	load_frame_build_menu.visible = false
+
+func populate_load_frame_build_menu() -> void:
+	for child in load_frame_build_vbox.get_children():
+		child.queue_free()
+	for fb in ResourceManager.get_frame_builds_from_pack(DataManager.currently_edited_data_pack):
+		var lfbb: Button = load_frame_build_button_prefab.instantiate()
+		lfbb.text = fb.frame_build_name
+		lfbb.button_up.connect(_on_frame_build_load.bind(fb))
+		load_frame_build_vbox.add_child(lfbb)
+	var back_button: Button = load_frame_build_button_prefab.instantiate()
+	back_button.text = "Back"
+	back_button.button_up.connect(func() -> void: load_frame_build_menu.visible = false)
+	load_frame_build_vbox.add_child(back_button)
+	load_frame_build_menu.visible = true
+
 func switch_to_main_view() -> void:
 	main_script.go_to_page(1)
 
@@ -487,24 +550,20 @@ func _on_frame_option_chosen(idx: int) -> void:
 	draw_grid_cells()
 
 func _on_grid_button_clicked(index: int) -> void:
-	selected_grid = index
-	start_part_pickup = true
+	part_grid_interface.selected_grid = index
+	part_grid_interface.start_part_pickup = true
 
 func _on_grid_cell_hovered(idx: int) -> void:
-	hovered_grids.append(idx)
+	part_grid_interface.hovered_grids.append(idx)
 
 func _on_grid_cell_unhovered(idx: int) -> void:
-	for i in range(hovered_grids.size()):
-		if hovered_grids[i] == idx:
-			hovered_grids.remove_at(i)
+	for i in range(part_grid_interface.hovered_grids.size()):
+		if part_grid_interface.hovered_grids[i] == idx:
+			part_grid_interface.hovered_grids.remove_at(i)
 			break
 
-func _on_part_grabbed(part: HeldPart) -> void:
-	part_grid_interface.dragged_part.assign_part(part)
-	switch_to_main_view()
-
 func _on_part_dropped(idx: int) -> void:
-	selected_grid = idx
+	part_grid_interface.selected_grid = idx
 	set_part_to_grid_cell(part_grid_interface.current_held_part)
 
 func _on_frame_select_button_clicked() -> void:
@@ -512,3 +571,15 @@ func _on_frame_select_button_clicked() -> void:
 		close_frame_select_panel()
 	else:
 		open_frame_select_panel()
+
+func _on_frame_name_text_changed(new_text: String) -> void:
+	current_frame_build.frame_build_name = new_text
+
+func _on_save_build_button_pressed() -> void:
+	save_build()
+
+func _on_load_build_button_pressed() -> void:
+	populate_load_frame_build_menu()
+
+func _on_frame_build_load(fb: FrameBuild) -> void:
+	load_build(fb)

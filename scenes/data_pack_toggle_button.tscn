@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://bvushk4ak2n0r"]
+
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_cje2j"]
+[ext_resource type="Script" uid="uid://c4frpcs0566g1" path="res://scripts/data_pack_toggle_button.gd" id="1_mwhjf"]
+
+[node name="DataPackToggleButton" type="CheckButton" unique_id=810421431]
+offset_right = 44.0
+offset_bottom = 24.0
+theme = ExtResource("1_cje2j")
+script = ExtResource("1_mwhjf")
