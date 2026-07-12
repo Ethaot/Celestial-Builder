@@ -7,4 +7,5 @@
 offset_right = 44.0
 offset_bottom = 24.0
 theme = ExtResource("1_cje2j")
+autowrap_mode = 3
 script = ExtResource("1_mwhjf")

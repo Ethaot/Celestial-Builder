@@ -563,8 +563,10 @@ func _on_grid_cell_unhovered(idx: int) -> void:
 			break
 
 func _on_part_dropped(idx: int) -> void:
-	part_grid_interface.selected_grid = idx
-	set_part_to_grid_cell(part_grid_interface.current_held_part)
+	if part_grid_interface.current_held_part != null:
+		part_grid_interface.selected_grid = idx
+		set_part_to_grid_cell(part_grid_interface.current_held_part)
+		part_grid_interface.current_held_part = null
 
 func _on_frame_select_button_clicked() -> void:
 	if frame_dropdown_panel_container.visible:

@@ -177,8 +177,8 @@ func get_data_pack_manifest() -> Array[Dictionary]:
 				for d in parsed_data:
 					if d is Dictionary:
 						if d["package_id"] == "celestial-bodies-core":
-							if d["package_url"] != "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-3.zip":
-								d["package_url"] = "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-3.zip"
+							if d["package_url"] != "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-4.zip":
+								d["package_url"] = "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-4.zip"
 							if !d.has("enabled"):
 								d["enabled"] = true
 						data_pack_manifest_data.append(d)
@@ -203,7 +203,7 @@ func get_data_pack_manifest() -> Array[Dictionary]:
 				"package_name": "Celestial Bodies Core",
 				"package_id": "celestial-bodies-core",
 				#"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core.zip",
-				"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-3.zip",
+				"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-4.zip",
 				"author": "Binary Star & Charlotte Laskowski",
 				"source_name": "Celestial Bodies Technical Handbook",
 				"source_url": "https://selkie.itch.io/celestial-bodies",

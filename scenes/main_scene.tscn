@@ -144,6 +144,13 @@ func _on_button_pressed() -> void:
 	create_custom_panel.visible = false
 "
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_almkq"]
+bg_color = Color(0.93333334, 0.93333334, 0.93333334, 1)
+border_width_left = 64
+border_width_right = 64
+border_color = Color(1, 1, 1, 0)
+border_blend = true
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6wevv"]
 bg_color = Color(0, 0, 0, 1)
 
@@ -170,6 +177,18 @@ func _ready() -> void:
 
 func _on_button_pressed() -> void:
 	SceneManager.switch_scene(SceneManager.DATA_MANAGER_SCENE)
+"
+
+[sub_resource type="GDScript" id="GDScript_almkq"]
+script/source = "extends Button
+
+@export var data_pack_file_dialog: FileDialog
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	data_pack_file_dialog.popup_file_dialog()
 "
 
 [sub_resource type="GDScript" id="GDScript_bcnxi"]
@@ -290,6 +309,7 @@ load_frame_build_menu = NodePath("LoadFrameBuildMenu")
 load_frame_build_vbox = NodePath("LoadFrameBuildMenu/ScrollContainer/LoadFrameBuildVBox")
 
 [node name="AppScreenScrollContainer" type="ScrollContainer" parent="." unique_id=733877498 node_paths=PackedStringArray("main_scene", "main_hbox")]
+clip_contents = false
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -315,6 +335,7 @@ theme_override_constants/separation = 0
 
 [node name="MenuScrollContainer" type="ScrollContainer" parent="AppScreenScrollContainer/HBoxContainer" unique_id=1134152300]
 custom_minimum_size = Vector2(1080, 0)
+clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
 horizontal_scroll_mode = 0
@@ -331,7 +352,7 @@ theme_override_constants/margin_right = 48
 [node name="MenuOptionsVBox" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer" unique_id=1082593203]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 16
+theme = ExtResource("1_w2twt")
 alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/MenuOptionsVBox" unique_id=1293858808]
@@ -480,7 +501,7 @@ license_panel_container = NodePath("../../LicensePanelContainer")
 [node name="LoadLampighterVBox" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer" unique_id=2069852079]
 visible = false
 layout_mode = 2
-theme_override_constants/separation = 16
+theme = ExtResource("1_w2twt")
 
 [node name="LicensePanelContainer" type="PanelContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer" unique_id=389832442]
 visible = false
@@ -560,6 +581,7 @@ create_custom_panel = NodePath("../../..")
 
 [node name="LamplighterScrollContainer" type="ScrollContainer" parent="AppScreenScrollContainer/HBoxContainer" unique_id=668718151]
 custom_minimum_size = Vector2(1080, 0)
+clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -665,6 +687,7 @@ text = "v"
 
 [node name="MainScrollContainer" type="ScrollContainer" parent="AppScreenScrollContainer/HBoxContainer" unique_id=138395016]
 custom_minimum_size = Vector2(1080, 0)
+clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
 horizontal_scroll_mode = 0
@@ -793,6 +816,7 @@ autowrap_mode = 3
 
 [node name="PartsScrollContainer" type="ScrollContainer" parent="AppScreenScrollContainer/HBoxContainer" unique_id=2109849229]
 custom_minimum_size = Vector2(1080, 0)
+clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
 horizontal_scroll_mode = 0
@@ -872,8 +896,21 @@ custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 color = Color(0.15686275, 0.15686275, 0.15686275, 0)
 
-[node name="ColorRect2" type="ColorRect" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/PartsVBox/PartTabsVBox" unique_id=1685833234]
+[node name="HBoxContainer" type="HBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/PartsVBox/PartTabsVBox" unique_id=614161204]
+layout_mode = 2
+
+[node name="Padding" type="Control" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/PartsVBox/PartTabsVBox/HBoxContainer" unique_id=1131544400]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+
+[node name="ColorRect2" type="Panel" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/PartsVBox/PartTabsVBox/HBoxContainer" unique_id=1074332206]
 custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_almkq")
+
+[node name="Padding2" type="Control" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/PartsVBox/PartTabsVBox/HBoxContainer" unique_id=1380264253]
+custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 
 [node name="ColorRect3" type="ColorRect" parent="AppScreenScrollContainer/HBoxContainer/PartsScrollContainer/PartsVBox/PartTabsVBox" unique_id=461095955]
@@ -975,6 +1012,7 @@ grow_vertical = 2
 color = Color(0.15686275, 0.15686275, 0.15686275, 1)
 
 [node name="ScrollContainer" type="ScrollContainer" parent="LoadFrameBuildMenu" unique_id=109342421]
+clip_contents = false
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -987,6 +1025,7 @@ grow_vertical = 2
 [node name="LoadFrameBuildVBox" type="VBoxContainer" parent="LoadFrameBuildMenu/ScrollContainer" unique_id=1581653521]
 layout_mode = 2
 size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
 
 [node name="FrameSelectPanelContainer" type="PanelContainer" parent="." unique_id=960837371]
 visible = false
@@ -1049,11 +1088,13 @@ text = "Manage Data"
 autowrap_mode = 3
 script = SubResource("GDScript_qqo70")
 
-[node name="LoadDataPackButton" type="Button" parent="DataPacksMenuPanel/ScrollContainer/VBoxContainer" unique_id=764707502]
+[node name="LoadDataPackButton" type="Button" parent="DataPacksMenuPanel/ScrollContainer/VBoxContainer" unique_id=764707502 node_paths=PackedStringArray("data_pack_file_dialog")]
 layout_mode = 2
 theme = ExtResource("1_w2twt")
 text = "Load a Data Pack"
 autowrap_mode = 3
+script = SubResource("GDScript_almkq")
+data_pack_file_dialog = NodePath("../../../../LoadDataPackFileDialog")
 
 [node name="AddRepositoryButton" type="Button" parent="DataPacksMenuPanel/ScrollContainer/VBoxContainer" unique_id=1494325095]
 layout_mode = 2
@@ -1079,7 +1120,7 @@ data_packs_menu_panel = NodePath("../../..")
 [node name="DataPackSelectorPanelContainer" parent="." unique_id=967509421 instance=ExtResource("14_si52b")]
 layout_mode = 1
 
-[node name="DataPacksToggleMenu" type="Panel" parent="." unique_id=1713665554 node_paths=PackedStringArray("data_packs_toggle_vbox")]
+[node name="DataPacksToggleMenu" type="Panel" parent="." unique_id=1713665554 node_paths=PackedStringArray("data_packs_toggle_vbox", "download_pack_file_dialog")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -1090,6 +1131,7 @@ grow_vertical = 2
 theme = ExtResource("1_w2twt")
 script = ExtResource("14_r6p65")
 data_packs_toggle_vbox = NodePath("ScrollContainer/DataPacksToggleVBox")
+download_pack_file_dialog = NodePath("../DownloadDataPackFileDialog")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="DataPacksToggleMenu" unique_id=1253620361]
 layout_mode = 1
@@ -1136,3 +1178,21 @@ text = "Loading Packages..."
 fit_content = true
 horizontal_alignment = 1
 script = SubResource("GDScript_4d01l")
+
+[node name="LoadDataPackFileDialog" type="FileDialog" parent="." unique_id=766788357]
+title = "Load a .zip"
+initial_position = 1
+size = Vector2i(960, 480)
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.zip;ZIP Files;application/zip")
+use_native_dialog = true
+hidden_files_toggle_enabled = false
+
+[node name="DownloadDataPackFileDialog" type="FileDialog" parent="." unique_id=41027554]
+initial_position = 1
+size = Vector2i(960, 480)
+access = 2
+filters = PackedStringArray("*.zip;ZIP Files;application/zip")
+use_native_dialog = true
+hidden_files_toggle_enabled = false

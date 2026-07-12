@@ -1,10 +1,11 @@
 extends Panel
 class_name DataPackToggleMenu
 
-var data_pack_toggle_button_prefab: PackedScene = preload("res://scenes/data_pack_toggle_button.tscn")
+var data_pack_toggle_hbox_prefab: PackedScene = preload("res://scenes/data_toggle_h_box.tscn")
 var button_prefab: PackedScene = preload("res://scenes/load_frame_build_button.tscn")
 
 @export var data_packs_toggle_vbox: VBoxContainer
+@export var download_pack_file_dialog: FileDialog
 
 var data_packs_changed: bool = false
 
@@ -13,19 +14,165 @@ func display_data_packs() -> void:
 	for i in range(1, children.size()):
 		children[i].queue_free()
 	for m in ResourceManager.manifests:
-		var dptb: DataPackToggleButton = data_pack_toggle_button_prefab.instantiate()
+		var dthb: DataToggleHBox = data_pack_toggle_hbox_prefab.instantiate()
+		var dptb: DataPackToggleButton = dthb.data_pack_toggle_button
 		dptb.text = m["package_name"] + " (" + m["package_id"] + ") by " + m["author"]
 		dptb.button_pressed = m["enabled"]
 		dptb.pack_id = m["package_id"]
 		dptb.dptm = self
-		data_packs_toggle_vbox.add_child(dptb)
+		dthb.data_pack_download_button.button_up.connect(_download_package_button_pressed.bind(m["package_id"]))
+		data_packs_toggle_vbox.add_child(dthb)
 	var back_button: Button = button_prefab.instantiate()
 	back_button.text = "Back"
 	back_button.button_up.connect(close_data_packs_menu)
 	data_packs_toggle_vbox.add_child(back_button)
 	visible = true
 
+func download_package(path: String, package_id: String) -> void:
+	if path.contains("."):
+		path = path.split(".")[0] + ".zip"
+	print("Preparing to write zip at path: " + path)
+	var zip_packer: ZIPPacker = ZIPPacker.new()
+	var error: Error = zip_packer.open(path)
+	if error != OK:
+		push_error("Could not open zip archive.")
+		return
+	if FileAccess.file_exists(ResourceManager.DATA_PACKS_PATH + package_id + "/manifest.json"):
+		print("Preparing to pack manifest.json...")
+		zip_packer.start_file("manifest.json")
+		var file = FileAccess.open(ResourceManager.DATA_PACKS_PATH + package_id + "/manifest.json", FileAccess.READ)
+		var json_string: String = file.get_as_text()
+		var data = json_string.to_utf8_buffer()
+		file.close()
+		zip_packer.write_file(data)
+		zip_packer.close_file()
+		print("manifest.json packed.")
+	if FileAccess.file_exists(ResourceManager.DATA_PACKS_PATH + package_id + "/frames.json"):
+		print("Preparing to pack frames.json...")
+		zip_packer.start_file("frames.json")
+		var file = FileAccess.open(ResourceManager.DATA_PACKS_PATH + package_id + "/frames.json", FileAccess.READ)
+		var json_string: String = file.get_as_text()
+		var data = json_string.to_utf8_buffer()
+		file.close()
+		zip_packer.write_file(data)
+		zip_packer.close_file()
+		print("frames.json packed.")
+	if FileAccess.file_exists(ResourceManager.DATA_PACKS_PATH + package_id + "/frame_builds.json"):
+		print("Preparing to pack frame_builds.json...")
+		zip_packer.start_file("frame_builds.json")
+		var file = FileAccess.open(ResourceManager.DATA_PACKS_PATH + package_id + "/frame_builds.json", FileAccess.READ)
+		var json_string: String = file.get_as_text()
+		var data = json_string.to_utf8_buffer()
+		file.close()
+		zip_packer.write_file(data)
+		zip_packer.close_file()
+		print("frame_builds.json packed.")
+	if FileAccess.file_exists(ResourceManager.DATA_PACKS_PATH + package_id + "/parts.json"):
+		print("Preparing to pack parts.json...")
+		zip_packer.start_file("parts.json")
+		var file = FileAccess.open(ResourceManager.DATA_PACKS_PATH + package_id + "/parts.json", FileAccess.READ)
+		var json_string: String = file.get_as_text()
+		var data = json_string.to_utf8_buffer()
+		file.close()
+		zip_packer.write_file(data)
+		zip_packer.close_file()
+		print("parts.json packed.")
+	zip_packer.close()
+	print("Zip file written.")
+		
+	#download_pack_file_dialog.visible = false
+
 func close_data_packs_menu() -> void:
 	if data_packs_changed:
 		ResourceManager.refresh_all_packs()
 	visible = false
+
+func _download_package_button_pressed(package_id: String) -> void:
+	if OS.has_feature("web") or OS.has_feature("web_android") or OS.has_feature("web_ios"):
+		# Initiate a download
+		print("Preparing zip for download...")
+		var zip_packer: ZIPPacker = ZIPPacker.new()
+		var error: Error = zip_packer.open(ResourceManager.TEMP_FOLDER + package_id + ".zip")
+		if error != OK:
+			push_error("Could not open zip archive.")
+			return
+		if FileAccess.file_exists(ResourceManager.DATA_PACKS_PATH + package_id + "/manifest.json"):
+			print("Preparing to pack manifest.json...")
+			zip_packer.start_file("manifest.json")
+			var file = FileAccess.open(ResourceManager.DATA_PACKS_PATH + package_id + "/manifest.json", FileAccess.READ)
+			var json_string: String = file.get_as_text()
+			var data = json_string.to_utf8_buffer()
+			file.close()
+			zip_packer.write_file(data)
+			zip_packer.close_file()
+			print("manifest.json packed.")
+		if FileAccess.file_exists(ResourceManager.DATA_PACKS_PATH + package_id + "/frames.json"):
+			print("Preparing to pack frames.json...")
+			zip_packer.start_file("frames.json")
+			var file = FileAccess.open(ResourceManager.DATA_PACKS_PATH + package_id + "/frames.json", FileAccess.READ)
+			var json_string: String = file.get_as_text()
+			var data = json_string.to_utf8_buffer()
+			file.close()
+			zip_packer.write_file(data)
+			zip_packer.close_file()
+			print("frames.json packed.")
+		if FileAccess.file_exists(ResourceManager.DATA_PACKS_PATH + package_id + "/frame_builds.json"):
+			print("Preparing to pack frame_builds.json...")
+			zip_packer.start_file("frame_builds.json")
+			var file = FileAccess.open(ResourceManager.DATA_PACKS_PATH + package_id + "/frame_builds.json", FileAccess.READ)
+			var json_string: String = file.get_as_text()
+			var data = json_string.to_utf8_buffer()
+			file.close()
+			zip_packer.write_file(data)
+			zip_packer.close_file()
+			print("frame_builds.json packed.")
+		if FileAccess.file_exists(ResourceManager.DATA_PACKS_PATH + package_id + "/parts.json"):
+			print("Preparing to pack parts.json...")
+			zip_packer.start_file("parts.json")
+			var file = FileAccess.open(ResourceManager.DATA_PACKS_PATH + package_id + "/parts.json", FileAccess.READ)
+			var json_string: String = file.get_as_text()
+			var data = json_string.to_utf8_buffer()
+			file.close()
+			zip_packer.write_file(data)
+			zip_packer.close_file()
+			print("parts.json packed.")
+		zip_packer.close()
+		print("Zip file written.")
+		var downloadable_zip = FileAccess.open(ResourceManager.TEMP_FOLDER + package_id + ".zip", FileAccess.READ)
+		var downloadable_data: PackedByteArray = downloadable_zip.get_buffer(downloadable_zip.get_length())
+		downloadable_zip.close()
+		
+		# Prepare the Uint8Array to hold raw bytes
+		var js_array = JavaScriptBridge.create_object("Uint8Array", downloadable_data.size())
+		for i in range(downloadable_data.size()):
+			js_array[i] = downloadable_data[i]
+		
+		# Make the blob with the right MIME
+		var blob_properties = JavaScriptBridge.create_object("Object")
+		blob_properties["type"] = "application/zip"
+		var blob_parts = JavaScriptBridge.create_object("Array")
+		blob_parts.push(js_array)
+		var blob = JavaScriptBridge.create_object("Blob", blob_parts, blob_properties)
+		
+		# Hacky way to make a false click
+		var window = JavaScriptBridge.get_interface("window")
+		var document = JavaScriptBridge.get_interface("document")
+		var url_interface = JavaScriptBridge.get_interface("URL")
+		var blob_url = url_interface.createObjectURL(blob)
+		var link = document.createElement("a")
+		link.href = blob_url
+		link.download = package_id + ".zip"
+		
+		# Now trigger the download and clean up memory
+		document.body.appendChild(link)
+		link.click()
+		document.body.removeChild(link)
+		url_interface.revokeObjectURL(blob_url)
+		
+	else:
+		if download_pack_file_dialog.file_selected.get_connections().size() > 0:
+			download_pack_file_dialog.file_selected.disconnect(download_package)
+		download_pack_file_dialog.file_selected.connect(download_package.bind(package_id))
+		download_pack_file_dialog.current_file = package_id + ".zip"
+		download_pack_file_dialog.popup_file_dialog()
+	

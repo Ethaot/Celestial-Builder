@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://ccc521cid47ft"]
+
+[ext_resource type="PackedScene" uid="uid://bvushk4ak2n0r" path="res://scenes/data_pack_toggle_button.tscn" id="1_eycvr"]
+[ext_resource type="Script" uid="uid://cybh7tc7kwx88" path="res://scripts/data_toggle_h_box.gd" id="1_g0mil"]
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="2_g0mil"]
+
+[node name="DataToggleHBox" type="HBoxContainer" unique_id=1546969981 node_paths=PackedStringArray("data_pack_toggle_button", "data_pack_download_button", "data_pack_delete_button")]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+script = ExtResource("1_g0mil")
+data_pack_toggle_button = NodePath("DataPackToggleButton")
+data_pack_download_button = NodePath("DownloadButton")
+data_pack_delete_button = NodePath("DeleteButton")
+
+[node name="DataPackToggleButton" parent="." unique_id=810421431 instance=ExtResource("1_eycvr")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DownloadButton" type="Button" parent="." unique_id=1018577474]
+layout_mode = 2
+theme = ExtResource("2_g0mil")
+text = "Download"
+
+[node name="DeleteButton" type="Button" parent="." unique_id=857445072]
+layout_mode = 2
+theme = ExtResource("2_g0mil")
+theme_override_colors/font_color = Color(0.78431374, 0, 0, 1)
+text = "Delete"
