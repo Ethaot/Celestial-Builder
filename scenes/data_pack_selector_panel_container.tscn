@@ -1,0 +1,161 @@
+[gd_scene format=3 uid="uid://cugrq5ji4qm4"]
+
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_fjkal"]
+[ext_resource type="Script" uid="uid://bfqwbddrfipji" path="res://scripts/data_pack_selector_panel_container.gd" id="2_u577c"]
+[ext_resource type="Script" uid="uid://6lpo6yi1q5l6" path="res://scripts/scroll_container_touch_support.gd" id="3_4j1mj"]
+
+[node name="DataPackSelectorPanelContainer" type="Panel" unique_id=967509421 node_paths=PackedStringArray("data_pack_selector_menu", "data_pack_selector_vbox", "currently_modifying_label", "new_data_pack_menu", "new_data_pack_name_label", "new_data_pack_name_line_edit", "new_data_pack_id_label", "new_data_pack_id_line_edit", "new_data_pack_author_label", "new_data_pack_author_line_edit", "new_data_pack_source_name_label", "new_data_pack_source_name_line_edit", "new_data_pack_version_label", "new_data_pack_version_line_edit", "new_data_pack_confirm_button", "new_data_pack_back_button")]
+visible = false
+custom_minimum_size = Vector2(960, 960)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_fjkal")
+script = ExtResource("2_u577c")
+data_pack_selector_menu = NodePath("DataPackSelectorMenu")
+data_pack_selector_vbox = NodePath("DataPackSelectorMenu/DataPackSelectorVBox")
+currently_modifying_label = NodePath("DataPackSelectorMenu/DataPackSelectorVBox/CurrentlyModifyingLabel")
+new_data_pack_menu = NodePath("NewDataPackMenu")
+new_data_pack_name_label = NodePath("NewDataPackMenu/NewDataPackVBox/NameHBox/DataPackNameLabel")
+new_data_pack_name_line_edit = NodePath("NewDataPackMenu/NewDataPackVBox/NameHBox/DataPackNameLineEdit")
+new_data_pack_id_label = NodePath("NewDataPackMenu/NewDataPackVBox/IDHBox/DataPackIDLabel")
+new_data_pack_id_line_edit = NodePath("NewDataPackMenu/NewDataPackVBox/IDHBox/DataPackIDLineEdit")
+new_data_pack_author_label = NodePath("NewDataPackMenu/NewDataPackVBox/AuthorHBox/DataPackAuthorLabel")
+new_data_pack_author_line_edit = NodePath("NewDataPackMenu/NewDataPackVBox/AuthorHBox/DataPackAuthorLineEdit")
+new_data_pack_source_name_label = NodePath("NewDataPackMenu/NewDataPackVBox/SourceNameHBox/DataPackSourceNameLabel")
+new_data_pack_source_name_line_edit = NodePath("NewDataPackMenu/NewDataPackVBox/SourceNameHBox/DataPackSourceNameLineEdit")
+new_data_pack_version_label = NodePath("NewDataPackMenu/NewDataPackVBox/VersionHBox/DataPackVersionLabel")
+new_data_pack_version_line_edit = NodePath("NewDataPackMenu/NewDataPackVBox/VersionHBox/DataPackVersionLineEdit")
+new_data_pack_confirm_button = NodePath("NewDataPackMenu/NewDataPackVBox/HBoxContainer/ConfirmButton")
+new_data_pack_back_button = NodePath("NewDataPackMenu/NewDataPackVBox/HBoxContainer/BackButton")
+
+[node name="DataPackSelectorMenu" type="ScrollContainer" parent="." unique_id=1658669033]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_4j1mj")
+
+[node name="DataPackSelectorVBox" type="VBoxContainer" parent="DataPackSelectorMenu" unique_id=2045570769]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CurrentlyModifyingLabel" type="Label" parent="DataPackSelectorMenu/DataPackSelectorVBox" unique_id=1524132712]
+layout_mode = 2
+theme = ExtResource("1_fjkal")
+text = "Currently Modifying:"
+horizontal_alignment = 1
+
+[node name="NewDataPackMenu" type="ScrollContainer" parent="." unique_id=73596178]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="NewDataPackVBox" type="VBoxContainer" parent="NewDataPackMenu" unique_id=510601187]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Padding" type="Control" parent="NewDataPackMenu/NewDataPackVBox" unique_id=2079430203]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+
+[node name="NameHBox" type="HBoxContainer" parent="NewDataPackMenu/NewDataPackVBox" unique_id=1390284744]
+layout_mode = 2
+
+[node name="DataPackNameLabel" type="Label" parent="NewDataPackMenu/NewDataPackVBox/NameHBox" unique_id=2107589565]
+layout_mode = 2
+theme = ExtResource("1_fjkal")
+text = "Pack Name:"
+
+[node name="DataPackNameLineEdit" type="LineEdit" parent="NewDataPackMenu/NewDataPackVBox/NameHBox" unique_id=726205166]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_fjkal")
+placeholder_text = "Data Pack Name"
+
+[node name="IDHBox" type="HBoxContainer" parent="NewDataPackMenu/NewDataPackVBox" unique_id=1713914693]
+layout_mode = 2
+
+[node name="DataPackIDLabel" type="Label" parent="NewDataPackMenu/NewDataPackVBox/IDHBox" unique_id=912513972]
+layout_mode = 2
+theme = ExtResource("1_fjkal")
+text = "Pack ID:"
+
+[node name="DataPackIDLineEdit" type="LineEdit" parent="NewDataPackMenu/NewDataPackVBox/IDHBox" unique_id=1004211581]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_fjkal")
+placeholder_text = "Data Pack ID"
+
+[node name="AuthorHBox" type="HBoxContainer" parent="NewDataPackMenu/NewDataPackVBox" unique_id=1038323282]
+layout_mode = 2
+
+[node name="DataPackAuthorLabel" type="Label" parent="NewDataPackMenu/NewDataPackVBox/AuthorHBox" unique_id=28895133]
+layout_mode = 2
+theme = ExtResource("1_fjkal")
+text = "Author:"
+
+[node name="DataPackAuthorLineEdit" type="LineEdit" parent="NewDataPackMenu/NewDataPackVBox/AuthorHBox" unique_id=2116848307]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_fjkal")
+placeholder_text = "Author"
+
+[node name="SourceNameHBox" type="HBoxContainer" parent="NewDataPackMenu/NewDataPackVBox" unique_id=696124295]
+layout_mode = 2
+
+[node name="DataPackSourceNameLabel" type="Label" parent="NewDataPackMenu/NewDataPackVBox/SourceNameHBox" unique_id=823477126]
+layout_mode = 2
+theme = ExtResource("1_fjkal")
+text = "Source Name:"
+
+[node name="DataPackSourceNameLineEdit" type="LineEdit" parent="NewDataPackMenu/NewDataPackVBox/SourceNameHBox" unique_id=1403698795]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_fjkal")
+placeholder_text = "Source"
+
+[node name="VersionHBox" type="HBoxContainer" parent="NewDataPackMenu/NewDataPackVBox" unique_id=459974153]
+layout_mode = 2
+
+[node name="DataPackVersionLabel" type="Label" parent="NewDataPackMenu/NewDataPackVBox/VersionHBox" unique_id=2009640065]
+layout_mode = 2
+theme = ExtResource("1_fjkal")
+text = "Version:"
+
+[node name="DataPackVersionLineEdit" type="LineEdit" parent="NewDataPackMenu/NewDataPackVBox/VersionHBox" unique_id=2126056451]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_fjkal")
+placeholder_text = "Version"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="NewDataPackMenu/NewDataPackVBox" unique_id=143263044]
+layout_mode = 2
+
+[node name="ConfirmButton" type="Button" parent="NewDataPackMenu/NewDataPackVBox/HBoxContainer" unique_id=700873456]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_fjkal")
+text = "Confirm"
+
+[node name="BackButton" type="Button" parent="NewDataPackMenu/NewDataPackVBox/HBoxContainer" unique_id=832571322]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_fjkal")
+text = "Back"

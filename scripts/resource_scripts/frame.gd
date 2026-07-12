@@ -11,6 +11,7 @@ class_name Frame
 @export var frame_armor_slots: Array[Vector2i]
 @export var frame_reinforced_armor_slots: Array[Vector2i]
 @export var frame_size: Constants.Size
+@export var frame_secondary_size: Constants.Size
 @export var titan: bool
 @export var unusual: bool
 
@@ -26,6 +27,7 @@ func to_dict() -> Dictionary:
 		"frame_armor_slots": frame_armor_slots,
 		"frame_reinforced_armor_slots": frame_reinforced_armor_slots,
 		"frame_size": frame_size,
+		"frame_secondary_size": frame_secondary_size,
 		"titan": titan,
 		"unusual": unusual
 	}
@@ -60,5 +62,9 @@ func from_dict(dict: Dictionary) -> void:
 		var y: int = matches[1].get_string().to_int()
 		frame_reinforced_armor_slots.append(Vector2i(x,y))
 	frame_size = dict["frame_size"]
+	if dict.has("frame_secondary_size"):
+		frame_secondary_size = dict["frame_secondary_size"]
+	else:
+		frame_secondary_size = frame_size
 	titan = dict["titan"]
 	unusual = dict["unusual"]

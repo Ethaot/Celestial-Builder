@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://dwvjiki85dura"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4d01l"]
+bg_color = Color(0.8, 0.8, 0.8, 1)
+border_width_left = 32
+border_width_right = 32
+border_color = Color(0, 0, 0, 0)
+border_blend = true
+
+[node name="HorizontalRule" type="Panel" unique_id=1388795751]
+custom_minimum_size = Vector2(0, 8)
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_4d01l")

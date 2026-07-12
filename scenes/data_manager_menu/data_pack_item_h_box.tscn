@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bj5dq1482lq6y"]
+
+[ext_resource type="Script" uid="uid://db4252g0qb3yd" path="res://scripts/data_manager_menu/data_pack_item_h_box.gd" id="1_17i22"]
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="2_mfp1h"]
+
+[node name="DataPackItemHBox" type="HBoxContainer" unique_id=1681774600 node_paths=PackedStringArray("data_pack_item_label", "data_pack_item_copy_button", "data_pack_item_delete_button")]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_17i22")
+data_pack_item_label = NodePath("DataPackItemLabel")
+data_pack_item_copy_button = NodePath("DataPackCopyButton")
+data_pack_item_delete_button = NodePath("DataPackDeleteButton")
+
+[node name="DataPackItemLabel" type="Label" parent="." unique_id=1053411818]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_mfp1h")
+text = "Data Pack Item"
+
+[node name="DataPackCopyButton" type="Button" parent="." unique_id=70669822]
+layout_mode = 2
+theme = ExtResource("2_mfp1h")
+text = "Copy"
+
+[node name="DataPackDeleteButton" type="Button" parent="." unique_id=289201110]
+layout_mode = 2
+theme = ExtResource("2_mfp1h")
+theme_override_colors/font_color = Color(0.78431374, 0, 0, 1)
+text = "X"

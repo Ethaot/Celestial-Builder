@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://cp40lojoy6by"]
+
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_1603m"]
+[ext_resource type="Script" uid="uid://bratj6ynfpbr5" path="res://scripts/data_manager_menu/data_pack_category_v_box.gd" id="2_nlhsr"]
+
+[node name="DataPackCategoryVBox" type="VBoxContainer" unique_id=319003110 node_paths=PackedStringArray("data_pack_category_button", "data_pack_item_vbox")]
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("1_1603m")
+script = ExtResource("2_nlhsr")
+data_pack_category_button = NodePath("DataPackCategoryButton")
+data_pack_item_vbox = NodePath("DataPackItemVBox")
+
+[node name="DataPackCategoryButton" type="Button" parent="." unique_id=133740452]
+layout_mode = 2
+theme = ExtResource("1_1603m")
+text = "Data Pack Category"
+
+[node name="DataPackItemVBox" type="VBoxContainer" parent="." unique_id=219633400]
+visible = false
+layout_mode = 2
+theme = ExtResource("1_1603m")

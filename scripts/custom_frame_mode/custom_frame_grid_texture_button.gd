@@ -10,6 +10,9 @@ func _ready() -> void:
 	self_modulate = Color("282828")
 	button_up.connect(_on_button_pressed)
 
+func assign_grid_gradient_texture() -> void:
+	grid_gradient_rect.texture = ResourceManager.player_grid_gradient_atlastextures[index]
+
 func _on_button_pressed() -> void:
 	if selected:
 		selected = false

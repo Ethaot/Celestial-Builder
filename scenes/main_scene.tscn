@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://cg66ksdd4jth" path="res://scenes/dragged_part.tscn" id="6_rt2n2"]
 [ext_resource type="StyleBox" uid="uid://chgyajxu7nuva" path="res://assets/ui/styles/tab_button_style_box_normal.tres" id="7_c1pb6"]
 [ext_resource type="Script" uid="uid://b2tjnvqoeudp4" path="res://scripts/data_packs_toggle_menu.gd" id="14_r6p65"]
+[ext_resource type="PackedScene" uid="uid://cugrq5ji4qm4" path="res://scenes/data_pack_selector_panel_container.tscn" id="14_si52b"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e1cbu"]
 bg_color = Color(0.9098039, 0, 0.54901963, 1)
@@ -161,6 +162,28 @@ func _on_button_pressed() -> void:
 	data_packs_toggle_menu.display_data_packs()
 "
 
+[sub_resource type="GDScript" id="GDScript_qqo70"]
+script/source = "extends Button
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	SceneManager.switch_scene(SceneManager.DATA_MANAGER_SCENE)
+"
+
+[sub_resource type="GDScript" id="GDScript_bcnxi"]
+script/source = "extends Button
+
+@export var data_pack_selector_panel: DataPackSelectorPanel
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	data_pack_selector_panel.popup()
+"
+
 [sub_resource type="GDScript" id="GDScript_si52b"]
 script/source = "extends Button
 
@@ -180,6 +203,17 @@ border_width_top = 16
 border_width_right = 16
 border_width_bottom = 16
 border_color = Color(0.9098039, 0, 0.54901963, 1)
+
+[sub_resource type="GDScript" id="GDScript_u23kh"]
+script/source = "extends Panel
+
+func _ready() -> void:
+	if ResourceManager.downloads_complete:
+		visible = false
+	ResourceManager.packs_imported.connect(func() -> void: visible = false)
+	ResourceManager.refreshing.connect(func() -> void: visible = true)
+	
+"
 
 [sub_resource type="GDScript" id="GDScript_4d01l"]
 script/source = "extends RichTextLabel
@@ -1004,23 +1038,36 @@ layout_mode = 2
 layout_mode = 2
 theme = ExtResource("1_w2twt")
 text = "Toggle Data Packs"
+autowrap_mode = 3
 script = SubResource("GDScript_01n6w")
 data_packs_toggle_menu = NodePath("../../../../DataPacksToggleMenu")
 
-[node name="UploadDataPackButton" type="Button" parent="DataPacksMenuPanel/ScrollContainer/VBoxContainer" unique_id=764707502]
+[node name="ManageDataButton" type="Button" parent="DataPacksMenuPanel/ScrollContainer/VBoxContainer" unique_id=569803445]
 layout_mode = 2
 theme = ExtResource("1_w2twt")
-text = "Upload a Data Pack"
+text = "Manage Data"
+autowrap_mode = 3
+script = SubResource("GDScript_qqo70")
+
+[node name="LoadDataPackButton" type="Button" parent="DataPacksMenuPanel/ScrollContainer/VBoxContainer" unique_id=764707502]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "Load a Data Pack"
+autowrap_mode = 3
 
 [node name="AddRepositoryButton" type="Button" parent="DataPacksMenuPanel/ScrollContainer/VBoxContainer" unique_id=1494325095]
 layout_mode = 2
 theme = ExtResource("1_w2twt")
 text = "Download From a Repository"
+autowrap_mode = 3
 
-[node name="CreateDataPackButton" type="Button" parent="DataPacksMenuPanel/ScrollContainer/VBoxContainer" unique_id=701507934]
+[node name="ChooseDataPackButton" type="Button" parent="DataPacksMenuPanel/ScrollContainer/VBoxContainer" unique_id=701507934 node_paths=PackedStringArray("data_pack_selector_panel")]
 layout_mode = 2
 theme = ExtResource("1_w2twt")
-text = "Create a Data Pack"
+text = "Select a Data Pack to Modify"
+autowrap_mode = 3
+script = SubResource("GDScript_bcnxi")
+data_pack_selector_panel = NodePath("../../../../DataPackSelectorPanelContainer")
 
 [node name="BackButton" type="Button" parent="DataPacksMenuPanel/ScrollContainer/VBoxContainer" unique_id=1853079434 node_paths=PackedStringArray("data_packs_menu_panel")]
 layout_mode = 2
@@ -1028,6 +1075,9 @@ theme = ExtResource("1_w2twt")
 text = "Back"
 script = SubResource("GDScript_si52b")
 data_packs_menu_panel = NodePath("../../..")
+
+[node name="DataPackSelectorPanelContainer" parent="." unique_id=967509421 instance=ExtResource("14_si52b")]
+layout_mode = 1
 
 [node name="DataPacksToggleMenu" type="Panel" parent="." unique_id=1713665554 node_paths=PackedStringArray("data_packs_toggle_vbox")]
 visible = false
@@ -1066,6 +1116,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_gn8jn")
+script = SubResource("GDScript_u23kh")
 
 [node name="CenterContainer" type="CenterContainer" parent="LoadingPanel" unique_id=355823925]
 layout_mode = 1

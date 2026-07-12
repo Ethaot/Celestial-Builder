@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bsjhl6jpg58tg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4d01l"]
+content_margin_left = 16.0
+content_margin_top = 24.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.2509804, 0.2509804, 0.2509804, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.9098039, 0, 0.54901963, 1)
+
+[node name="DataPackPanelContainer" type="PanelContainer" unique_id=60460019]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_4d01l")

@@ -6,10 +6,10 @@
 [ext_resource type="FontFile" uid="uid://clxaxe666gut2" path="res://fonts/Cousine-Italic.ttf" id="3_1pjia"]
 [ext_resource type="StyleBox" uid="uid://chgyajxu7nuva" path="res://assets/ui/styles/tab_button_style_box_normal.tres" id="4_hbisc"]
 [ext_resource type="Script" uid="uid://c5n8cvq6rsl6o" path="res://scripts/custom_frame_build_mode/frame_tab_script.gd" id="4_hl41v"]
-[ext_resource type="Script" uid="uid://bfqwbddrfipji" path="res://scripts/data_pack_selector_panel_container.gd" id="5_hl41v"]
 [ext_resource type="Script" uid="uid://chgjg4cfqjfww" path="res://scripts/alt_aspect_ratio_container.gd" id="5_pqtcs"]
 [ext_resource type="Script" uid="uid://c1eeelmq5jva1" path="res://scripts/custom_frame_build_mode/parts_tab_script.gd" id="6_fag2l"]
 [ext_resource type="PackedScene" uid="uid://dwxq6xyo184in" path="res://scenes/frame_select_dropdown_button.tscn" id="8_pqtcs"]
+[ext_resource type="PackedScene" uid="uid://cugrq5ji4qm4" path="res://scenes/data_pack_selector_panel_container.tscn" id="10_fag2l"]
 [ext_resource type="Script" uid="uid://d1b0vmronhxko" path="res://scripts/custom_frame_build_mode/part_grid_interface.gd" id="10_pqtcs"]
 [ext_resource type="PackedScene" uid="uid://cg66ksdd4jth" path="res://scenes/dragged_part.tscn" id="11_pwrrv"]
 
@@ -18,10 +18,15 @@ script/source = "extends Button
 
 @export var data_pack_selector_panel: DataPackSelectorPanel
 func _ready() -> void:
+	text = \"Current Data Pack: \" + DataManager.currently_edited_data_pack
 	button_up.connect(_on_button_pressed)
+	data_pack_selector_panel.new_data_pack_selected.connect(update_name)
 
 func _on_button_pressed() -> void:
 	data_pack_selector_panel.popup()
+
+func update_name(new_data_pack_id: String) -> void:
+	text = \"Current Data Pack: \" + new_data_pack_id
 "
 
 [sub_resource type="GDScript" id="GDScript_pwrrv"]
@@ -435,37 +440,8 @@ layout_mode = 2
 [node name="FrameSelectDropdownButton2" parent="FrameSelectPanelContainer/FrameSelectVBoxContainer" unique_id=866670583 instance=ExtResource("8_pqtcs")]
 layout_mode = 2
 
-[node name="DataPackSelectorPanelContainer" type="Panel" parent="." unique_id=26558639 node_paths=PackedStringArray("data_pack_selector_vbox")]
-visible = false
-custom_minimum_size = Vector2(960, 960)
+[node name="DataPackSelectorPanelContainer" parent="." unique_id=488746494 instance=ExtResource("10_fag2l")]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -480.0
-offset_top = -480.0
-offset_right = 480.0
-offset_bottom = 480.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("2_cybhx")
-script = ExtResource("5_hl41v")
-data_pack_selector_vbox = NodePath("ScrollContainer/DataPackSelectorVBox")
-
-[node name="ScrollContainer" type="ScrollContainer" parent="DataPackSelectorPanelContainer" unique_id=131982840]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("1_55x64")
-
-[node name="DataPackSelectorVBox" type="VBoxContainer" parent="DataPackSelectorPanelContainer/ScrollContainer" unique_id=1071766129]
-layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="PartGridInterface" type="Node" parent="." unique_id=1702503083 node_paths=PackedStringArray("frame_tab_menu", "parts_tab_menu", "dragged_part")]
 script = ExtResource("10_pqtcs")

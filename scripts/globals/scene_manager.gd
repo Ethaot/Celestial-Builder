@@ -4,6 +4,7 @@ const MAIN_SCENE: String = "res://scenes/main_scene.tscn"
 const ENCOUNTER_SCENE: String = "res://scenes/encounter_mode.tscn"
 const CUSTOM_FRAME_SCENE: String = "res://scenes/custom_frame_builder.tscn"
 const CUSTOM_FRAME_BUILDER_SCENE: String = "res://scenes/custom_frame_build_mode/custom_frame_build_builder.tscn"
+const DATA_MANAGER_SCENE: String = "res://scenes/data_manager_menu/data_manager_menu.tscn"
 
 func switch_scene(scene: String) -> void:
 	var new_packed_scene: PackedScene = load(scene)

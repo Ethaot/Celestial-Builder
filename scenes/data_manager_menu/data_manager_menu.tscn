@@ -1,0 +1,89 @@
+[gd_scene format=3 uid="uid://dfnf04rfmq0uw"]
+
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_rcjcm"]
+[ext_resource type="Script" uid="uid://dg56fkvgwjaeb" path="res://scripts/data_manager_menu/data_manager_menu.gd" id="2_qqo70"]
+
+[sub_resource type="GDScript" id="GDScript_4d01l"]
+script/source = "extends Button
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	SceneManager.switch_scene(SceneManager.MAIN_SCENE)
+"
+
+[node name="DataManagerMenu" type="Panel" unique_id=745905131 node_paths=PackedStringArray("menu_vbox", "copy_to_panel", "copy_to_vbox_container")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_rcjcm")
+script = ExtResource("2_qqo70")
+menu_vbox = NodePath("ScrollContainer/HBoxContainer/VBoxContainer")
+copy_to_panel = NodePath("CopyToPanel")
+copy_to_vbox_container = NodePath("CopyToPanel/ScrollContainer/CopyToVBoxContainer")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1462157367]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer" unique_id=1759524889]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Padding2" type="Control" parent="ScrollContainer/HBoxContainer" unique_id=1239635502]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/HBoxContainer" unique_id=148345153]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_rcjcm")
+
+[node name="Padding" type="Control" parent="ScrollContainer/HBoxContainer/VBoxContainer" unique_id=1587034064]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+
+[node name="Padding" type="Control" parent="ScrollContainer/HBoxContainer" unique_id=2103033512]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CopyToPanel" type="Panel" parent="." unique_id=1320696948]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_rcjcm")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CopyToPanel" unique_id=249060670]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CopyToVBoxContainer" type="VBoxContainer" parent="CopyToPanel/ScrollContainer" unique_id=581484814]
+layout_mode = 2
+theme = ExtResource("1_rcjcm")
+
+[node name="BackButton" type="Button" parent="." unique_id=1589937887]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_right = 8.0
+grow_vertical = 0
+theme = ExtResource("1_rcjcm")
+text = "Back"
+script = SubResource("GDScript_4d01l")

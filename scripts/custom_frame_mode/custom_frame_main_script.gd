@@ -6,6 +6,7 @@ enum ARMORMODE{None, Armor}
 var label_prefab: PackedScene = preload("res://scenes/grid_label.tscn")
 var grid_button_prefab: PackedScene = preload("res://scenes/custom_frame_mode/custom_frame_grid_texture_button.tscn")
 var armor_grid_button_prefab: PackedScene = preload("res://scenes/custom_frame_mode/custom_frame_armor_grid_texture_button.tscn")
+var load_button_prefab: PackedScene = preload("res://scenes/load_frame_build_button.tscn")
 
 @export var signal_bus: CustomFrameModeSignalBus
 
@@ -13,12 +14,19 @@ var armor_grid_button_prefab: PackedScene = preload("res://scenes/custom_frame_m
 @export var frame_name_line_edit: LineEdit
 @export var frame_id_line_edit: LineEdit
 @export var frame_size_button: Button
+@export var frame_secondary_size_button: Button
 @export var frame_size_popup_panel: PanelContainer
+@export var frame_secondary_size_popup_panel: PanelContainer
 @export var frame_size_vbox: VBoxContainer
+@export var frame_secondary_size_vbox: VBoxContainer
 @export var frame_size_light_button: Button
 @export var frame_size_medium_button: Button
 @export var frame_size_heavy_button: Button
 @export var frame_size_ultra_button: Button
+@export var frame_secondary_size_light_button: Button
+@export var frame_secondary_size_medium_button: Button
+@export var frame_secondary_size_heavy_button: Button
+@export var frame_secondary_size_ultra_button: Button
 @export var grid: GridContainer
 @export var armor_grid: GridContainer
 @export var customize_armor_toggle_button: Button
@@ -33,6 +41,10 @@ var armor_grid_button_prefab: PackedScene = preload("res://scenes/custom_frame_m
 @export var save_frame_button: Button
 @export var load_frame_button: Button
 @export var reset_frame_button: Button
+@export var select_data_pack_button: Button
+@export var load_frame_panel: Panel
+@export var load_frame_vbox: VBoxContainer
+@export var data_pack_selector_panel: DataPackSelectorPanel
 
 var page_width: int
 var grid_buttons: Array[CustomFrameGridTextureButton]
@@ -42,6 +54,7 @@ var armor_array: Array[int]
 var armor_pos_array: Array[Vector2i]
 var reinforced_armor_pos_array: Array[Vector2i]
 var frame_size: Constants.Size = Constants.Size.Light
+var frame_secondary_size: Constants.Size = Constants.Size.Light
 
 func _ready() -> void:
 	get_window().size_changed.connect(setup)
@@ -56,6 +69,11 @@ func _ready() -> void:
 	frame_size_medium_button.button_up.connect(choose_frame_size.bind(Constants.Size.Medium))
 	frame_size_heavy_button.button_up.connect(choose_frame_size.bind(Constants.Size.Heavy))
 	frame_size_ultra_button.button_up.connect(choose_frame_size.bind(Constants.Size.Ultra))
+	frame_secondary_size_button.button_up.connect(_frame_size_dropdown_button_pressed.bind(true))
+	frame_secondary_size_light_button.button_up.connect(choose_frame_size.bind(Constants.Size.Light, true))
+	frame_secondary_size_medium_button.button_up.connect(choose_frame_size.bind(Constants.Size.Medium, true))
+	frame_secondary_size_heavy_button.button_up.connect(choose_frame_size.bind(Constants.Size.Heavy, true))
+	frame_secondary_size_ultra_button.button_up.connect(choose_frame_size.bind(Constants.Size.Ultra, true))
 	
 	customize_armor_toggle_button.button_up.connect(_customize_armor_toggle_button_pressed)
 	signal_bus.armor_grid_selected.connect(update_armor_array)
@@ -63,6 +81,8 @@ func _ready() -> void:
 	frame_hp_down_button.button_up.connect(_hp_down_button_pressed)
 	frame_hp_up_button.button_up.connect(_hp_up_button_pressed)
 	save_frame_button.button_up.connect(_save_button_pressed)
+	load_frame_button.button_up.connect(_load_button_pressed)
+	reset_frame_button.button_up.connect(_reset_button_pressed)
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -161,25 +181,45 @@ func setup() -> void:
 	page_width = screen_size.x
 	scroll_container.custom_minimum_size.x = page_width
 
-func toggle_frame_size_popup() -> void:
-	if !frame_size_popup_panel.visible:
-		frame_size_popup_panel.size = Vector2(frame_size_button.size.x, frame_size_vbox.size.y)
-		frame_size_popup_panel.position = Vector2(frame_size_button.global_position.x, frame_size_button.global_position.y + frame_size_button.size.y)
-		frame_size_popup_panel.visible = true
+func toggle_frame_size_popup(secondary: bool = false) -> void:
+	if !secondary:
+		if !frame_size_popup_panel.visible:
+			frame_size_popup_panel.size = Vector2(frame_size_button.size.x, frame_size_vbox.size.y)
+			frame_size_popup_panel.position = Vector2(frame_size_button.global_position.x, frame_size_button.global_position.y + frame_size_button.size.y)
+			frame_size_popup_panel.visible = true
+		else:
+			frame_size_popup_panel.visible = false
 	else:
-		frame_size_popup_panel.visible = false
+		if !frame_secondary_size_popup_panel.visible:
+			frame_secondary_size_popup_panel.size = Vector2(frame_secondary_size_button.size.x, frame_secondary_size_vbox.size.y)
+			frame_secondary_size_popup_panel.position = Vector2(frame_secondary_size_button.global_position.x, frame_secondary_size_button.global_position.y + frame_secondary_size_button.size.y)
+			frame_secondary_size_popup_panel.visible = true
+		else:
+			frame_secondary_size_popup_panel.visible = false
 
-func choose_frame_size(new_size: Constants.Size) -> void:
-	frame_size = new_size
-	match new_size:
-		Constants.Size.Light:
-			frame_size_button.text = "Frame Size: Light"
-		Constants.Size.Medium:
-			frame_size_button.text = "Frame Size: Medium"
-		Constants.Size.Heavy:
-			frame_size_button.text = "Frame Size: Heavy"
-		Constants.Size.Ultra:
-			frame_size_button.text = "Frame Size: Ultra"
+func choose_frame_size(new_size: Constants.Size, secondary: bool = false) -> void:
+	if !secondary:
+		frame_size = new_size
+		match new_size:
+			Constants.Size.Light:
+				frame_size_button.text = "Frame Size: Light"
+			Constants.Size.Medium:
+				frame_size_button.text = "Frame Size: Medium"
+			Constants.Size.Heavy:
+				frame_size_button.text = "Frame Size: Heavy"
+			Constants.Size.Ultra:
+				frame_size_button.text = "Frame Size: Ultra"
+	else:
+		frame_secondary_size = new_size
+		match new_size:
+			Constants.Size.Light:
+				frame_secondary_size_button.text = "Secondary Size: Light"
+			Constants.Size.Medium:
+				frame_secondary_size_button.text = "Secondary Size: Medium"
+			Constants.Size.Heavy:
+				frame_secondary_size_button.text = "Secondary Size: Heavy"
+			Constants.Size.Ultra:
+				frame_secondary_size_button.text = "Secondary Size: Ultra"
 
 func toggle_armor_mode() -> void:
 	if current_armor_mode == ARMORMODE.None:
@@ -208,13 +248,28 @@ func save_frame_data() -> void:
 		frame.frame_armor_slots = armor_pos_array
 		frame.frame_reinforced_armor_slots = reinforced_armor_pos_array
 		frame.frame_size = frame_size
+		frame.frame_secondary_size = frame_secondary_size
 		frame.unusual = frame_unusual_toggle.button_pressed
 		frame.titan = frame_titan_toggle.button_pressed
 		
-		ResourceManager.save_frame_to_frames_json("custom", frame)
+		ResourceManager.save_frame_to_frames_json(DataManager.currently_edited_data_pack, frame)
 
-func _frame_size_dropdown_button_pressed() -> void:
-	toggle_frame_size_popup()
+func display_load_screen() -> void:
+	for child in load_frame_vbox.get_children():
+		child.queue_free()
+	for f in ResourceManager.get_frames_from_pack(DataManager.currently_edited_data_pack):
+		var lfb: Button = load_button_prefab.instantiate()
+		lfb.text = f.frame_name
+		lfb.button_up.connect(_on_frame_loaded.bind(f))
+		load_frame_vbox.add_child(lfb)
+	var back_button: Button = load_button_prefab.instantiate()
+	back_button.text = "Back"
+	back_button.button_up.connect(func() -> void: load_frame_panel.visible = false)
+	load_frame_vbox.add_child(back_button)
+	load_frame_panel.visible = true
+
+func _frame_size_dropdown_button_pressed(secondary: bool = false) -> void:
+	toggle_frame_size_popup(secondary)
 
 func _customize_armor_toggle_button_pressed() -> void:
 	toggle_armor_mode()
@@ -227,3 +282,64 @@ func _hp_up_button_pressed() -> void:
 
 func _save_button_pressed() -> void:
 	save_frame_data()
+
+func _load_button_pressed() -> void:
+	display_load_screen()
+
+func _on_frame_loaded(frame: Frame) -> void:
+	frame_name_line_edit.text = frame.frame_name
+	frame_id_line_edit.text = frame.frame_id
+	choose_frame_size(frame.frame_size)
+	choose_frame_size(frame.frame_secondary_size, true)
+	var slots_idx_array: Array[int]
+	for slot in frame.frame_available_slots:
+		slots_idx_array.append(slot.x+slot.y*6)
+	for tb in grid_buttons:
+		if slots_idx_array.has(tb.index):
+			tb.selected = true
+			tb.self_modulate = Color.WHITE
+			tb.grid_gradient_rect.visible = true
+		else:
+			tb.selected = false
+			tb.self_modulate = Color("#282828")
+			tb.grid_gradient_rect.visible = false
+	slots_idx_array.clear()
+	var r_armor_slot_idx_array: Array[int]
+	for slot in frame.frame_armor_slots:
+		slots_idx_array.append(slot.x+slot.y*6)
+	for slot in frame.frame_reinforced_armor_slots:
+		r_armor_slot_idx_array.append(slot.x+slot.y*6)
+	for tb in armor_grid_buttons:
+		if slots_idx_array.has(tb.index):
+			tb.mode = tb.MODE.Armor
+		elif r_armor_slot_idx_array.has(tb.index):
+			tb.mode = tb.MODE.Reinforced
+		else:
+			tb.mode = tb.MODE.None
+	draw_armor_grids()
+	frame_hp_label.text = str(frame.frame_hp)
+	frame_titan_toggle.button_pressed = frame.titan
+	frame_unusual_toggle.button_pressed = frame.unusual
+	frame_feature_is_elite_toggle.button_pressed = frame.frame_feature_is_elite
+	frame_ability_name_line_edit.text = frame.frame_feature_name
+	frame_ability_description_text_edit.text = frame.frame_feature_text
+	load_frame_panel.visible = false
+
+func _reset_button_pressed() -> void:
+	frame_name_line_edit.text = ""
+	frame_id_line_edit.text = ""
+	choose_frame_size(Constants.Size.Light)
+	choose_frame_size(Constants.Size.Light, true)
+	for tb in grid_buttons:
+		tb.selected = false
+		tb.self_modulate = Color("#282828")
+		tb.grid_gradient_rect.visible = false
+	for tb in armor_grid_buttons:
+		tb.mode = tb.MODE.None
+	draw_armor_grids()
+	frame_hp_label.text = "0"
+	frame_titan_toggle.button_pressed = false
+	frame_unusual_toggle.button_pressed = false
+	frame_feature_is_elite_toggle.button_pressed = true
+	frame_ability_name_line_edit.text = ""
+	frame_ability_description_text_edit.text = ""

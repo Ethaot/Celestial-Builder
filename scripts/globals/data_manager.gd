@@ -26,7 +26,11 @@ func _process(delta: float) -> void:
 func save_config() -> void:
 	if !DirAccess.dir_exists_absolute(CONFIG_DIR):
 		DirAccess.make_dir_absolute(CONFIG_DIR)
-	var cfg_dict: Dictionary[String, String] = {"last_loaded_save_id": config.last_loaded_save_id}
+	var cfg_dict: Dictionary[String, String] = {
+		"last_loaded_save_id": config.last_loaded_save_id,
+		"last_loaded_encounter_id": config.last_loaded_encounter_id,
+		"last_modified_data_pack_id": currently_edited_data_pack
+		}
 	var file = FileAccess.open(CONFIG_DIR + "config.json", FileAccess.WRITE)
 	var cfg_string: String = JSON.stringify(cfg_dict, "\t")
 	file.store_line(cfg_string)
@@ -38,12 +42,19 @@ func load_config() -> void:
 		if FileAccess.file_exists(CONFIG_DIR + "config.json"):
 			var file = FileAccess.open(CONFIG_DIR + "config.json", FileAccess.READ)
 			var cfg_string: String = file.get_as_text()
-			var json_string = JSON.parse_string(cfg_string)
-			if json_string is Dictionary:
+			var data = JSON.parse_string(cfg_string)
+			if data is Dictionary:
 				var loaded_cfg: Config = Config.new()
-				if json_string["last_loaded_save_id"].length() > 0:
-					loaded_cfg.last_loaded_save_id = json_string["last_loaded_save_id"]
+				if data["last_loaded_save_id"].length() > 0:
+					loaded_cfg.last_loaded_save_id = data["last_loaded_save_id"]
+					if data.has("last_loaded_encounter_id"):
+						loaded_cfg.last_loaded_encounter_id = data["last_loaded_encounter_id"]
+					if data.has("last_modified_data_pack_id"):
+						loaded_cfg.last_modified_data_pack_id = data["last_modified_data_pack_id"]
+					else:
+						loaded_cfg.last_modified_data_pack_id = "custom"
 				config = loaded_cfg
+				currently_edited_data_pack = config.last_modified_data_pack_id
 			file.close()
 		else:
 			config = Config.new()

@@ -98,7 +98,7 @@ func _ready() -> void:
 	if !ResourceManager.prepared:
 		await ResourceManager.prepared_signal
 	
-	loading_screen.visible = false
+	#loading_screen.visible = false
 	
 	populate_frame_option_button()
 	#frame_option_button.item_selected.connect(_on_frame_option_chosen)

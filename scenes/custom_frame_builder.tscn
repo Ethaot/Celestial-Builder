@@ -5,6 +5,18 @@
 [ext_resource type="Script" uid="uid://6lpo6yi1q5l6" path="res://scripts/scroll_container_touch_support.gd" id="2_8ce3o"]
 [ext_resource type="Script" uid="uid://chgjg4cfqjfww" path="res://scripts/alt_aspect_ratio_container.gd" id="3_7xyhl"]
 [ext_resource type="Script" uid="uid://dccyiis4a0dhf" path="res://scripts/custom_frame_mode/custom_frame_mode_signal_bus.gd" id="4_28umx"]
+[ext_resource type="PackedScene" uid="uid://cugrq5ji4qm4" path="res://scenes/data_pack_selector_panel_container.tscn" id="6_8yp2c"]
+
+[sub_resource type="GDScript" id="GDScript_si52b"]
+script/source = "extends Button
+
+@export var data_pack_selector_panel: DataPackSelectorPanel
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	data_pack_selector_panel.popup()
+"
 
 [sub_resource type="GDScript" id="GDScript_28umx"]
 script/source = "extends Button
@@ -16,7 +28,7 @@ func _on_button_pressed() -> void:
 	SceneManager.switch_scene(SceneManager.MAIN_SCENE)
 "
 
-[node name="CustomFrameBuilder" type="ColorRect" unique_id=547921195 node_paths=PackedStringArray("signal_bus", "scroll_container", "frame_name_line_edit", "frame_id_line_edit", "frame_size_button", "frame_size_popup_panel", "frame_size_vbox", "frame_size_light_button", "frame_size_medium_button", "frame_size_heavy_button", "frame_size_ultra_button", "grid", "armor_grid", "customize_armor_toggle_button", "frame_hp_label", "frame_hp_down_button", "frame_hp_up_button", "frame_titan_toggle", "frame_unusual_toggle", "frame_ability_name_line_edit", "frame_ability_description_text_edit", "save_frame_button", "load_frame_button", "reset_frame_button")]
+[node name="CustomFrameBuilder" type="ColorRect" unique_id=547921195 node_paths=PackedStringArray("signal_bus", "scroll_container", "frame_name_line_edit", "frame_id_line_edit", "frame_size_button", "frame_secondary_size_button", "frame_size_popup_panel", "frame_secondary_size_popup_panel", "frame_size_vbox", "frame_secondary_size_vbox", "frame_size_light_button", "frame_size_medium_button", "frame_size_heavy_button", "frame_size_ultra_button", "frame_secondary_size_light_button", "frame_secondary_size_medium_button", "frame_secondary_size_heavy_button", "frame_secondary_size_ultra_button", "grid", "armor_grid", "customize_armor_toggle_button", "frame_hp_label", "frame_hp_down_button", "frame_hp_up_button", "frame_titan_toggle", "frame_unusual_toggle", "frame_feature_is_elite_toggle", "frame_ability_name_line_edit", "frame_ability_description_text_edit", "save_frame_button", "load_frame_button", "reset_frame_button", "select_data_pack_button", "load_frame_panel", "load_frame_vbox", "data_pack_selector_panel")]
 texture_filter = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,13 +41,20 @@ signal_bus = NodePath("SignalBus")
 scroll_container = NodePath("ScrollContainer")
 frame_name_line_edit = NodePath("ScrollContainer/MainVBox/FrameNameLineEdit")
 frame_id_line_edit = NodePath("ScrollContainer/MainVBox/FrameIDLineEdit")
-frame_size_button = NodePath("ScrollContainer/MainVBox/FrameSizeButton")
+frame_size_button = NodePath("ScrollContainer/MainVBox/HBoxContainer/FrameSizeButton")
+frame_secondary_size_button = NodePath("ScrollContainer/MainVBox/HBoxContainer/FrameSecondarySizeButton")
 frame_size_popup_panel = NodePath("FrameSizePanelContainer")
+frame_secondary_size_popup_panel = NodePath("FrameSecondarySizePanelContainer")
 frame_size_vbox = NodePath("FrameSizePanelContainer/ScrollContainer/FrameSizeVBox")
+frame_secondary_size_vbox = NodePath("FrameSecondarySizePanelContainer/ScrollContainer/FrameSecondarySizeVBox")
 frame_size_light_button = NodePath("FrameSizePanelContainer/ScrollContainer/FrameSizeVBox/LightButton")
 frame_size_medium_button = NodePath("FrameSizePanelContainer/ScrollContainer/FrameSizeVBox/MediumButton")
 frame_size_heavy_button = NodePath("FrameSizePanelContainer/ScrollContainer/FrameSizeVBox/HeavyButton")
 frame_size_ultra_button = NodePath("FrameSizePanelContainer/ScrollContainer/FrameSizeVBox/UltraButton")
+frame_secondary_size_light_button = NodePath("FrameSecondarySizePanelContainer/ScrollContainer/FrameSecondarySizeVBox/LightButton")
+frame_secondary_size_medium_button = NodePath("FrameSecondarySizePanelContainer/ScrollContainer/FrameSecondarySizeVBox/MediumButton")
+frame_secondary_size_heavy_button = NodePath("FrameSecondarySizePanelContainer/ScrollContainer/FrameSecondarySizeVBox/HeavyButton")
+frame_secondary_size_ultra_button = NodePath("FrameSecondarySizePanelContainer/ScrollContainer/FrameSecondarySizeVBox/UltraButton")
 grid = NodePath("ScrollContainer/MainVBox/MarginContainer/AspectRatioContainer/GridContainer")
 armor_grid = NodePath("ScrollContainer/MainVBox/MarginContainer/AspectRatioContainer/ArmorGridContainer")
 customize_armor_toggle_button = NodePath("ScrollContainer/MainVBox/CustomizeArmorToggleButton")
@@ -44,11 +63,16 @@ frame_hp_down_button = NodePath("ScrollContainer/MainVBox/FrameHPHBox/FrameHPDow
 frame_hp_up_button = NodePath("ScrollContainer/MainVBox/FrameHPHBox/FrameHPUpButton")
 frame_titan_toggle = NodePath("ScrollContainer/MainVBox/CheckboxesHBox/TitanToggle")
 frame_unusual_toggle = NodePath("ScrollContainer/MainVBox/CheckboxesHBox/EnemyToggle")
+frame_feature_is_elite_toggle = NodePath("ScrollContainer/MainVBox/CheckboxesHBox/FrameFeatureIsEliteToggle")
 frame_ability_name_line_edit = NodePath("ScrollContainer/MainVBox/FrameAbilityHBox/FrameAbilityNameLineEdit")
 frame_ability_description_text_edit = NodePath("ScrollContainer/MainVBox/FrameAbilityTextEdit")
 save_frame_button = NodePath("ScrollContainer/MainVBox/MenuButtonsHBox/SaveFrameButton")
 load_frame_button = NodePath("ScrollContainer/MainVBox/MenuButtonsHBox/LoadFrameButton")
 reset_frame_button = NodePath("ScrollContainer/MainVBox/ResetFrameButton")
+select_data_pack_button = NodePath("ScrollContainer/MainVBox/SelectDataPackButton")
+load_frame_panel = NodePath("LoadFramePanel")
+load_frame_vbox = NodePath("LoadFramePanel/LoadFrameScrollContainer/LoadFrameVBox")
+data_pack_selector_panel = NodePath("DataPackSelectorPanelContainer")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=2006330063]
 layout_mode = 1
@@ -80,10 +104,22 @@ theme = ExtResource("2_7xyhl")
 placeholder_text = "Frame ID"
 alignment = 1
 
-[node name="FrameSizeButton" type="Button" parent="ScrollContainer/MainVBox" unique_id=1165514885]
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/MainVBox" unique_id=1929614955]
 layout_mode = 2
+
+[node name="FrameSizeButton" type="Button" parent="ScrollContainer/MainVBox/HBoxContainer" unique_id=1165514885]
+layout_mode = 2
+size_flags_horizontal = 3
 theme = ExtResource("2_7xyhl")
 text = "Frame Size: Light"
+autowrap_mode = 3
+
+[node name="FrameSecondarySizeButton" type="Button" parent="ScrollContainer/MainVBox/HBoxContainer" unique_id=344680035]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_7xyhl")
+text = "Secondary Size: Light"
+autowrap_mode = 3
 
 [node name="Label" type="Label" parent="ScrollContainer/MainVBox" unique_id=1365120259]
 layout_mode = 2
@@ -222,6 +258,13 @@ layout_mode = 2
 theme = ExtResource("2_7xyhl")
 text = "Reset Frame"
 
+[node name="SelectDataPackButton" type="Button" parent="ScrollContainer/MainVBox" unique_id=1237802127 node_paths=PackedStringArray("data_pack_selector_panel")]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+text = "Select Data Pack"
+script = SubResource("GDScript_si52b")
+data_pack_selector_panel = NodePath("../../../DataPackSelectorPanelContainer")
+
 [node name="ExitFrameModeButton" type="Button" parent="ScrollContainer/MainVBox" unique_id=280387012]
 layout_mode = 2
 theme = ExtResource("2_7xyhl")
@@ -264,5 +307,67 @@ layout_mode = 2
 theme = ExtResource("2_7xyhl")
 text = "Ultra"
 
+[node name="FrameSecondarySizePanelContainer" type="PanelContainer" parent="." unique_id=1493583732]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("2_7xyhl")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="FrameSecondarySizePanelContainer" unique_id=1109695558]
+layout_mode = 2
+script = ExtResource("2_8ce3o")
+
+[node name="FrameSecondarySizeVBox" type="VBoxContainer" parent="FrameSecondarySizePanelContainer/ScrollContainer" unique_id=1801868551]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="LightButton" type="Button" parent="FrameSecondarySizePanelContainer/ScrollContainer/FrameSecondarySizeVBox" unique_id=595709389]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+text = "Light"
+
+[node name="MediumButton" type="Button" parent="FrameSecondarySizePanelContainer/ScrollContainer/FrameSecondarySizeVBox" unique_id=445261150]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+text = "Medium"
+
+[node name="HeavyButton" type="Button" parent="FrameSecondarySizePanelContainer/ScrollContainer/FrameSecondarySizeVBox" unique_id=918710182]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+text = "Heavy"
+
+[node name="UltraButton" type="Button" parent="FrameSecondarySizePanelContainer/ScrollContainer/FrameSecondarySizeVBox" unique_id=90914554]
+layout_mode = 2
+theme = ExtResource("2_7xyhl")
+text = "Ultra"
+
 [node name="SignalBus" type="Node" parent="." unique_id=871445702]
 script = ExtResource("4_28umx")
+
+[node name="DataPackSelectorPanelContainer" parent="." unique_id=488746494 instance=ExtResource("6_8yp2c")]
+layout_mode = 1
+
+[node name="LoadFramePanel" type="Panel" parent="." unique_id=1057377873]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_7xyhl")
+
+[node name="LoadFrameScrollContainer" type="ScrollContainer" parent="LoadFramePanel" unique_id=534923186]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LoadFrameVBox" type="VBoxContainer" parent="LoadFramePanel/LoadFrameScrollContainer" unique_id=1825711618]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_7xyhl")
