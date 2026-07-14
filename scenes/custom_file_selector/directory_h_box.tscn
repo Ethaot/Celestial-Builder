@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://binfk14r15a7"]
+
+[ext_resource type="Script" uid="uid://c2gcfhkak7nlr" path="res://scripts/custom_file_selector/directory_hbox.gd" id="1_y3enp"]
+
+[node name="DirectoryHBox" type="HBoxContainer" unique_id=2052069079 node_paths=PackedStringArray("sub_directory_vbox", "directory_button")]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+script = ExtResource("1_y3enp")
+sub_directory_vbox = NodePath("SubDirectoryVBox")
+directory_button = NodePath("SubDirectoryVBox/DirectoryCollapseButton")
+
+[node name="Padding" type="Control" parent="." unique_id=699325407]
+custom_minimum_size = Vector2(16, 0)
+layout_mode = 2
+
+[node name="SubDirectoryVBox" type="VBoxContainer" parent="." unique_id=494275181]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DirectoryCollapseButton" type="Button" parent="SubDirectoryVBox" unique_id=1638880999]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Directory"
+autowrap_mode = 3

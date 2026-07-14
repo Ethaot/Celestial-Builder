@@ -110,6 +110,30 @@ border_color = Color(0.9098039, 0, 0.54901963, 1)
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ogfsw"]
 content_margin_top = 12.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n7spb"]
+bg_color = Color(0, 0, 0, 0.6)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.9098039, 0, 0.54901963, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6e685"]
+bg_color = Color(0, 0, 0, 0.6)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.9098039, 0, 0.54901963, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m2b53"]
+bg_color = Color(0, 0, 0, 0.6)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.9098039, 0, 0.54901963, 1)
+
 [resource]
 default_font = ExtResource("1_yhag5")
 default_font_size = 64
@@ -143,4 +167,7 @@ RichTextLabel/fonts/bold_italics_font = ExtResource("3_ogfsw")
 RichTextLabel/fonts/italics_font = ExtResource("3_u23kh")
 RichTextLabel/fonts/normal_font = ExtResource("1_yhag5")
 RichTextLabel/styles/normal = SubResource("StyleBoxEmpty_ogfsw")
+TextEdit/styles/focus = SubResource("StyleBoxFlat_n7spb")
+TextEdit/styles/normal = SubResource("StyleBoxFlat_6e685")
+TextEdit/styles/read_only = SubResource("StyleBoxFlat_m2b53")
 VBoxContainer/constants/separation = 16

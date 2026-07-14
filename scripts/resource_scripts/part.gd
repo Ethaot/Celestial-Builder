@@ -13,6 +13,21 @@ class_name Part
 @export var tags: Array[String]
 @export var connected_tags: Array[String]
 
+func to_dict() -> Dictionary:
+	var dict: Dictionary
+	dict["part_name"] = part_name
+	dict["part_id"] = part_id
+	dict["part_type"] = part_type
+	dict["powered"] = powered
+	dict["part_configuration"] = part_configuration
+	dict["part_icon"] = part_icon
+	dict["part_description"] = part_description
+	dict["requirements"] = requirements
+	dict["part_tab"] = part_tab
+	dict["tags"] = tags
+	dict["connected_tags"] = connected_tags
+	return dict
+
 func from_dict(dict: Dictionary) -> void:
 	var regex = RegEx.new()
 	regex.compile("-?\\d+")

@@ -177,10 +177,13 @@ func _input(event: InputEvent) -> void:
 					if event.pressed:
 						button_held = true
 						mouse_button_pressed_timer = 0.0
+						#if hovered_grids.size() > 0:
+							#_on_grid_button_clicked(hovered_grids[0])
 					else:
 						button_held = false
 						start_part_pickup = false
 						selecting_part_from_parts = false
+						hovered_grids.clear()
 		Mode.Edit:
 			if event is InputEventMouseButton:
 				if event.button_index == MOUSE_BUTTON_LEFT:
@@ -200,6 +203,7 @@ func _input(event: InputEvent) -> void:
 						else:
 							_on_part_cleared()
 						button_held = false
+						hovered_grids.clear()
 
 func _process(delta: float) -> void:
 	match current_mode:
@@ -924,6 +928,8 @@ func _on_grid_button_clicked(index: int) -> void:
 	match current_mode:
 		Mode.Normal:
 			start_part_pickup = true
+			if OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios"):
+				hovered_grids.append(index)
 		Mode.Edit:
 			pass
 
@@ -987,7 +993,7 @@ func _on_load_frame_build_button_pressed() -> void:
 		lfbb.button_up.connect(_on_frame_build_load.bind(fb.duplicate(true)))
 		load_frame_build_vbox.add_child(lfbb)
 	for fb in ResourceManager.frame_builds:
-		if fb.player_build:
+		if fb.factions.has("player"):
 			var lfbb: Button = load_frame_build_button_prefab.instantiate()
 			lfbb.text = fb.frame_build_name
 			lfbb.button_up.connect(_on_frame_build_load.bind(fb.duplicate(true)))

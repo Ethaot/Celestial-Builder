@@ -12,7 +12,9 @@
 [ext_resource type="FontFile" uid="uid://clxaxe666gut2" path="res://fonts/Cousine-Italic.ttf" id="6_18nlu"]
 [ext_resource type="PackedScene" uid="uid://dwxq6xyo184in" path="res://scenes/frame_select_dropdown_button.tscn" id="6_e1cbu"]
 [ext_resource type="PackedScene" uid="uid://cg66ksdd4jth" path="res://scenes/dragged_part.tscn" id="6_rt2n2"]
+[ext_resource type="Script" uid="uid://chyxrd6ikyak2" path="res://scripts/mobile_friendly_line_edit.gd" id="7_6u1mn"]
 [ext_resource type="StyleBox" uid="uid://chgyajxu7nuva" path="res://assets/ui/styles/tab_button_style_box_normal.tres" id="7_c1pb6"]
+[ext_resource type="Script" uid="uid://cq5gdptwn0ehy" path="res://scripts/data_packs_menu_panel.gd" id="14_01n6w"]
 [ext_resource type="Script" uid="uid://b2tjnvqoeudp4" path="res://scripts/data_packs_toggle_menu.gd" id="14_r6p65"]
 [ext_resource type="PackedScene" uid="uid://cugrq5ji4qm4" path="res://scenes/data_pack_selector_panel_container.tscn" id="14_si52b"]
 
@@ -92,6 +94,13 @@ func _on_button_pressed() -> void:
 	license_panel_container.visible = true
 "
 
+[sub_resource type="GDScript" id="GDScript_tnrwk"]
+script/source = "extends RichTextLabel
+
+func _ready() -> void:
+	text = \"[rainbow freq=0.05 sat=1 val=1 speed=1]Ver \" + ProjectSettings.get_setting(\"application/config/version\") + \"[/rainbow]\"
+"
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tnrwk"]
 bg_color = Color(0.078431375, 0.078431375, 0.078431375, 1)
 border_width_left = 4
@@ -130,6 +139,16 @@ func _ready() -> void:
 
 func _on_button_pressed() -> void:
 	SceneManager.switch_scene(SceneManager.CUSTOM_FRAME_BUILDER_SCENE)
+"
+
+[sub_resource type="GDScript" id="GDScript_6e685"]
+script/source = "extends Button
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	SceneManager.switch_scene(SceneManager.CUSTOM_PART_SCENE)
 "
 
 [sub_resource type="GDScript" id="GDScript_4w45t"]
@@ -182,13 +201,20 @@ func _on_button_pressed() -> void:
 [sub_resource type="GDScript" id="GDScript_almkq"]
 script/source = "extends Button
 
+@export var data_packs_menu_panel: DataPacksMenuPanel
 @export var data_pack_file_dialog: FileDialog
 
 func _ready() -> void:
 	button_up.connect(_on_button_pressed)
 
 func _on_button_pressed() -> void:
-	data_pack_file_dialog.popup_file_dialog()
+	if OS.has_feature(\"web\") or OS.has_feature(\"web_android\") or OS.has_feature(\"web_ios\"):
+		data_packs_menu_panel.trigger_web_upload()
+	else:
+		data_pack_file_dialog.popup_file_dialog()
+
+
+	
 "
 
 [sub_resource type="GDScript" id="GDScript_bcnxi"]
@@ -482,7 +508,7 @@ create_custom_panel = NodePath("../../CreateCustomPanelContainer")
 [node name="ManageDataPacksButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/MenuOptionsVBox" unique_id=523658077 node_paths=PackedStringArray("data_packs_menu_panel")]
 layout_mode = 2
 theme = ExtResource("1_w2twt")
-text = "Manage Data Packs"
+text = "Data Packs"
 script = SubResource("GDScript_6u1mn")
 data_packs_menu_panel = NodePath("../../../../../../DataPacksMenuPanel")
 
@@ -497,6 +523,16 @@ theme = ExtResource("1_w2twt")
 text = "License"
 script = SubResource("GDScript_e1cbu")
 license_panel_container = NodePath("../../LicensePanelContainer")
+
+[node name="VersionLabel" type="RichTextLabel" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/MenuOptionsVBox" unique_id=1605397323]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
+bbcode_enabled = true
+text = "[rainbow freq=0.05 sat=1 val=1 speed = 1]Ver 0.1.0[/rainbow]"
+fit_content = true
+scroll_active = false
+script = SubResource("GDScript_tnrwk")
 
 [node name="LoadLampighterVBox" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer" unique_id=2069852079]
 visible = false
@@ -571,6 +607,7 @@ script = SubResource("GDScript_pwrrv")
 layout_mode = 2
 theme = ExtResource("1_w2twt")
 text = "Part"
+script = SubResource("GDScript_6e685")
 
 [node name="CloseCreateCustomButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer/ScrollContainer/VBoxContainer" unique_id=1532798652 node_paths=PackedStringArray("create_custom_panel")]
 layout_mode = 2
@@ -595,11 +632,13 @@ alignment = 1
 layout_mode = 2
 theme = ExtResource("1_w2twt")
 placeholder_text = "Lamplighter Name"
+script = ExtResource("7_6u1mn")
 
 [node name="CharacterCallsignLineEdit" type="LineEdit" parent="AppScreenScrollContainer/HBoxContainer/LamplighterScrollContainer/VBoxContainer" unique_id=1792909835]
 layout_mode = 2
 theme = ExtResource("1_w2twt")
 placeholder_text = "Callsign"
+script = ExtResource("7_6u1mn")
 
 [node name="AttributeHBox" parent="AppScreenScrollContainer/HBoxContainer/LamplighterScrollContainer/VBoxContainer" unique_id=1567067405 instance=ExtResource("4_rt2n2")]
 layout_mode = 2
@@ -717,6 +756,7 @@ layout_mode = 2
 theme = ExtResource("1_w2twt")
 placeholder_text = "Frame Name"
 alignment = 1
+script = ExtResource("7_6u1mn")
 
 [node name="MarginContainer" type="MarginContainer" parent="AppScreenScrollContainer/HBoxContainer/MainScrollContainer/VBoxContainer" unique_id=2141348350]
 layout_mode = 2
@@ -1046,7 +1086,7 @@ layout_mode = 2
 [node name="FrameSelectDropdownButton2" parent="FrameSelectPanelContainer/FrameSelectVBoxContainer" unique_id=1142693216 instance=ExtResource("6_e1cbu")]
 layout_mode = 2
 
-[node name="DataPacksMenuPanel" type="Panel" parent="." unique_id=1358786442]
+[node name="DataPacksMenuPanel" type="Panel" parent="." unique_id=1358786442 node_paths=PackedStringArray("data_pack_load_dialog")]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -1055,6 +1095,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_w2twt")
+script = ExtResource("14_01n6w")
+data_pack_load_dialog = NodePath("../LoadDataPackFileDialog")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="DataPacksMenuPanel" unique_id=960447024]
 layout_mode = 1
@@ -1076,7 +1118,7 @@ layout_mode = 2
 [node name="ToggleDataPacksButton" type="Button" parent="DataPacksMenuPanel/ScrollContainer/VBoxContainer" unique_id=1115709103 node_paths=PackedStringArray("data_packs_toggle_menu")]
 layout_mode = 2
 theme = ExtResource("1_w2twt")
-text = "Toggle Data Packs"
+text = "Manage Data Packs"
 autowrap_mode = 3
 script = SubResource("GDScript_01n6w")
 data_packs_toggle_menu = NodePath("../../../../DataPacksToggleMenu")
@@ -1084,19 +1126,21 @@ data_packs_toggle_menu = NodePath("../../../../DataPacksToggleMenu")
 [node name="ManageDataButton" type="Button" parent="DataPacksMenuPanel/ScrollContainer/VBoxContainer" unique_id=569803445]
 layout_mode = 2
 theme = ExtResource("1_w2twt")
-text = "Manage Data"
+text = "Move or Delete Data"
 autowrap_mode = 3
 script = SubResource("GDScript_qqo70")
 
-[node name="LoadDataPackButton" type="Button" parent="DataPacksMenuPanel/ScrollContainer/VBoxContainer" unique_id=764707502 node_paths=PackedStringArray("data_pack_file_dialog")]
+[node name="LoadDataPackButton" type="Button" parent="DataPacksMenuPanel/ScrollContainer/VBoxContainer" unique_id=764707502 node_paths=PackedStringArray("data_packs_menu_panel", "data_pack_file_dialog")]
 layout_mode = 2
 theme = ExtResource("1_w2twt")
 text = "Load a Data Pack"
 autowrap_mode = 3
 script = SubResource("GDScript_almkq")
+data_packs_menu_panel = NodePath("../../..")
 data_pack_file_dialog = NodePath("../../../../LoadDataPackFileDialog")
 
 [node name="AddRepositoryButton" type="Button" parent="DataPacksMenuPanel/ScrollContainer/VBoxContainer" unique_id=1494325095]
+visible = false
 layout_mode = 2
 theme = ExtResource("1_w2twt")
 text = "Download From a Repository"
@@ -1180,7 +1224,7 @@ horizontal_alignment = 1
 script = SubResource("GDScript_4d01l")
 
 [node name="LoadDataPackFileDialog" type="FileDialog" parent="." unique_id=766788357]
-title = "Load a .zip"
+title = "Open a File"
 initial_position = 1
 size = Vector2i(960, 480)
 file_mode = 0
@@ -1196,3 +1240,57 @@ access = 2
 filters = PackedStringArray("*.zip;ZIP Files;application/zip")
 use_native_dialog = true
 hidden_files_toggle_enabled = false
+
+[node name="AddRepositoryPanel" type="PanelContainer" parent="." unique_id=344430873]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = -65.0
+offset_right = -64.0
+offset_bottom = 65.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_w2twt")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AddRepositoryPanel" unique_id=281107619]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+
+[node name="Label2" type="Label" parent="AddRepositoryPanel/VBoxContainer" unique_id=779484181]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "Link a Data Pack"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="AddRepositoryPanel/VBoxContainer" unique_id=1831192287]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="AddRepositoryPanel/VBoxContainer/HBoxContainer" unique_id=2091468398]
+layout_mode = 2
+theme = ExtResource("1_w2twt")
+text = "URL:"
+
+[node name="LineEdit" type="LineEdit" parent="AddRepositoryPanel/VBoxContainer/HBoxContainer" unique_id=545033822]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
+script = ExtResource("7_6u1mn")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="AddRepositoryPanel/VBoxContainer" unique_id=2087879023]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="AddRepositoryPanel/VBoxContainer/HBoxContainer2" unique_id=1098355565]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
+text = "Back"
+
+[node name="AcceptButton" type="Button" parent="AddRepositoryPanel/VBoxContainer/HBoxContainer2" unique_id=746381835]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_w2twt")
+text = "Accept"

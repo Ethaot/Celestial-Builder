@@ -21,6 +21,10 @@ func display_data_packs() -> void:
 		dptb.pack_id = m["package_id"]
 		dptb.dptm = self
 		dthb.data_pack_download_button.button_up.connect(_download_package_button_pressed.bind(m["package_id"]))
+		if m["package_id"] != "celestial-bodies-core":
+			dthb.data_pack_delete_button.button_up.connect(delete_data_pack.bind(m["package_id"]))
+		else:
+			dthb.data_pack_delete_button.visible = false
 		data_packs_toggle_vbox.add_child(dthb)
 	var back_button: Button = button_prefab.instantiate()
 	back_button.text = "Back"
@@ -81,6 +85,31 @@ func download_package(path: String, package_id: String) -> void:
 	print("Zip file written.")
 		
 	#download_pack_file_dialog.visible = false
+
+func delete_data_pack(package_id: String) -> void:
+	print("Attempting to remove package " + package_id + "...")
+	if DirAccess.dir_exists_absolute(ResourceManager.DATA_PACKS_PATH + package_id + "/"):
+		remove_recursive(ResourceManager.DATA_PACKS_PATH + package_id + "/")
+		ResourceManager.remove_manifest(package_id)
+		print("Package removed.")
+		ResourceManager.refresh_all_packs()
+		display_data_packs()
+		if DataManager.currently_edited_data_pack == package_id:
+			DataManager.currently_edited_data_pack = "custom"
+
+func remove_recursive(path: String) -> void:
+	if !DirAccess.dir_exists_absolute(path):
+		return
+	
+	for dir_name in DirAccess.get_directories_at(path):
+		var sub_dir_path = path.path_join(dir_name)
+		remove_recursive(sub_dir_path)
+		
+	for file_name in DirAccess.get_files_at(path):
+		var file_path = path.path_join(file_name)
+		DirAccess.remove_absolute(file_path)
+	
+	DirAccess.remove_absolute(path)
 
 func close_data_packs_menu() -> void:
 	if data_packs_changed:
@@ -175,4 +204,3 @@ func _download_package_button_pressed(package_id: String) -> void:
 		download_pack_file_dialog.file_selected.connect(download_package.bind(package_id))
 		download_pack_file_dialog.current_file = package_id + ".zip"
 		download_pack_file_dialog.popup_file_dialog()
-	

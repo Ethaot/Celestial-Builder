@@ -6,7 +6,9 @@
 [ext_resource type="FontFile" uid="uid://clxaxe666gut2" path="res://fonts/Cousine-Italic.ttf" id="3_1pjia"]
 [ext_resource type="StyleBox" uid="uid://chgyajxu7nuva" path="res://assets/ui/styles/tab_button_style_box_normal.tres" id="4_hbisc"]
 [ext_resource type="Script" uid="uid://c5n8cvq6rsl6o" path="res://scripts/custom_frame_build_mode/frame_tab_script.gd" id="4_hl41v"]
+[ext_resource type="Script" uid="uid://chyxrd6ikyak2" path="res://scripts/mobile_friendly_line_edit.gd" id="5_5jhiw"]
 [ext_resource type="Script" uid="uid://chgjg4cfqjfww" path="res://scripts/alt_aspect_ratio_container.gd" id="5_pqtcs"]
+[ext_resource type="Script" uid="uid://cojbe5fq0ysak" path="res://scripts/custom_frame_build_mode/add_faction_button.gd" id="6_24in7"]
 [ext_resource type="Script" uid="uid://c1eeelmq5jva1" path="res://scripts/custom_frame_build_mode/parts_tab_script.gd" id="6_fag2l"]
 [ext_resource type="PackedScene" uid="uid://dwxq6xyo184in" path="res://scenes/frame_select_dropdown_button.tscn" id="8_pqtcs"]
 [ext_resource type="PackedScene" uid="uid://cugrq5ji4qm4" path="res://scenes/data_pack_selector_panel_container.tscn" id="10_fag2l"]
@@ -61,6 +63,7 @@ frame_tab_button = NodePath("MenuTabsPanelContainer/MarginContainer/HBoxContaine
 parts_tab_button = NodePath("MenuTabsPanelContainer/MarginContainer/HBoxContainer/PartsTabButton")
 
 [node name="MainScrollContainer" type="ScrollContainer" parent="." unique_id=1324318227]
+clip_contents = false
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -77,11 +80,15 @@ vertical_scroll_mode = 0
 custom_minimum_size = Vector2(1080, 0)
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 0
 
 [node name="MenuScrollContainer" type="ScrollContainer" parent="MainScrollContainer/MainHBoxContainer" unique_id=1194409073]
 custom_minimum_size = Vector2(1080, 0)
+clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
 script = ExtResource("1_55x64")
 
 [node name="CenterContainer" type="CenterContainer" parent="MainScrollContainer/MainHBoxContainer/MenuScrollContainer" unique_id=384419718]
@@ -107,9 +114,13 @@ theme = ExtResource("2_cybhx")
 text = "Exit Frame Builder"
 script = SubResource("GDScript_pwrrv")
 
-[node name="FrameScrollContainer" type="ScrollContainer" parent="MainScrollContainer/MainHBoxContainer" unique_id=1367777726 node_paths=PackedStringArray("main_script", "part_grid_interface", "frame_dropdown_button", "frame_dropdown_panel_container", "frame_dropdown_vbox", "frame_name_line_edit", "hp_label", "grid_grid_container", "armor_grid_container", "defenses_hbox", "part_effects_vbox", "player_build_toggle", "save_frame_build_button", "load_frame_build_button", "load_frame_build_menu", "load_frame_build_vbox")]
+[node name="FrameScrollContainer" type="ScrollContainer" parent="MainScrollContainer/MainHBoxContainer" unique_id=1367777726 node_paths=PackedStringArray("main_script", "part_grid_interface", "frame_dropdown_button", "frame_dropdown_panel_container", "frame_dropdown_vbox", "frame_name_line_edit", "frame_build_id_line_edit", "hp_label", "grid_grid_container", "armor_grid_container", "defenses_hbox", "part_effects_vbox", "factions_vbox", "save_frame_build_button", "load_frame_build_button", "load_frame_build_menu", "load_frame_build_vbox")]
 custom_minimum_size = Vector2(1080, 0)
+clip_contents = false
 layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
 script = ExtResource("4_hl41v")
 main_script = NodePath("../../..")
 part_grid_interface = NodePath("../../../PartGridInterface")
@@ -117,16 +128,17 @@ frame_dropdown_button = NodePath("FrameTabVBox/FrameSelectButton")
 frame_dropdown_panel_container = NodePath("../../../FrameSelectPanelContainer")
 frame_dropdown_vbox = NodePath("../../../FrameSelectPanelContainer/FrameSelectVBoxContainer")
 frame_name_line_edit = NodePath("FrameTabVBox/FrameNameLineEdit")
+frame_build_id_line_edit = NodePath("FrameTabVBox/FrameIDLineEdit")
 hp_label = NodePath("FrameTabVBox/DefensesHBox/HPLabel")
-grid_grid_container = NodePath("FrameTabVBox/MarginContainer/AspectRatioContainer/GridGridContainer")
-armor_grid_container = NodePath("FrameTabVBox/MarginContainer/AspectRatioContainer/ArmorGridContainer")
+grid_grid_container = NodePath("FrameTabVBox/GridMarginContainer/AspectRatioContainer/GridGridContainer")
+armor_grid_container = NodePath("FrameTabVBox/GridMarginContainer/AspectRatioContainer/ArmorGridContainer")
 defenses_hbox = NodePath("FrameTabVBox/DefensesHBox")
 part_effects_vbox = NodePath("FrameTabVBox/PartEffectsVBox")
-player_build_toggle = NodePath("FrameTabVBox/PlayerBuildToggle")
-save_frame_build_button = NodePath("FrameTabVBox/HBoxContainer/SaveFrameBuildButton")
-load_frame_build_button = NodePath("FrameTabVBox/HBoxContainer/LoadFrameBuildButton")
+factions_vbox = NodePath("FrameTabVBox/HBoxContainer/FactionsVBox")
+save_frame_build_button = NodePath("FrameTabVBox/SaveLoadHBox/SaveFrameBuildButton")
+load_frame_build_button = NodePath("FrameTabVBox/SaveLoadHBox/LoadFrameBuildButton")
 load_frame_build_menu = NodePath("../../../LoadFrameBuildMenu")
-load_frame_build_vbox = NodePath("../../../LoadFrameBuildMenu/ScrollContainer/LoadFrameBuildVBox")
+load_frame_build_vbox = NodePath("../../../LoadFrameBuildMenu/ScrollContainer/HBoxContainer/LoadFrameBuildVBox")
 
 [node name="FrameTabVBox" type="VBoxContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer" unique_id=2028298435]
 layout_mode = 2
@@ -144,24 +156,32 @@ layout_mode = 2
 theme = ExtResource("2_cybhx")
 placeholder_text = "Frame Name"
 alignment = 1
+script = ExtResource("5_5jhiw")
 
-[node name="MarginContainer" type="MarginContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox" unique_id=163320388]
+[node name="FrameIDLineEdit" type="LineEdit" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox" unique_id=1736215766]
+layout_mode = 2
+theme = ExtResource("2_cybhx")
+placeholder_text = "Frame Build ID"
+alignment = 1
+script = ExtResource("5_5jhiw")
+
+[node name="GridMarginContainer" type="MarginContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox" unique_id=163320388]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/MarginContainer" unique_id=1474471608]
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/GridMarginContainer" unique_id=1474471608]
 layout_mode = 2
 mouse_filter = 2
 stretch_mode = 0
 alignment_vertical = 0
 script = ExtResource("5_pqtcs")
 
-[node name="ColorRect" type="ColorRect" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/MarginContainer/AspectRatioContainer" unique_id=963262445]
+[node name="ColorRect" type="ColorRect" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/GridMarginContainer/AspectRatioContainer" unique_id=963262445]
 layout_mode = 2
 mouse_filter = 2
 color = Color(0.9098039, 0, 0.54901963, 1)
 
-[node name="ColorRect" type="ColorRect" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/MarginContainer/AspectRatioContainer/ColorRect" unique_id=971831093]
+[node name="ColorRect" type="ColorRect" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/GridMarginContainer/AspectRatioContainer/ColorRect" unique_id=971831093]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -173,14 +193,14 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.3137255, 0.3137255, 0.3137255, 1)
 
-[node name="GridGridContainer" type="GridContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/MarginContainer/AspectRatioContainer" unique_id=13069550]
+[node name="GridGridContainer" type="GridContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/GridMarginContainer/AspectRatioContainer" unique_id=13069550]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 7
 
-[node name="ArmorGridContainer" type="GridContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/MarginContainer/AspectRatioContainer" unique_id=1770130627]
+[node name="ArmorGridContainer" type="GridContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/GridMarginContainer/AspectRatioContainer" unique_id=1770130627]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/h_separation = 0
@@ -202,37 +222,57 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 16
 
-[node name="PlayerBuildToggle" type="CheckButton" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox" unique_id=1145249856]
+[node name="HBoxContainer" type="HBoxContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox" unique_id=1307239970]
+layout_mode = 2
+
+[node name="Padding" type="Control" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/HBoxContainer" unique_id=1490110919]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+
+[node name="FactionsVBox" type="VBoxContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/HBoxContainer" unique_id=1501170652]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_cybhx")
+
+[node name="Label" type="Label" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/HBoxContainer/FactionsVBox" unique_id=1648449404]
+layout_mode = 2
+text = "Factions"
+
+[node name="AddFactionButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/HBoxContainer/FactionsVBox" unique_id=493227267 node_paths=PackedStringArray("factions_vbox")]
 layout_mode = 2
 theme = ExtResource("2_cybhx")
-text = "Build is player-facing?"
+text = "+ Add a faction"
+script = ExtResource("6_24in7")
+factions_vbox = NodePath("..")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox" unique_id=68781393]
+[node name="Padding2" type="Control" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/HBoxContainer" unique_id=1910213313]
+custom_minimum_size = Vector2(128, 0)
 layout_mode = 2
 
-[node name="SaveFrameBuildButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/HBoxContainer" unique_id=1094504286]
+[node name="SaveLoadHBox" type="HBoxContainer" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox" unique_id=68781393]
+layout_mode = 2
+
+[node name="SaveFrameBuildButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/SaveLoadHBox" unique_id=1094504286]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_cybhx")
 text = "Save Frame Build"
 autowrap_mode = 3
 
-[node name="LoadFrameBuildButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/HBoxContainer" unique_id=1434015282]
+[node name="LoadFrameBuildButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox/SaveLoadHBox" unique_id=1434015282]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_cybhx")
 text = "Load Frame Build"
 autowrap_mode = 3
 
-[node name="ResetFrameDamageButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/FrameScrollContainer/FrameTabVBox" unique_id=135902388]
-layout_mode = 2
-theme = ExtResource("2_cybhx")
-text = "Reset Frame Damage"
-autowrap_mode = 3
-
 [node name="PartsScrollContainer" type="ScrollContainer" parent="MainScrollContainer/MainHBoxContainer" unique_id=2115693763 node_paths=PackedStringArray("main_script", "part_grid_interface", "part_tabs_vbox", "parts_grid_container", "weapons_ranged_tab_button", "weapons_explosive_tab_button", "weapons_melee_tab_button", "weapons_ew_tab_button", "weapons_missiles_tab_button", "parts_reactors_tab_button", "parts_thrusters_tab_button", "parts_processors_tab_button", "parts_shields_tab_button")]
 custom_minimum_size = Vector2(1080, 0)
+clip_contents = false
 layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
 script = ExtResource("6_fag2l")
 main_script = NodePath("../../..")
 part_grid_interface = NodePath("../../../PartGridInterface")
@@ -335,6 +375,44 @@ layout_mode = 2
 mouse_filter = 2
 columns = 2
 
+[node name="LoadFrameBuildMenu" type="ColorRect" parent="." unique_id=1422851021]
+visible = false
+z_index = 2
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -128.0
+grow_horizontal = 2
+color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="LoadFrameBuildMenu" unique_id=1088092436]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LoadFrameBuildMenu/ScrollContainer" unique_id=18580396]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Padding" type="Control" parent="LoadFrameBuildMenu/ScrollContainer/HBoxContainer" unique_id=213112173]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LoadFrameBuildVBox" type="VBoxContainer" parent="LoadFrameBuildMenu/ScrollContainer/HBoxContainer" unique_id=1343017198]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_cybhx")
+
+[node name="Padding2" type="Control" parent="LoadFrameBuildMenu/ScrollContainer/HBoxContainer" unique_id=1437540038]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="MenuTabsPanelContainer" type="PanelContainer" parent="." unique_id=863419163]
 layout_mode = 1
 anchors_preset = 12
@@ -395,31 +473,6 @@ theme_override_styles/hover = ExtResource("4_hbisc")
 theme_override_styles/disabled = ExtResource("4_hbisc")
 theme_override_styles/focus = ExtResource("4_hbisc")
 text = "Parts"
-
-[node name="LoadFrameBuildMenu" type="ColorRect" parent="." unique_id=1422851021]
-visible = false
-z_index = 2
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.15686275, 0.15686275, 0.15686275, 1)
-
-[node name="ScrollContainer" type="ScrollContainer" parent="LoadFrameBuildMenu" unique_id=1088092436]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 128.0
-offset_bottom = 64.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="LoadFrameBuildVBox" type="VBoxContainer" parent="LoadFrameBuildMenu/ScrollContainer" unique_id=1343017198]
-layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="FrameSelectPanelContainer" type="PanelContainer" parent="." unique_id=747904936]
 visible = false

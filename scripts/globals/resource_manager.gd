@@ -162,6 +162,54 @@ func add_data_pack(pack_dict: Dictionary) -> void:
 		DataManager.config.last_modified_data_pack_id = pack_dict["package_id"]
 		refresh_all_packs()
 
+func add_manifest(local_path: String) -> void:
+	var full_path: String = DATA_PACKS_PATH + local_path
+	var file = FileAccess.open(full_path, FileAccess.READ)
+	var json_string: String = file.get_as_text()
+	var data = JSON.parse_string(json_string)
+	file.close()
+	if FileAccess.file_exists(DATA_PACKS_PATH + "data_packs_manifest.json"):
+		var mani_file = FileAccess.open(DATA_PACKS_PATH + "data_packs_manifest.json", FileAccess.READ)
+		var mani_json_string: String = mani_file.get_as_text()
+		var mani_data = JSON.parse_string(mani_json_string)
+		var manis: Array[Dictionary]
+		if mani_data is Array:
+			for d in mani_data:
+				if d is Dictionary:
+					manis.append(d)
+		mani_file.close()
+		if data is Dictionary:
+			mani_file = FileAccess.open(DATA_PACKS_PATH + "data_packs_manifest.json", FileAccess.WRITE)
+			var new_mani: Dictionary = data.duplicate()
+			new_mani["etag"] = "ETag: Null"
+			new_mani["enabled"] = true
+			manis.append(new_mani)
+			var mani_string: String = JSON.stringify(manis, "\t")
+			mani_file.store_line(mani_string)
+			mani_file.close()
+		# Don't refresh the packs here because the manifest may be added before the rest of the data. Let the method calling this refresh the packs.
+		#refresh_all_packs()
+
+func remove_manifest(package_id: String) -> void:
+	if FileAccess.file_exists(DATA_PACKS_PATH + "data_packs_manifest.json"):
+		var write_data: Array[Dictionary]
+		var file = FileAccess.open(DATA_PACKS_PATH + "data_packs_manifest.json", FileAccess.READ)
+		var read_string: String = file.get_as_text()
+		var read_data = JSON.parse_string(read_string)
+		if read_data is Array:
+			print("READ DATA IS ARRAY")
+			for d in read_data:
+				if d is Dictionary:
+					print("VALUE IS DICTIONARY")
+					if d["package_id"] != package_id:
+						write_data.append(d)
+						print("WRITE DATA APPENDED TO")
+		var write_string: String = JSON.stringify(write_data, "\t")
+		file.close()
+		file = FileAccess.open(DATA_PACKS_PATH + "data_packs_manifest.json", FileAccess.WRITE)
+		file.store_line(write_string)
+		file.close()
+
 func get_data_pack_manifest() -> Array[Dictionary]:
 	print("Retrieving data pack manifests...")
 	var data_pack_manifest_data: Array[Dictionary] = []
@@ -173,29 +221,29 @@ func get_data_pack_manifest() -> Array[Dictionary]:
 			var json_string: String = file.get_as_text()
 			var parsed_data = JSON.parse_string(json_string)
 			if parsed_data is Array:
-				#if parsed_data.size() > 0:
-				for d in parsed_data:
-					if d is Dictionary:
-						if d["package_id"] == "celestial-bodies-core":
-							if d["package_url"] != "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-4.zip":
-								d["package_url"] = "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-4.zip"
-							if !d.has("enabled"):
-								d["enabled"] = true
-						data_pack_manifest_data.append(d)
-				#else:
-					#var core_data: Dictionary = {
-						#"package_name": "Celestial Bodies Core",
-						#"package_id": "celestial-bodies-core",
-						##"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core.zip",
-						#"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-3.zip",
-						#"author": "Binary Star & Charlotte Laskowski",
-						#"source_name": "Celestial Bodies Technical Handbook",
-						#"source_url": "https://selkie.itch.io/celestial-bodies",
-						#"version": "0.0.1",
-						#"etag": "ETag: Null",
-						#"enabled": true
-					#}
-					#data_pack_manifest_data.append(core_data)
+				if parsed_data.size() > 0:
+					for d in parsed_data:
+						if d is Dictionary:
+							if d["package_id"] == "celestial-bodies-core":
+								if d["package_url"] != "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-4.zip":
+									d["package_url"] = "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-4.zip"
+								if !d.has("enabled"):
+									d["enabled"] = true
+							data_pack_manifest_data.append(d)
+				else:
+					var core_data: Dictionary = {
+						"package_name": "Celestial Bodies Core",
+						"package_id": "celestial-bodies-core",
+						#"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core.zip",
+						"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-4.zip",
+						"author": "Binary Star & Charlotte Laskowski",
+						"source_name": "Celestial Bodies Technical Handbook",
+						"source_url": "https://selkie.itch.io/celestial-bodies",
+						"version": "0.0.1",
+						"etag": "ETag: Null",
+						"enabled": true
+					}
+					data_pack_manifest_data.append(core_data)
 			file.close()
 		else:
 			print("Manifest file not found. Creating new Core Data.")
@@ -269,6 +317,7 @@ func update_manifest() -> void:
 					"package_url": m_data["package_url"],
 					"author": m_data["author"],
 					"version": m_data["version"],
+					#"dependencies": m_data["dependencies"],
 					"etag": m["etag"],
 					"enabled": m["enabled"]
 				}
@@ -457,6 +506,30 @@ func create_player_grid_gradient_atlastextures() -> Array[AtlasTexture]:
 			arr.append(at)
 	return arr
 
+func save_part_to_parts_json(data_pack_id: String, part: Part) -> void:
+	if FileAccess.file_exists(DATA_PACKS_PATH + data_pack_id + "/parts.json"):
+		var file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/parts.json", FileAccess.READ_WRITE)
+		var json_string: String = file.get_as_text()
+		var data = JSON.parse_string(json_string)
+		var data_had_part: bool = false
+		if data is Array:
+			for dict in data:
+				if dict is Dictionary:
+					if dict["part_id"] == part.part_id:
+						dict.assign(part.to_dict())
+						data_had_part = true
+			if !data_had_part:
+				data.append(part.to_dict())
+		json_string = JSON.stringify(data, "\t")
+		file.store_line(json_string)
+		file.close()
+	else:
+		var file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/parts.json", FileAccess.WRITE)
+		var data: Array = [part.to_dict()]
+		var json_string: String = JSON.stringify(data, "\t")
+		file.store_line(json_string)
+		file.close()
+
 func save_frame_to_frames_json(data_pack_id: String, frame: Frame) -> void:
 	if FileAccess.file_exists(DATA_PACKS_PATH + data_pack_id + "/frames.json"):
 		var file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/frames.json", FileAccess.READ_WRITE)
@@ -490,7 +563,7 @@ func save_frame_build_to_frame_builds_json(data_pack_id: String, fb: FrameBuild)
 		if data is Array:
 			for dict in data:
 				if dict is Dictionary:
-					if dict["frame_build_name"] == fb.frame_build_name:
+					if dict["frame_build_id"] == fb.frame_build_id:
 						dict.assign(fb.to_dict())
 						data_had_frame_build = true
 			if !data_had_frame_build:
@@ -600,6 +673,7 @@ func _on_request_completed(result, _response_code, headers, body):
 			var data = reader.read_file(file_path)
 			var file = FileAccess.open(DATA_PACKS_PATH + file_path, FileAccess.WRITE)
 			file.store_buffer(data)
+			file.close()
 		reader.close()
 		print("File unzipped successfully.")
 		DirAccess.remove_absolute(TEMP_FOLDER + "tmp" + str(current_tmp_file) + ".zip")

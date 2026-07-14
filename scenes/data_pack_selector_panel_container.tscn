@@ -3,6 +3,7 @@
 [ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_fjkal"]
 [ext_resource type="Script" uid="uid://bfqwbddrfipji" path="res://scripts/data_pack_selector_panel_container.gd" id="2_u577c"]
 [ext_resource type="Script" uid="uid://6lpo6yi1q5l6" path="res://scripts/scroll_container_touch_support.gd" id="3_4j1mj"]
+[ext_resource type="Script" uid="uid://chyxrd6ikyak2" path="res://scripts/mobile_friendly_line_edit.gd" id="4_u577c"]
 
 [node name="DataPackSelectorPanelContainer" type="Panel" unique_id=967509421 node_paths=PackedStringArray("data_pack_selector_menu", "data_pack_selector_vbox", "currently_modifying_label", "new_data_pack_menu", "new_data_pack_name_label", "new_data_pack_name_line_edit", "new_data_pack_id_label", "new_data_pack_id_line_edit", "new_data_pack_author_label", "new_data_pack_author_line_edit", "new_data_pack_source_name_label", "new_data_pack_source_name_line_edit", "new_data_pack_version_label", "new_data_pack_version_line_edit", "new_data_pack_confirm_button", "new_data_pack_back_button")]
 visible = false
@@ -88,6 +89,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_fjkal")
 placeholder_text = "Data Pack Name"
+script = ExtResource("4_u577c")
 
 [node name="IDHBox" type="HBoxContainer" parent="NewDataPackMenu/NewDataPackVBox" unique_id=1713914693]
 layout_mode = 2
@@ -102,6 +104,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_fjkal")
 placeholder_text = "Data Pack ID"
+script = ExtResource("4_u577c")
 
 [node name="AuthorHBox" type="HBoxContainer" parent="NewDataPackMenu/NewDataPackVBox" unique_id=1038323282]
 layout_mode = 2
@@ -116,6 +119,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_fjkal")
 placeholder_text = "Author"
+script = ExtResource("4_u577c")
 
 [node name="SourceNameHBox" type="HBoxContainer" parent="NewDataPackMenu/NewDataPackVBox" unique_id=696124295]
 layout_mode = 2
@@ -130,6 +134,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_fjkal")
 placeholder_text = "Source"
+script = ExtResource("4_u577c")
 
 [node name="VersionHBox" type="HBoxContainer" parent="NewDataPackMenu/NewDataPackVBox" unique_id=459974153]
 layout_mode = 2
@@ -144,6 +149,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_fjkal")
 placeholder_text = "Version"
+script = ExtResource("4_u577c")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="NewDataPackMenu/NewDataPackVBox" unique_id=143263044]
 layout_mode = 2

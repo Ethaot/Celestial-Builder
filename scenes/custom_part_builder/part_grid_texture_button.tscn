@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://dy5gfq4etwmwj"]
+
+[ext_resource type="Texture2D" uid="uid://j8aslsoao6vh" path="res://assets/ui/EmptyGridSpace.png" id="1_2lisi"]
+[ext_resource type="Script" uid="uid://c5epl0oeurcpn" path="res://scripts/custom_part_mode/part_grid_texture_button.gd" id="2_uy20v"]
+
+[node name="TextureButton" type="TextureButton" unique_id=726394561 node_paths=PackedStringArray("grid_gradient_rect", "grid_clipping_rect", "part_tex_rect")]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = ExtResource("1_2lisi")
+stretch_mode = 4
+script = ExtResource("2_uy20v")
+grid_gradient_rect = NodePath("ClippingRect/GridGradientRect")
+grid_clipping_rect = NodePath("ClippingRect")
+part_tex_rect = NodePath("CenterContainer/Control/TextureRect")
+
+[node name="ClippingRect" type="ColorRect" parent="." unique_id=1223426456]
+clip_children = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="GridGradientRect" type="TextureRect" parent="ClippingRect" unique_id=1463342396]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 3
+
+[node name="CenterContainer" type="AspectRatioContainer" parent="." unique_id=1420050203]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch_mode = 3
+
+[node name="Control" type="Control" parent="CenterContainer" unique_id=772663713]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer/Control" unique_id=183779612]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 2
+stretch_mode = 4

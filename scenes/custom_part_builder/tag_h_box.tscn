@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://by6ovjxfv6xxf"]
+
+[ext_resource type="Script" uid="uid://ddmlc1r5uicr7" path="res://scripts/custom_part_mode/tag_hbox.gd" id="1_854bt"]
+[ext_resource type="Script" uid="uid://chyxrd6ikyak2" path="res://scripts/mobile_friendly_line_edit.gd" id="1_p1pyy"]
+
+[node name="TagHBox" type="HBoxContainer" unique_id=1678333708 node_paths=PackedStringArray("line_edit", "delete_button")]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+script = ExtResource("1_854bt")
+line_edit = NodePath("TagLineEdit")
+delete_button = NodePath("DeleteButton")
+
+[node name="TagLineEdit" type="LineEdit" parent="." unique_id=269217205]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Tag"
+script = ExtResource("1_p1pyy")
+metadata/_custom_type_script = "uid://chyxrd6ikyak2"
+
+[node name="DeleteButton" type="Button" parent="." unique_id=1983604643]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.78431374, 0, 0, 1)
+text = "X"
+autowrap_mode = 3

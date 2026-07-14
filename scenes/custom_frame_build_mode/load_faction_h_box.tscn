@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://dpbip382xcy3d"]
+
+[ext_resource type="Script" uid="uid://bfws0t2l14qgr" path="res://scripts/custom_frame_build_mode/load_faction_h_box.gd" id="1_bwro0"]
+
+[node name="LoadFactionHBox" type="HBoxContainer" unique_id=599143050 node_paths=PackedStringArray("frame_vbox")]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_bwro0")
+frame_vbox = NodePath("VBoxContainer")
+
+[node name="Padding" type="Control" parent="." unique_id=1480902669]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1043419899]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Padding2" type="Control" parent="." unique_id=574624499]
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2

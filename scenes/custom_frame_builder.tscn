@@ -5,7 +5,17 @@
 [ext_resource type="Script" uid="uid://6lpo6yi1q5l6" path="res://scripts/scroll_container_touch_support.gd" id="2_8ce3o"]
 [ext_resource type="Script" uid="uid://chgjg4cfqjfww" path="res://scripts/alt_aspect_ratio_container.gd" id="3_7xyhl"]
 [ext_resource type="Script" uid="uid://dccyiis4a0dhf" path="res://scripts/custom_frame_mode/custom_frame_mode_signal_bus.gd" id="4_28umx"]
+[ext_resource type="Script" uid="uid://chyxrd6ikyak2" path="res://scripts/mobile_friendly_line_edit.gd" id="4_htf1x"]
 [ext_resource type="PackedScene" uid="uid://cugrq5ji4qm4" path="res://scenes/data_pack_selector_panel_container.tscn" id="6_8yp2c"]
+
+[sub_resource type="GDScript" id="GDScript_mwhmt"]
+script/source = "extends TextEdit
+
+func _gui_input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch and event.is_pressed():
+		grab_focus()
+		DisplayServer.virtual_keyboard_show(text)
+"
 
 [sub_resource type="GDScript" id="GDScript_si52b"]
 script/source = "extends Button
@@ -103,12 +113,14 @@ layout_mode = 2
 theme = ExtResource("2_7xyhl")
 placeholder_text = "Frame Name"
 alignment = 1
+script = ExtResource("4_htf1x")
 
 [node name="FrameIDLineEdit" type="LineEdit" parent="ScrollContainer/MainVBox" unique_id=857127033]
 layout_mode = 2
 theme = ExtResource("2_7xyhl")
 placeholder_text = "Frame ID"
 alignment = 1
+script = ExtResource("4_htf1x")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/MainVBox" unique_id=1929614955]
 layout_mode = 2
@@ -238,6 +250,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_7xyhl")
 placeholder_text = "Ability Name"
+script = ExtResource("4_htf1x")
 
 [node name="FrameAbilityTextEdit" type="TextEdit" parent="ScrollContainer/MainVBox" unique_id=1344370730]
 custom_minimum_size = Vector2(0, 360)
@@ -245,6 +258,7 @@ layout_mode = 2
 theme = ExtResource("2_7xyhl")
 placeholder_text = "Ability Text (BBCode Supported)"
 wrap_mode = 1
+script = SubResource("GDScript_mwhmt")
 
 [node name="MenuButtonsHBox" type="HBoxContainer" parent="ScrollContainer/MainVBox" unique_id=454417739]
 layout_mode = 2

@@ -6,7 +6,8 @@ class_name DraggedPart
 var empty_grid_frame: Texture2D = preload("res://assets/empty_grid_frame.png")
 
 func _process(_delta: float) -> void:
-	global_position = get_viewport().get_mouse_position()
+	if !OS.has_feature("mobile") and !OS.has_feature("web_android") and !OS.has_feature("web_ios"):
+		global_position = get_viewport().get_mouse_position()
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -17,6 +18,8 @@ func _input(event: InputEvent) -> void:
 		if event.index == 0:
 			if !event.pressed:
 				clear_part()
+	if event is InputEventScreenDrag:
+		global_position = event.position
 
 func assign_part(held_part: HeldPart) -> void:
 	var num_columns: int = 0

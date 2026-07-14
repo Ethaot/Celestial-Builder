@@ -11,7 +11,8 @@ class_name CustomFrameBuildMode
 var page_width: int
 
 func _ready() -> void:
-	get_window().size_changed.connect(setup)
+	#get_window().size_changed.connect(setup)
+	get_viewport().size_changed.connect(setup)
 	setup()
 	
 	menu_tab_button.button_up.connect(_on_menu_tab_button_pressed)
@@ -19,7 +20,11 @@ func _ready() -> void:
 	parts_tab_button.button_up.connect(_on_parts_tab_button_pressed)
 
 func setup() -> void:
-	var screen_size: Vector2i = DisplayServer.screen_get_size(DisplayServer.SCREEN_PRIMARY)
+	var screen_size: Vector2i
+	if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_MAXIMIZED:
+		screen_size = DisplayServer.screen_get_size(DisplayServer.SCREEN_PRIMARY)
+	else:
+		screen_size = DisplayServer.window_get_size()
 	#get_window().size = screen_size
 	get_window().content_scale_size = screen_size
 	page_width = screen_size.x

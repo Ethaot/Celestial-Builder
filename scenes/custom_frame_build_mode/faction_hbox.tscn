@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://dqvopi4xeb6gx"]
+
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_k0t7h"]
+[ext_resource type="Script" uid="uid://doda2tcm0b6q2" path="res://scripts/custom_frame_build_mode/faction_hbox.gd" id="1_xb1u0"]
+[ext_resource type="Script" uid="uid://chyxrd6ikyak2" path="res://scripts/mobile_friendly_line_edit.gd" id="3_bjv53"]
+
+[node name="FactionHBox" type="HBoxContainer" unique_id=1173336151 node_paths=PackedStringArray("faction_line_edit", "delete_button")]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+script = ExtResource("1_xb1u0")
+faction_line_edit = NodePath("FactionLineEdit")
+delete_button = NodePath("DeleteButton")
+
+[node name="FactionLineEdit" type="LineEdit" parent="." unique_id=685992866]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_k0t7h")
+placeholder_text = "Faction Name"
+script = ExtResource("3_bjv53")
+
+[node name="DeleteButton" type="Button" parent="." unique_id=1098701280]
+layout_mode = 2
+theme = ExtResource("1_k0t7h")
+theme_override_colors/font_color = Color(0.78431374, 0, 0, 1)
+text = "Delete"

@@ -7,6 +7,10 @@ var grid_texture_button_prefab: PackedScene = preload("res://scenes/grid_texture
 var selectable_grid_frame: Texture2D = preload("res://assets/ui/EmptyGridSpace.png")
 var part_effect_label_prefab: PackedScene = preload("res://scenes/part_effect_label.tscn")
 var load_frame_build_button_prefab: PackedScene = preload("res://scenes/load_frame_build_button.tscn")
+var faction_hbox_prefab: PackedScene = preload("res://scenes/custom_frame_build_mode/faction_hbox.tscn")
+var load_faction_hbox_prefab: PackedScene = preload("res://scenes/custom_frame_build_mode/load_faction_h_box.tscn")
+
+var main_theme: Theme = preload("res://MainTheme.tres")
 
 @export var main_script: CustomFrameBuildMode
 @export var part_grid_interface: PartGridInterface
@@ -14,12 +18,13 @@ var load_frame_build_button_prefab: PackedScene = preload("res://scenes/load_fra
 @export var frame_dropdown_panel_container: PanelContainer
 @export var frame_dropdown_vbox: VBoxContainer
 @export var frame_name_line_edit: LineEdit
+@export var frame_build_id_line_edit: LineEdit
 @export var hp_label: Label
 @export var grid_grid_container: GridContainer
 @export var armor_grid_container: GridContainer
 @export var defenses_hbox: HFlowContainer
 @export var part_effects_vbox: VBoxContainer
-@export var player_build_toggle: CheckButton
+@export var factions_vbox: VBoxContainer
 @export var save_frame_build_button: Button
 @export var load_frame_build_button: Button
 @export var load_frame_build_menu: ColorRect
@@ -43,6 +48,7 @@ func _ready() -> void:
 	populate_grid()
 	
 	frame_name_line_edit.text_changed.connect(_on_frame_name_text_changed)
+	frame_build_id_line_edit.text_changed.connect(_on_frame_build_id_text_changed)
 	save_frame_build_button.button_up.connect(_on_save_build_button_pressed)
 	load_frame_build_button.button_up.connect(_on_load_build_button_pressed)
 
@@ -508,7 +514,14 @@ func pickup_placed_part(idx: int) -> void:
 			iter += 1
 
 func save_build() -> void:
-	if frame_name_line_edit.text != "":
+	if frame_build_id_line_edit.text != "":
+		current_frame_build.frame_build_id = frame_build_id_line_edit.text
+		var factions: Array[String]
+		var children: Array[Node] = factions_vbox.get_children()
+		for i in range(1, children.size() - 1):
+			if children[i] is FactionHBox:
+				factions.append(children[i].faction_line_edit.text.to_lower())
+		current_frame_build.factions = factions
 		ResourceManager.save_frame_build_to_frame_builds_json(DataManager.currently_edited_data_pack, current_frame_build)
 
 func load_build(fb: FrameBuild) -> void:
@@ -520,18 +533,44 @@ func load_build(fb: FrameBuild) -> void:
 	_on_frame_option_chosen(frame_idx)
 	current_frame_build = fb
 	frame_name_line_edit.text = fb.frame_build_name
-	player_build_toggle.button_pressed = fb.player_build
+	frame_build_id_line_edit.text = fb.frame_build_id
+	# Factions Stuff
+	var children: Array[Node] = factions_vbox.get_children()
+	var add_faction_button: AddFactionButton = children[children.size() - 1]
+	for i in range(1, children.size() - 1):
+		children[i].queue_free()
+	for faction in fb.factions:
+		var fhb: FactionHBox = faction_hbox_prefab.instantiate()
+		fhb.faction_line_edit.text = faction
+		factions_vbox.add_child(fhb)
+	factions_vbox.move_child(add_faction_button, factions_vbox.get_children().size() - 1)
 	draw_grid_cells()
 	load_frame_build_menu.visible = false
 
 func populate_load_frame_build_menu() -> void:
 	for child in load_frame_build_vbox.get_children():
 		child.queue_free()
+	var faction_frames_dict: Dictionary[String, Array]
 	for fb in ResourceManager.get_frame_builds_from_pack(DataManager.currently_edited_data_pack):
-		var lfbb: Button = load_frame_build_button_prefab.instantiate()
-		lfbb.text = fb.frame_build_name
-		lfbb.button_up.connect(_on_frame_build_load.bind(fb))
-		load_frame_build_vbox.add_child(lfbb)
+		for fac in fb.factions:
+			if faction_frames_dict.has(fac):
+				faction_frames_dict[fac].append(fb)
+			else:
+				faction_frames_dict[fac] = [fb]
+	for faction in faction_frames_dict:
+		var folder_button: Button = load_frame_build_button_prefab.instantiate()
+		folder_button.text = faction
+		folder_button.add_theme_color_override("font_color", Color("#e8008c"))
+		load_frame_build_vbox.add_child(folder_button)
+		var fhb: LoadFactionHBox = load_faction_hbox_prefab.instantiate()
+		load_frame_build_vbox.add_child(fhb)
+		fhb.visible = false
+		folder_button.button_up.connect(func() -> void: fhb.visible = false if fhb.visible else true)
+		for fb in faction_frames_dict[faction]:
+			var lfbb: Button = load_frame_build_button_prefab.instantiate()
+			lfbb.text = fb.frame_build_name
+			lfbb.button_up.connect(_on_frame_build_load.bind(fb))
+			fhb.frame_vbox.add_child(lfbb)
 	var back_button: Button = load_frame_build_button_prefab.instantiate()
 	back_button.text = "Back"
 	back_button.button_up.connect(func() -> void: load_frame_build_menu.visible = false)
@@ -545,6 +584,8 @@ func _on_frame_option_chosen(idx: int) -> void:
 	close_frame_select_panel()
 	current_frame_build = FrameBuild.new()
 	current_frame_build.frame_id = frame_option_dict[idx]
+	current_frame_build.frame_build_name = frame_name_line_edit.text
+	current_frame_build.frame_build_id = frame_build_id_line_edit.text
 	hp_label.text = "HP: " + str(ResourceManager.frame_dict[current_frame_build.frame_id].frame_hp)
 	frame_dropdown_button.text = ResourceManager.frame_dict[frame_option_dict[idx]].frame_name
 	draw_grid_cells()
@@ -576,6 +617,9 @@ func _on_frame_select_button_clicked() -> void:
 
 func _on_frame_name_text_changed(new_text: String) -> void:
 	current_frame_build.frame_build_name = new_text
+
+func _on_frame_build_id_text_changed(new_text: String) -> void:
+	current_frame_build.frame_build_id = new_text
 
 func _on_save_build_button_pressed() -> void:
 	save_build()

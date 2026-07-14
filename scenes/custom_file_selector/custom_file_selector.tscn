@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://cc4dvmmkl16ws"]
+
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_hkuq2"]
+[ext_resource type="Script" uid="uid://djvw6y60utunx" path="res://scripts/custom_file_selector/custom_file_selector.gd" id="2_5huue"]
+
+[node name="CustomFileSelector" type="PanelContainer" unique_id=1511121049 node_paths=PackedStringArray("directory_vbox", "close_button")]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_hkuq2")
+script = ExtResource("2_5huue")
+directory_vbox = NodePath("MainVBox/ScrollContainer/DirectoryVBox")
+close_button = NodePath("MainVBox/ScrollContainer/DirectoryVBox/CloseButton")
+
+[node name="MainVBox" type="VBoxContainer" parent="." unique_id=678981956]
+layout_mode = 2
+
+[node name="CurrentDirectoryLabel" type="Label" parent="MainVBox" unique_id=731029150]
+visible = false
+layout_mode = 2
+text = "Current Directory"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainVBox" unique_id=1040559659]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DirectoryVBox" type="VBoxContainer" parent="MainVBox/ScrollContainer" unique_id=1517214090]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CloseButton" type="Button" parent="MainVBox/ScrollContainer/DirectoryVBox" unique_id=1013885989]
+layout_mode = 2
+text = "Close"
