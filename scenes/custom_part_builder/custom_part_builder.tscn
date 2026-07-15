@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://d3ngqwfynhupp" path="res://scripts/custom_part_mode/custom_part_builder.gd" id="2_6e685"]
 [ext_resource type="Script" uid="uid://chyxrd6ikyak2" path="res://scripts/mobile_friendly_line_edit.gd" id="4_76g6l"]
 [ext_resource type="Script" uid="uid://chgjg4cfqjfww" path="res://scripts/alt_aspect_ratio_container.gd" id="5_5hq4i"]
+[ext_resource type="Script" uid="uid://bbd32h71scplk" path="res://scripts/mobile_friendly_button.gd" id="5_ys0rt"]
 [ext_resource type="PackedScene" uid="uid://cc4dvmmkl16ws" path="res://scenes/custom_file_selector/custom_file_selector.tscn" id="6_76g6l"]
 [ext_resource type="PackedScene" uid="uid://cugrq5ji4qm4" path="res://scenes/data_pack_selector_panel_container.tscn" id="7_5hq4i"]
 
@@ -36,7 +37,7 @@ func _on_down_button_pressed() -> void:
 "
 
 [sub_resource type="GDScript" id="GDScript_76g6l"]
-script/source = "extends Button
+script/source = "extends MobileFriendlyButton
 
 @export var data_pack_selector_panel: DataPackSelectorPanel
 
@@ -53,7 +54,7 @@ func _on_button_pressed() -> void:
 "
 
 [sub_resource type="GDScript" id="GDScript_u23kh"]
-script/source = "extends Button
+script/source = "extends MobileFriendlyButton
 
 func _ready() -> void:
 	button_up.connect(_on_button_pressed)
@@ -79,7 +80,7 @@ func popup() -> void:
 	visible = true
 "
 
-[node name="CustomPartBuilder" type="ColorRect" unique_id=1567033318 node_paths=PackedStringArray("scroll_container", "part_name_line_edit", "part_id_line_edit", "select_image_button", "upload_image_button", "part_type_button", "size_button", "part_type_dropdown_panel", "part_type_dropdown_vbox", "size_dropdown_panel", "size_dropdown_vbox", "grid_grid_container", "description_text_edit", "shield_capacity_hbox", "shield_capacity_amount_label", "part_tab_line_edit", "tags_vbox", "add_tag_button", "connected_tags_vbox", "add_connected_tag_button", "save_part_button", "load_part_button", "choose_data_pack_button", "select_image_file_dialog", "upload_image_file_dialog")]
+[node name="CustomPartBuilder" type="ColorRect" unique_id=1567033318 node_paths=PackedStringArray("scroll_container", "part_name_line_edit", "part_id_line_edit", "select_image_button", "upload_image_button", "part_type_button", "size_button", "part_type_dropdown_panel", "part_type_dropdown_vbox", "size_dropdown_panel", "size_dropdown_vbox", "grid_grid_container", "description_text_edit", "shield_capacity_hbox", "shield_capacity_amount_label", "part_tab_line_edit", "tags_vbox", "add_tag_button", "connected_tags_vbox", "add_connected_tag_button", "save_part_button", "load_part_button", "load_part_menu", "load_part_vbox", "choose_data_pack_button", "select_image_file_dialog", "upload_image_file_dialog")]
 texture_filter = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -110,6 +111,8 @@ connected_tags_vbox = NodePath("MainScrollContainer/MainVBox/TagsHBox/ConnectedT
 add_connected_tag_button = NodePath("MainScrollContainer/MainVBox/TagsHBox/ConnectedTagsVBox/AddConnectedTagButton")
 save_part_button = NodePath("MainScrollContainer/MainVBox/HBoxContainer/SavePartButton")
 load_part_button = NodePath("MainScrollContainer/MainVBox/HBoxContainer/LoadPartButton")
+load_part_menu = NodePath("LoadPartMenu")
+load_part_vbox = NodePath("LoadPartMenu/ScrollContainer/HBoxContainer/LoadPartVBox")
 choose_data_pack_button = NodePath("MainScrollContainer/MainVBox/ChooseDataPackButton")
 select_image_file_dialog = NodePath("CustomFileSelector")
 upload_image_file_dialog = NodePath("UploadImageFileDialog")
@@ -122,6 +125,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 96.0
 theme = ExtResource("2_1uogk")
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
 script = ExtResource("1_qpyal")
 
 [node name="MainVBox" type="VBoxContainer" parent="MainScrollContainer" unique_id=256657607]
@@ -145,26 +150,34 @@ metadata/_custom_type_script = "uid://chyxrd6ikyak2"
 [node name="HBoxContainer2" type="HBoxContainer" parent="MainScrollContainer/MainVBox" unique_id=997663839]
 layout_mode = 2
 
-[node name="UploadImageButton" type="Button" parent="MainScrollContainer/MainVBox/HBoxContainer2" unique_id=546163142]
+[node name="UploadImageButton" type="Button" parent="MainScrollContainer/MainVBox/HBoxContainer2" unique_id=205030214]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Upload Image"
 autowrap_mode = 3
+script = ExtResource("5_ys0rt")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
 
-[node name="SelectImageButton" type="Button" parent="MainScrollContainer/MainVBox/HBoxContainer2" unique_id=23970719]
+[node name="SelectImageButton" type="Button" parent="MainScrollContainer/MainVBox/HBoxContainer2" unique_id=911462004]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Select Image"
 autowrap_mode = 3
+script = ExtResource("5_ys0rt")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
 
-[node name="PartTypeButton" type="Button" parent="MainScrollContainer/MainVBox" unique_id=659044756]
+[node name="PartTypeButton" type="Button" parent="MainScrollContainer/MainVBox" unique_id=399365212]
 layout_mode = 2
 text = "Part Type: part_reactor"
 autowrap_mode = 3
+script = ExtResource("5_ys0rt")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
 
-[node name="SizeButton" type="Button" parent="MainScrollContainer/MainVBox" unique_id=485892240]
+[node name="SizeButton" type="Button" parent="MainScrollContainer/MainVBox" unique_id=148722855]
 visible = false
 layout_mode = 2
+script = ExtResource("5_ys0rt")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
 
 [node name="GridMarginContainer" type="MarginContainer" parent="MainScrollContainer/MainVBox" unique_id=336477574]
 layout_mode = 2
@@ -278,18 +291,20 @@ size_flags_horizontal = 3
 text = "Load Part"
 autowrap_mode = 3
 
-[node name="ChooseDataPackButton" type="Button" parent="MainScrollContainer/MainVBox" unique_id=1505788399 node_paths=PackedStringArray("data_pack_selector_panel")]
+[node name="ChooseDataPackButton" type="Button" parent="MainScrollContainer/MainVBox" unique_id=441676068 node_paths=PackedStringArray("data_pack_selector_panel")]
 layout_mode = 2
 text = "Current Data Pack: custom"
 autowrap_mode = 3
 script = SubResource("GDScript_76g6l")
 data_pack_selector_panel = NodePath("../../../DataPackSelectorPanelContainer")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
 
-[node name="ExitPartModeButton" type="Button" parent="MainScrollContainer/MainVBox" unique_id=1862340792]
+[node name="ExitPartModeButton" type="Button" parent="MainScrollContainer/MainVBox" unique_id=2129434184]
 layout_mode = 2
 text = "Exit Part Mode"
 autowrap_mode = 3
 script = SubResource("GDScript_u23kh")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
 
 [node name="PartTypeDropdownPanel" type="PanelContainer" parent="." unique_id=1181059393 node_paths=PackedStringArray("dropdown_button", "dropdown_vbox")]
 visible = false
@@ -355,3 +370,41 @@ use_native_dialog = true
 
 [node name="DataPackSelectorPanelContainer" parent="." unique_id=967509421 instance=ExtResource("7_5hq4i")]
 layout_mode = 1
+
+[node name="LoadPartMenu" type="ColorRect" parent="." unique_id=1825872409]
+visible = false
+z_index = 2
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="LoadPartMenu" unique_id=647995717]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+script = ExtResource("1_qpyal")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LoadPartMenu/ScrollContainer" unique_id=1090557594]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Padding" type="Control" parent="LoadPartMenu/ScrollContainer/HBoxContainer" unique_id=767726970]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LoadPartVBox" type="VBoxContainer" parent="LoadPartMenu/ScrollContainer/HBoxContainer" unique_id=1538900379]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_1uogk")
+
+[node name="Padding2" type="Control" parent="LoadPartMenu/ScrollContainer/HBoxContainer" unique_id=2006390969]
+layout_mode = 2
+size_flags_horizontal = 3

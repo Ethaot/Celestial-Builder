@@ -11,6 +11,7 @@ var button_prefab: PackedScene = preload("res://scenes/load_frame_build_button.t
 @export var menu_vbox: VBoxContainer
 @export var copy_to_panel: Panel
 @export var copy_to_vbox_container: VBoxContainer
+@export var back_button: Button
 
 var clipboard_item: Dictionary
 
@@ -19,12 +20,13 @@ func _ready() -> void:
 
 func populate_menu() -> void:
 	var children: Array[Node] = menu_vbox.get_children()
-	for i in range(1, children.size()):
+	for i in range(1, children.size() - 1):
 		children[i].queue_free()
 	for m in ResourceManager.manifests:
 		if m["package_id"] != "celestial-bodies-core":
 			load_data_pack(m["package_id"])
 	load_data_pack("custom")
+	menu_vbox.move_child(back_button, menu_vbox.get_children().size() - 1)
 
 func load_data_pack(pack_id: String) -> void:
 	var base_path: String = ResourceManager.DATA_PACKS_PATH + pack_id + "/"

@@ -29,6 +29,7 @@ func _input(event: InputEvent) -> void:
 						button_held = false
 						start_part_pickup = false
 						parts_tab_menu.selecting_part_from_parts = false
+						hovered_grids.clear()
 			if event is InputEventScreenTouch:
 				if event.index == 0:
 					if event.pressed:
@@ -38,24 +39,31 @@ func _input(event: InputEvent) -> void:
 						button_held = false
 						start_part_pickup = false
 						parts_tab_menu.selecting_part_from_parts = false
+						hovered_grids.clear()
 		Mode.Edit:
 			if event is InputEventMouseButton:
 				if event.button_index == MOUSE_BUTTON_LEFT:
 					if !event.pressed:
 						if hovered_grids.size() > 0:
-							pass
+							change_mode(Mode.Normal)
+							frame_tab_menu.draw_grid_cells()
 							#_on_part_dropped(hovered_grids[0])
 						else:
-							parts_tab_menu._on_part_cleared()
+							change_mode(Mode.Normal)
+							frame_tab_menu.draw_grid_cells()
+							hovered_grids.clear()
 						button_held = false
 			if event is InputEventScreenTouch:
 				if event.index == 0:
 					if !event.pressed:
 						if hovered_grids.size() > 0:
-							pass
+							change_mode(Mode.Normal)
+							frame_tab_menu.draw_grid_cells()
 							#_on_part_dropped(hovered_grids[0])
 						else:
-							parts_tab_menu.on_part_cleared()
+							change_mode(Mode.Normal)
+							frame_tab_menu.draw_grid_cells()
+							hovered_grids.clear()
 						button_held = false
 
 func _process(delta: float) -> void:

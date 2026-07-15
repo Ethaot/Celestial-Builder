@@ -1,4 +1,4 @@
-extends ScrollContainer
+extends TouchScrollContainer
 class_name FrameBuilderPartsTabMenu
 
 var part_group_tab_vbox_prefab: PackedScene = preload("res://scenes/part_group_v_box.tscn")
@@ -19,8 +19,8 @@ var empty_grid_frame: Texture2D = preload("res://assets/empty_grid_frame.png")
 @export var parts_processors_tab_button: Button
 @export var parts_shields_tab_button: Button
 
-var is_dragging: bool = false
-var swipe_speed = 1.0
+#var is_dragging: bool = false
+#var swipe_speed = 1.0
 
 var start_part_pickup: bool = false
 var selecting_part_from_parts: bool = false
@@ -36,44 +36,44 @@ func _ready() -> void:
 	parts_processors_tab_button.button_up.connect(show_parts_screen.bind(Constants.PartType.PartProcessor))
 	parts_shields_tab_button.button_up.connect(show_parts_screen.bind(Constants.PartType.PartShield))
 
-func _gui_input(event: InputEvent) -> void:
-	if event is InputEventScreenTouch:
-		if event.index == 0:
-			is_dragging = event.pressed
-	if event is InputEventScreenDrag:
-		if is_dragging:
-			scroll_vertical -= event.relative.y * swipe_speed
+#func _gui_input(event: InputEvent) -> void:
+	#if event is InputEventScreenTouch:
+		#if event.index == 0:
+			#is_dragging = event.pressed
+	#if event is InputEventScreenDrag:
+		#if is_dragging:
+			#scroll_vertical -= event.relative.y * swipe_speed
 
-func _input(event: InputEvent) -> void:
-	match part_grid_interface.current_mode:
-		part_grid_interface.Mode.Normal:
-			if event is InputEventMouseButton:
-				if event.button_index == MOUSE_BUTTON_LEFT:
-					if !event.pressed:
-						start_part_pickup = false
-						selecting_part_from_parts = false
-			if event is InputEventScreenTouch:
-				if event.index == 0:
-					if !event.pressed:
-						start_part_pickup = false
-						selecting_part_from_parts = false
-		part_grid_interface.Mode.Edit:
-			if event is InputEventMouseButton:
-				if event.button_index == MOUSE_BUTTON_LEFT:
-					if !event.pressed:
-						if part_grid_interface.hovered_grids.size() > 0:
-							pass
-							#_on_part_dropped(hovered_grids[0])
-						else:
-							_on_part_cleared()
-			if event is InputEventScreenTouch:
-				if event.index == 0:
-					if !event.pressed:
-						if part_grid_interface.hovered_grids.size() > 0:
-							pass
-							#_on_part_dropped(hovered_grids[0])
-						else:
-							_on_part_cleared()
+#func _input(event: InputEvent) -> void:
+	#match part_grid_interface.current_mode:
+		#part_grid_interface.Mode.Normal:
+			#if event is InputEventMouseButton:
+				#if event.button_index == MOUSE_BUTTON_LEFT:
+					#if !event.pressed:
+						#start_part_pickup = false
+						#selecting_part_from_parts = false
+			#if event is InputEventScreenTouch:
+				#if event.index == 0:
+					#if !event.pressed:
+						#start_part_pickup = false
+						#selecting_part_from_parts = false
+		#part_grid_interface.Mode.Edit:
+			#if event is InputEventMouseButton:
+				#if event.button_index == MOUSE_BUTTON_LEFT:
+					#if !event.pressed:
+						#if part_grid_interface.hovered_grids.size() > 0:
+							#pass
+							##_on_part_dropped(hovered_grids[0])
+						#else:
+							#_on_part_cleared()
+			#if event is InputEventScreenTouch:
+				#if event.index == 0:
+					#if !event.pressed:
+						#if part_grid_interface.hovered_grids.size() > 0:
+							#pass
+							##_on_part_dropped(hovered_grids[0])
+						#else:
+							#_on_part_cleared()
 
 func show_parts_screen(part_type: Constants.PartType) -> void:
 	#switch_to_parts_view()
@@ -307,6 +307,7 @@ func switch_to_main_view() -> void:
 	main_script.go_to_page(1)
 
 func _on_part_grabbed(part: HeldPart) -> void:
+	part_grid_interface.change_mode(part_grid_interface.Mode.Edit)
 	part_grid_interface.dragged_part.assign_part(part)
 	switch_to_main_view()
 

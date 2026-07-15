@@ -59,7 +59,7 @@ skew = Vector2(0.5, 0)
 corner_radius_bottom_right = 12
 
 [sub_resource type="GDScript" id="GDScript_r6p65"]
-script/source = "extends Button
+script/source = "extends MobileFriendlyButton
 
 @export var create_custom_panel: PanelContainer
 
@@ -71,7 +71,7 @@ func _on_button_pressed() -> void:
 "
 
 [sub_resource type="GDScript" id="GDScript_6u1mn"]
-script/source = "extends Button
+script/source = "extends MobileFriendlyButton
 
 @export var data_packs_menu_panel: Panel
 
@@ -82,8 +82,18 @@ func _on_button_pressed() -> void:
 	data_packs_menu_panel.visible = true
 "
 
+[sub_resource type="GDScript" id="GDScript_6kn7j"]
+script/source = "extends MobileFriendlyButton
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	SceneManager.switch_scene(SceneManager.ENCOUNTER_SCENE)
+"
+
 [sub_resource type="GDScript" id="GDScript_e1cbu"]
-script/source = "extends Button
+script/source = "extends MobileFriendlyButton
 
 @export var license_panel_container: PanelContainer
 
@@ -122,7 +132,7 @@ func _on_button_pressed() -> void:
 "
 
 [sub_resource type="GDScript" id="GDScript_gn8jn"]
-script/source = "extends Button
+script/source = "extends MobileFriendlyButton
 
 func _ready() -> void:
 	button_up.connect(_on_button_pressed)
@@ -132,7 +142,7 @@ func _on_button_pressed() -> void:
 "
 
 [sub_resource type="GDScript" id="GDScript_pwrrv"]
-script/source = "extends Button
+script/source = "extends MobileFriendlyButton
 
 func _ready() -> void:
 	button_up.connect(_on_button_pressed)
@@ -142,7 +152,7 @@ func _on_button_pressed() -> void:
 "
 
 [sub_resource type="GDScript" id="GDScript_6e685"]
-script/source = "extends Button
+script/source = "extends MobileFriendlyButton
 
 func _ready() -> void:
 	button_up.connect(_on_button_pressed)
@@ -152,7 +162,7 @@ func _on_button_pressed() -> void:
 "
 
 [sub_resource type="GDScript" id="GDScript_4w45t"]
-script/source = "extends Button
+script/source = "extends MobileFriendlyButton
 
 @export var create_custom_panel: PanelContainer
 
@@ -359,7 +369,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="MenuScrollContainer" type="ScrollContainer" parent="AppScreenScrollContainer/HBoxContainer" unique_id=1134152300]
+[node name="MenuScrollContainer" type="ScrollContainer" parent="AppScreenScrollContainer/HBoxContainer" unique_id=1528496941]
 custom_minimum_size = Vector2(1080, 0)
 clip_contents = false
 layout_mode = 2
@@ -367,6 +377,7 @@ size_flags_horizontal = 3
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 3
 script = ExtResource("3_4w45t")
+metadata/_custom_type_script = "uid://6lpo6yi1q5l6"
 
 [node name="CenterContainer" type="MarginContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer" unique_id=1303896139]
 layout_mode = 2
@@ -498,31 +509,36 @@ layout_mode = 2
 theme = ExtResource("1_w2twt")
 text = "Load Lamplighter"
 
-[node name="CreateCustomButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/MenuOptionsVBox" unique_id=1149478536 node_paths=PackedStringArray("create_custom_panel")]
+[node name="CreateCustomButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/MenuOptionsVBox" unique_id=393972970 node_paths=PackedStringArray("create_custom_panel")]
 layout_mode = 2
 theme = ExtResource("1_w2twt")
 text = "Create Custom..."
 script = SubResource("GDScript_r6p65")
 create_custom_panel = NodePath("../../CreateCustomPanelContainer")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
 
-[node name="ManageDataPacksButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/MenuOptionsVBox" unique_id=523658077 node_paths=PackedStringArray("data_packs_menu_panel")]
+[node name="ManageDataPacksButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/MenuOptionsVBox" unique_id=768581871 node_paths=PackedStringArray("data_packs_menu_panel")]
 layout_mode = 2
 theme = ExtResource("1_w2twt")
 text = "Data Packs"
 script = SubResource("GDScript_6u1mn")
 data_packs_menu_panel = NodePath("../../../../../../DataPacksMenuPanel")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
 
-[node name="EncounterModeButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/MenuOptionsVBox" unique_id=1080778848]
+[node name="EncounterModeButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/MenuOptionsVBox" unique_id=300399974]
 layout_mode = 2
 theme = ExtResource("1_w2twt")
 text = "Switch to Encounter Mode"
+script = SubResource("GDScript_6kn7j")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
 
-[node name="LicenseButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/MenuOptionsVBox" unique_id=211574434 node_paths=PackedStringArray("license_panel_container")]
+[node name="LicenseButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/MenuOptionsVBox" unique_id=1296942921 node_paths=PackedStringArray("license_panel_container")]
 layout_mode = 2
 theme = ExtResource("1_w2twt")
 text = "License"
 script = SubResource("GDScript_e1cbu")
 license_panel_container = NodePath("../../LicensePanelContainer")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
 
 [node name="VersionLabel" type="RichTextLabel" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/MenuOptionsVBox" unique_id=1605397323]
 layout_mode = 2
@@ -546,6 +562,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_tnrwk")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/LicensePanelContainer" unique_id=866113251]
 layout_mode = 2
+script = ExtResource("3_4w45t")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/LicensePanelContainer/ScrollContainer" unique_id=185132099]
 layout_mode = 2
@@ -576,8 +593,10 @@ visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_tnrwk")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer" unique_id=2030274513]
+[node name="ScrollContainer" type="ScrollContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer" unique_id=1229597201]
 layout_mode = 2
+script = ExtResource("3_4w45t")
+metadata/_custom_type_script = "uid://6lpo6yi1q5l6"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer/ScrollContainer" unique_id=921493599]
 layout_mode = 2
@@ -591,36 +610,41 @@ theme = ExtResource("1_w2twt")
 text = "Create Custom..."
 horizontal_alignment = 1
 
-[node name="CreateCustomFrameButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer/ScrollContainer/VBoxContainer" unique_id=639630228]
+[node name="CreateCustomFrameButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer/ScrollContainer/VBoxContainer" unique_id=1241356433]
 layout_mode = 2
 theme = ExtResource("1_w2twt")
 text = "Frame"
 script = SubResource("GDScript_gn8jn")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
 
-[node name="CreateCustomFrameBuildButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer/ScrollContainer/VBoxContainer" unique_id=54999800]
+[node name="CreateCustomFrameBuildButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer/ScrollContainer/VBoxContainer" unique_id=560631380]
 layout_mode = 2
 theme = ExtResource("1_w2twt")
 text = "Frame Build"
 script = SubResource("GDScript_pwrrv")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
 
-[node name="CreateCustomPartButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer/ScrollContainer/VBoxContainer" unique_id=767720143]
+[node name="CreateCustomPartButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer/ScrollContainer/VBoxContainer" unique_id=1568930094]
 layout_mode = 2
 theme = ExtResource("1_w2twt")
 text = "Part"
 script = SubResource("GDScript_6e685")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
 
-[node name="CloseCreateCustomButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer/ScrollContainer/VBoxContainer" unique_id=1532798652 node_paths=PackedStringArray("create_custom_panel")]
+[node name="CloseCreateCustomButton" type="Button" parent="AppScreenScrollContainer/HBoxContainer/MenuScrollContainer/CenterContainer/CreateCustomPanelContainer/ScrollContainer/VBoxContainer" unique_id=1996699126 node_paths=PackedStringArray("create_custom_panel")]
 layout_mode = 2
 theme = ExtResource("1_w2twt")
 text = "Back"
 script = SubResource("GDScript_4w45t")
 create_custom_panel = NodePath("../../..")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
 
 [node name="LamplighterScrollContainer" type="ScrollContainer" parent="AppScreenScrollContainer/HBoxContainer" unique_id=668718151]
 custom_minimum_size = Vector2(1080, 0)
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
+script = ExtResource("3_4w45t")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="AppScreenScrollContainer/HBoxContainer/LamplighterScrollContainer" unique_id=834189932]
 layout_mode = 2
@@ -1184,6 +1208,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("3_4w45t")
 
 [node name="DataPacksToggleVBox" type="VBoxContainer" parent="DataPacksToggleMenu/ScrollContainer" unique_id=1044646355]
 layout_mode = 2

@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://dqndn7170lum6"]
+
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_52vuj"]
+[ext_resource type="Script" uid="uid://cv1lfd7cju1mn" path="res://scripts/load_component_h_box.gd" id="2_5w7wx"]
+
+[node name="LoadComponentHBox" type="HBoxContainer" unique_id=1634453570 node_paths=PackedStringArray("load_button", "delete_button")]
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 3
+theme = ExtResource("1_52vuj")
+script = ExtResource("2_5w7wx")
+load_button = NodePath("LoadButton")
+delete_button = NodePath("DeleteButton")
+
+[node name="LoadButton" type="Button" parent="." unique_id=1252796534]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DeleteButton" type="Button" parent="." unique_id=1793025064]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.78431374, 0, 0, 1)
+text = "Delete"

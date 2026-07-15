@@ -120,8 +120,8 @@ func refresh_all_packs() -> void:
 	frame_builds.append_array(import_frame_build_dicts(CUSTOM_PACK_PATH))
 	
 	# Final Dict Construction
-	part_image_dict = get_part_images_dict()
-	frame_dict = construct_frame_dict(frames)
+	part_image_dict.merge(get_part_images_dict())
+	frame_dict.merge(construct_frame_dict(frames))
 	
 	packs_ready = true
 	packs_imported.emit()
@@ -144,8 +144,9 @@ func add_data_pack(pack_dict: Dictionary) -> void:
 		file.store_line(json_string)
 		file.close()
 		if FileAccess.file_exists(DATA_PACKS_PATH + "data_packs_manifest.json"):
-			var mani_file = FileAccess.open(DATA_PACKS_PATH + "data_packs_manifest.json", FileAccess.READ_WRITE)
+			var mani_file = FileAccess.open(DATA_PACKS_PATH + "data_packs_manifest.json", FileAccess.READ)
 			var mani_json_string: String = mani_file.get_as_text()
+			mani_file.close()
 			var data = JSON.parse_string(mani_json_string)
 			var manis: Array[Dictionary]
 			if data is Array:
@@ -157,6 +158,7 @@ func add_data_pack(pack_dict: Dictionary) -> void:
 			new_mani["enabled"] = true
 			manis.append(new_mani)
 			var write_string = JSON.stringify(manis, "\t")
+			mani_file = FileAccess.open(DATA_PACKS_PATH + "data_packs_manifest.json", FileAccess.WRITE)
 			mani_file.store_line(write_string)
 			mani_file.close()
 		DataManager.config.last_modified_data_pack_id = pack_dict["package_id"]
@@ -413,31 +415,32 @@ func assign_parts_array(parts_array: Array[Array]) -> void:
 func get_part_images_dict() -> Dictionary[String, Array]:
 	var dict: Dictionary[String, Array] = {}
 	for key in part_dict:
-		var img: Image =  Image.load_from_file(DATA_PACKS_PATH + part_dict[key].part_icon)
-		if is_instance_valid(img):
-			var tex: ImageTexture = ImageTexture.create_from_image(img)
-			var tiles_x: int = 1
-			var tiles_y: int = 1
-			for pc in part_dict[key].part_configuration:
-				if pc.x + 1 > tiles_x:
-					tiles_x = pc.x + 1
-				if pc.y + 1 > tiles_y:
-					tiles_y = pc.y + 1
-			var tile_size_x: int = floori(float(img.get_size().x) / tiles_x)
-			var tile_size_y: int = floori(float(img.get_size().y) / tiles_y)
-			var tile_size: Vector2i = Vector2i(tile_size_x, tile_size_y)
-			var at_array: Array[AtlasTexture]
-			for y in tiles_y:
-				for x in tiles_x:
-					var tile_pos: Vector2i = Vector2i(x, y)
-					if part_dict[key].part_configuration.has(tile_pos):
-						var at: AtlasTexture = AtlasTexture.new()
-						at.atlas = tex
-						at.region = Rect2(tile_pos * tile_size, tile_size)
-						at_array.append(at)
-			dict[part_dict[key].part_id] = at_array
-		else:
-			push_error("Couldn't load image at " + part_dict[key].part_icon)
+		if FileAccess.file_exists(DATA_PACKS_PATH + part_dict[key].part_icon):
+			var img: Image =  Image.load_from_file(DATA_PACKS_PATH + part_dict[key].part_icon)
+			if is_instance_valid(img):
+				var tex: ImageTexture = ImageTexture.create_from_image(img)
+				var tiles_x: int = 1
+				var tiles_y: int = 1
+				for pc in part_dict[key].part_configuration:
+					if pc.x + 1 > tiles_x:
+						tiles_x = pc.x + 1
+					if pc.y + 1 > tiles_y:
+						tiles_y = pc.y + 1
+				var tile_size_x: int = floori(float(img.get_size().x) / tiles_x)
+				var tile_size_y: int = floori(float(img.get_size().y) / tiles_y)
+				var tile_size: Vector2i = Vector2i(tile_size_x, tile_size_y)
+				var at_array: Array[AtlasTexture]
+				for y in tiles_y:
+					for x in tiles_x:
+						var tile_pos: Vector2i = Vector2i(x, y)
+						if part_dict[key].part_configuration.has(tile_pos):
+							var at: AtlasTexture = AtlasTexture.new()
+							at.atlas = tex
+							at.region = Rect2(tile_pos * tile_size, tile_size)
+							at_array.append(at)
+				dict[part_dict[key].part_id] = at_array
+			else:
+				push_error("Couldn't load image at " + part_dict[key].part_icon)
 	return dict
 
 func import_frames_dicts(path: String) -> Array[Frame]:
@@ -508,8 +511,9 @@ func create_player_grid_gradient_atlastextures() -> Array[AtlasTexture]:
 
 func save_part_to_parts_json(data_pack_id: String, part: Part) -> void:
 	if FileAccess.file_exists(DATA_PACKS_PATH + data_pack_id + "/parts.json"):
-		var file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/parts.json", FileAccess.READ_WRITE)
+		var file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/parts.json", FileAccess.READ)
 		var json_string: String = file.get_as_text()
+		file.close()
 		var data = JSON.parse_string(json_string)
 		var data_had_part: bool = false
 		if data is Array:
@@ -520,6 +524,7 @@ func save_part_to_parts_json(data_pack_id: String, part: Part) -> void:
 						data_had_part = true
 			if !data_had_part:
 				data.append(part.to_dict())
+		file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/parts.json", FileAccess.WRITE)
 		json_string = JSON.stringify(data, "\t")
 		file.store_line(json_string)
 		file.close()
@@ -530,10 +535,32 @@ func save_part_to_parts_json(data_pack_id: String, part: Part) -> void:
 		file.store_line(json_string)
 		file.close()
 
+func remove_part_from_parts_json(data_pack_id: String, part_id: String) -> void:
+	print("Deleting part " + part_id + "...")
+	if FileAccess.file_exists(DATA_PACKS_PATH + data_pack_id + "/parts.json"):
+		var file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/parts.json", FileAccess.READ)
+		var json_string: String = file.get_as_text()
+		file.close()
+		var data = JSON.parse_string(json_string)
+		var new_data: Array[Dictionary]
+		if data is Array:
+			for dict in data:
+				if dict is Dictionary:
+					if dict["part_id"] != part_id:
+						new_data.append(dict)
+		json_string = JSON.stringify(new_data, "\t")
+		file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/parts.json", FileAccess.WRITE)
+		file.store_line(json_string)
+		file.close()
+		print("Part deleted.")
+	else:
+		push_error("Parts JSON does not exist for data pack " + data_pack_id + ".")
+
 func save_frame_to_frames_json(data_pack_id: String, frame: Frame) -> void:
 	if FileAccess.file_exists(DATA_PACKS_PATH + data_pack_id + "/frames.json"):
-		var file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/frames.json", FileAccess.READ_WRITE)
+		var file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/frames.json", FileAccess.READ)
 		var json_string: String = file.get_as_text()
+		file.close()
 		var data = JSON.parse_string(json_string)
 		var data_had_frame: bool = false
 		if data is Array:
@@ -545,6 +572,7 @@ func save_frame_to_frames_json(data_pack_id: String, frame: Frame) -> void:
 			if !data_had_frame:
 				data.append(frame.to_dict())
 		json_string = JSON.stringify(data, "\t")
+		file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/frames.json", FileAccess.WRITE)
 		file.store_line(json_string)
 		file.close()
 	else:
@@ -556,8 +584,9 @@ func save_frame_to_frames_json(data_pack_id: String, frame: Frame) -> void:
 
 func save_frame_build_to_frame_builds_json(data_pack_id: String, fb: FrameBuild) -> void:
 	if FileAccess.file_exists(DATA_PACKS_PATH + data_pack_id + "/frame_builds.json"):
-		var file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/frame_builds.json", FileAccess.READ_WRITE)
+		var file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/frame_builds.json", FileAccess.READ)
 		var json_string: String = file.get_as_text()
+		file.close()
 		var data = JSON.parse_string(json_string)
 		var data_had_frame_build: bool = false
 		if data is Array:
@@ -569,6 +598,7 @@ func save_frame_build_to_frame_builds_json(data_pack_id: String, fb: FrameBuild)
 			if !data_had_frame_build:
 				data.append(fb.to_dict())
 		json_string = JSON.stringify(data, "\t")
+		file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/frame_builds.json", FileAccess.WRITE)
 		file.store_line(json_string)
 		file.close()
 	else:
@@ -577,6 +607,27 @@ func save_frame_build_to_frame_builds_json(data_pack_id: String, fb: FrameBuild)
 		var json_string: String = JSON.stringify(data, "\t")
 		file.store_line(json_string)
 		file.close()
+
+func get_parts_from_pack(data_pack_id: String) -> Array[Part]:
+	var arr: Array[Part]
+	if FileAccess.file_exists(DATA_PACKS_PATH + data_pack_id + "/parts.json"):
+		var file = FileAccess.open(DATA_PACKS_PATH + data_pack_id + "/parts.json", FileAccess.READ)
+		var json_string: String = file.get_as_text()
+		var data = JSON.parse_string(json_string)
+		if data is Array:
+			for dict in data:
+				if dict is Dictionary:
+					var p: Part
+					match int(dict["part_type"]):
+						Constants.PartType.PartReactor:
+							p = Reactor.new()
+						Constants.PartType.PartShield:
+							p = Shield.new()
+						_:
+							p = Part.new()
+					p.from_dict(dict)
+					arr.append(p)
+	return arr
 
 func get_frames_from_pack(data_pack_id: String) -> Array[Frame]:
 	var arr: Array[Frame]

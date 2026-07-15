@@ -2,6 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_rcjcm"]
 [ext_resource type="Script" uid="uid://dg56fkvgwjaeb" path="res://scripts/data_manager_menu/data_manager_menu.gd" id="2_qqo70"]
+[ext_resource type="Script" uid="uid://6lpo6yi1q5l6" path="res://scripts/scroll_container_touch_support.gd" id="3_qu1fd"]
 
 [sub_resource type="GDScript" id="GDScript_4d01l"]
 script/source = "extends Button
@@ -13,7 +14,7 @@ func _on_button_pressed() -> void:
 	SceneManager.switch_scene(SceneManager.MAIN_SCENE)
 "
 
-[node name="DataManagerMenu" type="Panel" unique_id=745905131 node_paths=PackedStringArray("menu_vbox", "copy_to_panel", "copy_to_vbox_container")]
+[node name="DataManagerMenu" type="Panel" unique_id=745905131 node_paths=PackedStringArray("menu_vbox", "copy_to_panel", "copy_to_vbox_container", "back_button")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -21,9 +22,10 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_rcjcm")
 script = ExtResource("2_qqo70")
-menu_vbox = NodePath("ScrollContainer/HBoxContainer/VBoxContainer")
+menu_vbox = NodePath("ScrollContainer/HBoxContainer/MenuVBox")
 copy_to_panel = NodePath("CopyToPanel")
 copy_to_vbox_container = NodePath("CopyToPanel/ScrollContainer/CopyToVBoxContainer")
+back_button = NodePath("ScrollContainer/HBoxContainer/MenuVBox/BackButton")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1462157367]
 layout_mode = 1
@@ -32,6 +34,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("3_qu1fd")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer" unique_id=1759524889]
 layout_mode = 2
@@ -41,14 +44,20 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/HBoxContainer" unique_id=148345153]
+[node name="MenuVBox" type="VBoxContainer" parent="ScrollContainer/HBoxContainer" unique_id=148345153]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_rcjcm")
 
-[node name="Padding" type="Control" parent="ScrollContainer/HBoxContainer/VBoxContainer" unique_id=1587034064]
+[node name="Padding" type="Control" parent="ScrollContainer/HBoxContainer/MenuVBox" unique_id=1587034064]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
+
+[node name="BackButton" type="Button" parent="ScrollContainer/HBoxContainer/MenuVBox" unique_id=1589937887]
+layout_mode = 2
+theme = ExtResource("1_rcjcm")
+text = "Back"
+script = SubResource("GDScript_4d01l")
 
 [node name="Padding" type="Control" parent="ScrollContainer/HBoxContainer" unique_id=2103033512]
 layout_mode = 2
@@ -71,19 +80,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("3_qu1fd")
 
 [node name="CopyToVBoxContainer" type="VBoxContainer" parent="CopyToPanel/ScrollContainer" unique_id=581484814]
 layout_mode = 2
 theme = ExtResource("1_rcjcm")
-
-[node name="BackButton" type="Button" parent="." unique_id=1589937887]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -8.0
-offset_right = 8.0
-grow_vertical = 0
-theme = ExtResource("1_rcjcm")
-text = "Back"
-script = SubResource("GDScript_4d01l")

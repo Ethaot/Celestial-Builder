@@ -38,6 +38,8 @@ func _ready() -> void:
 	button_up.connect(_on_button_pressed)
 
 func _on_button_pressed() -> void:
+	ResourceManager.refresh_all_packs()
+	await ResourceManager.packs_imported
 	SceneManager.switch_scene(SceneManager.MAIN_SCENE)
 "
 
@@ -82,7 +84,7 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 0
 
-[node name="MenuScrollContainer" type="ScrollContainer" parent="MainScrollContainer/MainHBoxContainer" unique_id=1194409073]
+[node name="MenuScrollContainer" type="ScrollContainer" parent="MainScrollContainer/MainHBoxContainer" unique_id=1033396334]
 custom_minimum_size = Vector2(1080, 0)
 clip_contents = false
 layout_mode = 2
@@ -90,6 +92,7 @@ size_flags_horizontal = 3
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 3
 script = ExtResource("1_55x64")
+metadata/_custom_type_script = "uid://6lpo6yi1q5l6"
 
 [node name="CenterContainer" type="CenterContainer" parent="MainScrollContainer/MainHBoxContainer/MenuScrollContainer" unique_id=384419718]
 layout_mode = 2
@@ -386,7 +389,7 @@ offset_bottom = -128.0
 grow_horizontal = 2
 color = Color(0.15686275, 0.15686275, 0.15686275, 1)
 
-[node name="ScrollContainer" type="ScrollContainer" parent="LoadFrameBuildMenu" unique_id=1088092436]
+[node name="ScrollContainer" type="ScrollContainer" parent="LoadFrameBuildMenu" unique_id=1876279988]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -395,6 +398,8 @@ grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 3
+script = ExtResource("1_55x64")
+metadata/_custom_type_script = "uid://6lpo6yi1q5l6"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="LoadFrameBuildMenu/ScrollContainer" unique_id=18580396]
 layout_mode = 2

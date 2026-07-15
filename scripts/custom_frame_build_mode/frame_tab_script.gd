@@ -1,4 +1,4 @@
-extends ScrollContainer
+extends TouchScrollContainer
 class_name FrameBuilderFrameTabMenu
 
 var frame_select_dropdown_button_prefab: PackedScene = preload("res://scenes/frame_select_dropdown_button.tscn")
@@ -32,8 +32,8 @@ var main_theme: Theme = preload("res://MainTheme.tres")
 
 var current_frame_build: FrameBuild
 
-var is_dragging: bool = false
-var swipe_speed = 1.0
+#var is_dragging: bool = false
+#var swipe_speed = 1.0
 
 var frame_option_dict: Dictionary[int, String]
 var frame_select_panel_open: bool = false
@@ -59,13 +59,13 @@ func _input(event: InputEvent) -> void:
 				close_frame_select_panel()
 				get_viewport().set_input_as_handled()
 
-func _gui_input(event: InputEvent) -> void:
-	if event is InputEventScreenTouch:
-		if event.index == 0:
-			is_dragging = event.pressed
-	if event is InputEventScreenDrag:
-		if is_dragging:
-			scroll_vertical -= event.relative.y * swipe_speed
+#func _gui_input(event: InputEvent) -> void:
+	#if event is InputEventScreenTouch:
+		#if event.index == 0:
+			#is_dragging = event.pressed
+	#if event is InputEventScreenDrag:
+		#if is_dragging:
+			#scroll_vertical -= event.relative.y * swipe_speed
 
 func populate_frame_option_button() -> void:
 	for child in frame_dropdown_vbox.get_children():
@@ -468,9 +468,11 @@ func set_part_to_grid_cell(hp: HeldPart) -> void:
 	for offset in hp.slots:
 		# Make sure we don't wrap around
 		if selected_cell_pos.x + offset.x > 5 or selected_cell_pos.y + offset.y > 5:
+			draw_grid_cells()
 			return
 		# Make sure we're placing in a legal grid space for our frame
 		if !ResourceManager.frame_dict[current_frame_build.frame_id].frame_available_slots.has(selected_cell_pos + offset):
+			draw_grid_cells()
 			return
 		indices.append((selected_cell_pos.y + offset.y) * 6 + offset.x + selected_cell_pos.x)
 	pi.part_instance_slots = indices
@@ -577,6 +579,36 @@ func populate_load_frame_build_menu() -> void:
 	load_frame_build_vbox.add_child(back_button)
 	load_frame_build_menu.visible = true
 
+func show_valid_grids(idx: int) -> void:
+	for gtb: GridTextureButton in grid_container_texture_buttons:
+		var pos: Vector2i = Vector2i(gtb.grid_index % 6, floori(float(gtb.grid_index) / 6.0))
+		if ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_available_slots.has(pos):
+			gtb.self_modulate = Color.WHITE
+		else:
+			gtb.self_modulate = Color("#282828")
+	var occupied_slots: Array[int]
+	for pi in DataManager.save_data.character.current_frame_build.frame_build_configuration:
+		for slot in pi.part_instance_slots:
+			occupied_slots.append(slot)
+			grid_container_texture_buttons[slot].self_modulate = Color.BLACK
+	var base_pos: Vector2i = Vector2i(idx%6, floori(float(idx) / 6.0))
+	var completely_invalid: bool = false
+	var part_slots: Array[int]
+	for slot in part_grid_interface.current_held_part.slots:
+		var adjusted_pos: Vector2i = base_pos + slot
+		if adjusted_pos.x < 0 or adjusted_pos.x > 5 or adjusted_pos.y < 0 or adjusted_pos.y > 5:
+			completely_invalid = true
+		else:
+			part_slots.append(adjusted_pos.x + adjusted_pos.y * 6)
+	for slot in part_slots:
+		if completely_invalid:
+			grid_container_texture_buttons[slot].self_modulate = Color.RED
+		else:
+			if occupied_slots.has(slot):
+				grid_container_texture_buttons[slot].self_modulate = Color.RED
+			else:
+				grid_container_texture_buttons[slot].self_modulate = Color.GREEN
+
 func switch_to_main_view() -> void:
 	main_script.go_to_page(1)
 
@@ -596,6 +628,8 @@ func _on_grid_button_clicked(index: int) -> void:
 
 func _on_grid_cell_hovered(idx: int) -> void:
 	part_grid_interface.hovered_grids.append(idx)
+	if part_grid_interface.current_mode == part_grid_interface.Mode.Edit:
+		show_valid_grids(idx)
 
 func _on_grid_cell_unhovered(idx: int) -> void:
 	for i in range(part_grid_interface.hovered_grids.size()):

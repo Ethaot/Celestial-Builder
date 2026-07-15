@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dmwsv3gixjdg"]
 
 [ext_resource type="Script" uid="uid://bdlc1c62llc8c" path="res://scripts/custom_file_selector/file_hbox.gd" id="1_ebitd"]
+[ext_resource type="Script" uid="uid://bbd32h71scplk" path="res://scripts/mobile_friendly_button.gd" id="2_ke011"]
 
 [node name="FileHBox" type="HBoxContainer" unique_id=280721005 node_paths=PackedStringArray("file_vbox", "file_button", "file_image", "file_delete_button")]
 offset_right = 40.0
@@ -23,17 +24,23 @@ size_flags_horizontal = 3
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=243719804]
 layout_mode = 2
 
-[node name="FileNameButton" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1033971782]
+[node name="FileNameButton" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=734378870]
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 1
 text = "File Name"
 autowrap_mode = 3
+script = ExtResource("2_ke011")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
 
-[node name="DeleteButton" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=660962588]
+[node name="DeleteButton" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=717721603]
 layout_mode = 2
+mouse_filter = 1
 theme_override_colors/font_color = Color(0.78431374, 0, 0, 1)
 text = "Delete"
+script = ExtResource("2_ke011")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
 
 [node name="TextureRect" type="TextureRect" parent="VBoxContainer" unique_id=660226017]
 custom_minimum_size = Vector2(64, 64)

@@ -1,7 +1,7 @@
 extends Node
 
 const MAIN_SCENE: String = "res://scenes/main_scene.tscn"
-const ENCOUNTER_SCENE: String = "res://scenes/encounter_mode.tscn"
+const ENCOUNTER_SCENE: String = "res://scenes/encounter_mode/encounter_mode.tscn"
 const CUSTOM_FRAME_SCENE: String = "res://scenes/custom_frame_builder.tscn"
 const CUSTOM_FRAME_BUILDER_SCENE: String = "res://scenes/custom_frame_build_mode/custom_frame_build_builder.tscn"
 const CUSTOM_PART_SCENE: String = "res://scenes/custom_part_builder/custom_part_builder.tscn"

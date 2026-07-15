@@ -2,6 +2,8 @@
 
 [ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_hkuq2"]
 [ext_resource type="Script" uid="uid://djvw6y60utunx" path="res://scripts/custom_file_selector/custom_file_selector.gd" id="2_5huue"]
+[ext_resource type="Script" uid="uid://6lpo6yi1q5l6" path="res://scripts/scroll_container_touch_support.gd" id="3_0p3rg"]
+[ext_resource type="Script" uid="uid://bbd32h71scplk" path="res://scripts/mobile_friendly_button.gd" id="4_8pwqh"]
 
 [node name="CustomFileSelector" type="PanelContainer" unique_id=1511121049 node_paths=PackedStringArray("directory_vbox", "close_button")]
 texture_filter = 1
@@ -25,15 +27,21 @@ text = "Current Directory"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MainVBox" unique_id=1040559659]
+[node name="ScrollContainer" type="ScrollContainer" parent="MainVBox" unique_id=27125846]
 clip_contents = false
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+script = ExtResource("3_0p3rg")
+metadata/_custom_type_script = "uid://6lpo6yi1q5l6"
 
 [node name="DirectoryVBox" type="VBoxContainer" parent="MainVBox/ScrollContainer" unique_id=1517214090]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CloseButton" type="Button" parent="MainVBox/ScrollContainer/DirectoryVBox" unique_id=1013885989]
+[node name="CloseButton" type="Button" parent="MainVBox/ScrollContainer/DirectoryVBox" unique_id=1915347381]
 layout_mode = 2
 text = "Close"
+script = ExtResource("4_8pwqh")
+metadata/_custom_type_script = "uid://bbd32h71scplk"

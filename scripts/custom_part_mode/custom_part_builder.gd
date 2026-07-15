@@ -5,6 +5,7 @@ var button_prefab: PackedScene = preload("res://scenes/load_frame_build_button.t
 var label_prefab: PackedScene = preload("res://scenes/grid_label.tscn")
 var grid_button_prefab: PackedScene = preload("res://scenes/custom_part_builder/part_grid_texture_button.tscn")
 var tag_hbox_prefab: PackedScene = preload("res://scenes/custom_part_builder/tag_h_box.tscn")
+var load_component_hbox_prefab: PackedScene = preload("res://scenes/load_component_h_box.tscn")
 
 @export var scroll_container: ScrollContainer
 @export var part_name_line_edit: MobileFriendlyLineEdit
@@ -28,6 +29,8 @@ var tag_hbox_prefab: PackedScene = preload("res://scenes/custom_part_builder/tag
 @export var add_connected_tag_button: Button
 @export var save_part_button: Button
 @export var load_part_button: Button
+@export var load_part_menu: ColorRect
+@export var load_part_vbox: VBoxContainer
 @export var choose_data_pack_button: Button
 @export var select_image_file_dialog: CustomFileSelector
 @export var upload_image_file_dialog: FileDialog
@@ -50,6 +53,7 @@ func _ready() -> void:
 	add_tag_button.button_up.connect(_on_add_tag_button_pressed)
 	add_connected_tag_button.button_up.connect(_on_add_connected_tag_button_pressed)
 	save_part_button.button_up.connect(save_part)
+	load_part_button.button_up.connect(_on_load_part_button_pressed)
 	select_image_button.button_up.connect(select_image_file_dialog.popup)
 	select_image_file_dialog.path_chosen.connect(select_part_image)
 	upload_image_button.button_up.connect(_on_upload_part_image_button_pressed)
@@ -160,10 +164,29 @@ func populate_grid() -> void:
 			grid_grid_container.add_child(tb)
 
 func select_part_type(type: Constants.PartType) -> void:
+	var old_part_dict: Dictionary = current_part.to_dict()
 	current_part = Part.new()
 	size_button.visible = false
 	shield_capacity_hbox.visible = false
 	match type:
+		Constants.PartType.PartReactor:
+			var reactor_part: Reactor = Reactor.new()
+			current_part = reactor_part
+			select_size(Constants.Size.Ultralight)
+			size_button.visible = true
+		Constants.PartType.PartShield:
+			var shield_part: Shield = Shield.new()
+			current_part = shield_part
+			select_size(Constants.Size.Ultralight)
+			size_button.visible = true
+			shield_capacity_hbox.visible = true
+	current_part.from_dict(old_part_dict)
+	current_part.part_type = type
+	update_part_type_button_text(type)
+	part_type_dropdown_panel.visible = false
+
+func update_part_type_button_text(part_type: Constants.PartType) -> void:
+	match part_type:
 		Constants.PartType.WeaponRanged:
 			part_type_button.text = "Part Type: Ranged"
 		Constants.PartType.WeaponExplosive:
@@ -176,25 +199,20 @@ func select_part_type(type: Constants.PartType) -> void:
 			part_type_button.text = "Part Type: Missile"
 		Constants.PartType.PartReactor:
 			part_type_button.text = "Part Type: Reactor"
-			var reactor_part: Reactor = Reactor.new()
-			current_part = reactor_part
-			select_size(Constants.Size.Ultralight)
-			size_button.visible = true
 		Constants.PartType.PartThruster:
 			part_type_button.text = "Part Type: Thruster"
 		Constants.PartType.PartProcessor:
 			part_type_button.text = "Part Type: Processor"
 		Constants.PartType.PartShield:
 			part_type_button.text = "Part Type: Shield"
-			var shield_part: Shield = Shield.new()
-			current_part = shield_part
-			select_size(Constants.Size.Ultralight)
-			size_button.visible = true
-			shield_capacity_hbox.visible = true
-	current_part.part_type = type
-	part_type_dropdown_panel.visible = false
 
 func select_size(s: Constants.Size) -> void:
+	if current_part is Reactor or current_part is Shield:
+		current_part.size = s
+	size_dropdown_panel.visible = false
+	update_part_size_button(s)
+
+func update_part_size_button(s: Constants.Size) -> void:
 	match s:
 		Constants.Size.Ultralight:
 			size_button.text = "Size: Ultralight"
@@ -206,9 +224,6 @@ func select_size(s: Constants.Size) -> void:
 			size_button.text = "Size: Heavy"
 		Constants.Size.Ultra:
 			size_button.text = "Size: Ultra"
-	if current_part is Reactor or current_part is Shield:
-		current_part.size = s
-	size_dropdown_panel.visible = false
 
 func select_part_image(path: String) -> void:
 	current_part.part_icon = path.trim_prefix(ResourceManager.DATA_PACKS_PATH)
@@ -220,7 +235,6 @@ func update_part_image_on_grid() -> void:
 	for tb in grid_buttons:
 		tb.part_tex_rect.texture = null
 	if current_part.part_icon.length() > 0 and part_icon != null:
-		var atlas_texes: Array[AtlasTexture]
 		var part_length: int = 1
 		var part_height: int = 1
 		for slot in current_part.part_configuration:
@@ -269,6 +283,72 @@ func save_part() -> void:
 			current_part.connected_tags.append(connected_tag_hboxes[i].line_edit.text)
 	ResourceManager.save_part_to_parts_json(DataManager.currently_edited_data_pack, current_part)
 
+func populate_load_part_menu() -> void:
+	for child in load_part_vbox.get_children():
+		child.queue_free()
+	for p in ResourceManager.get_parts_from_pack(DataManager.currently_edited_data_pack):
+		var lchb: LoadComponentHBox = load_component_hbox_prefab.instantiate()
+		lchb.load_button.text = p.part_id
+		lchb.load_button.button_up.connect(_on_load_part.bind(p))
+		lchb.delete_button.button_up.connect(func() -> void:
+			ResourceManager.remove_part_from_parts_json(DataManager.currently_edited_data_pack, p.part_id)
+			lchb.queue_free()
+			)
+		load_part_vbox.add_child(lchb)
+	var back_button: Button = button_prefab.instantiate()
+	back_button.text = "Back"
+	back_button.button_up.connect(func() -> void: load_part_menu.visible = false)
+	load_part_vbox.add_child(back_button)
+
+func populate_all_components() -> void:
+	part_name_line_edit.text = current_part.part_name
+	part_id_line_edit.text = current_part.part_id
+	part_tab_line_edit.text = current_part.part_tab
+	description_text_edit.text = current_part.part_description
+	update_part_type_button_text(current_part.part_type)
+	if current_part is Reactor or current_part is Shield:
+		update_part_size_button(current_part.size)
+		size_button.visible = true
+		if current_part is Shield:
+			shield_capacity_amount_label.text = str(current_part.capacity)
+			shield_capacity_hbox.visible = true
+		update_part_size_button(current_part.size)
+	else:
+		size_button.visible = false
+		shield_capacity_hbox.visible = false
+	
+	for gb in grid_buttons:
+		if current_part.part_configuration.has(Vector2i(gb.index%6, floori(float(gb.index) / 6.0))):
+			gb.selected = true
+			gb.self_modulate = Color.WHITE
+		else:
+			gb.selected = false
+			gb.self_modulate = Color("#282828")
+	
+	if FileAccess.file_exists(ResourceManager.DATA_PACKS_PATH + current_part.part_icon):
+		var img: Image = Image.load_from_file(ResourceManager.DATA_PACKS_PATH + current_part.part_icon)
+		var itex: ImageTexture = ImageTexture.create_from_image(img)
+		part_icon = itex
+	update_part_image_on_grid()
+	
+	var tag_children: Array[Node] = tags_vbox.get_children()
+	for i in range(1, tag_children.size() - 1):
+		tag_children[i].queue_free()
+	var connected_tag_children: Array[Node] = connected_tags_vbox.get_children()
+	for i in range(1, connected_tag_children.size() - 1):
+		connected_tag_children[i].queue_free()
+	
+	for t in current_part.tags:
+		var thb: TagHBox = tag_hbox_prefab.instantiate()
+		thb.line_edit.text = t
+		tags_vbox.add_child(thb)
+		tags_vbox.move_child(add_tag_button, tags_vbox.get_children().size() - 1)
+	for t in current_part.connected_tags:
+		var thb: TagHBox = tag_hbox_prefab.instantiate()
+		thb.line_edit.text = t
+		connected_tags_vbox.add_child(thb)
+		connected_tags_vbox.move_child(add_connected_tag_button, connected_tags_vbox.get_children().size() - 1)
+
 func trigger_web_upload() -> void:
 	var js_code = """
 	(function() {
@@ -312,8 +392,8 @@ func _on_grid_button_pressed(idx: int) -> void:
 		grid_buttons[idx].self_modulate = Color("#282828")
 	else:
 		current_part.part_configuration.append(pos)
-		current_part.part_configuration.sort_custom(sort_grid_by_y)
 		current_part.part_configuration.sort_custom(sort_grid_by_x)
+		current_part.part_configuration.sort_custom(sort_grid_by_y)
 		grid_buttons[idx].self_modulate = Color.WHITE
 	grid_buttons[idx].selected = false if grid_buttons[idx].selected else true
 	update_part_image_on_grid()
@@ -368,3 +448,12 @@ func _on_add_connected_tag_button_pressed() -> void:
 	var thb: TagHBox = tag_hbox_prefab.instantiate()
 	connected_tags_vbox.add_child(thb)
 	connected_tags_vbox.move_child(add_connected_tag_button, connected_tags_vbox.get_children().size() - 1)
+
+func _on_load_part_button_pressed() -> void:
+	populate_load_part_menu()
+	load_part_menu.visible = true
+
+func _on_load_part(p: Part) -> void:
+	current_part = p
+	populate_all_components()
+	load_part_menu.visible = false

@@ -189,19 +189,23 @@ func _input(event: InputEvent) -> void:
 				if event.button_index == MOUSE_BUTTON_LEFT:
 					if !event.pressed:
 						if hovered_grids.size() > 0:
-							pass
+							draw_grid_cells()
+							print(str(1))
 							#_on_part_dropped(hovered_grids[0])
 						else:
+							print(str(2))
 							_on_part_cleared()
+							draw_grid_cells()
 						button_held = false
 			if event is InputEventScreenTouch:
 				if event.index == 0:
 					if !event.pressed:
 						if hovered_grids.size() > 0:
-							pass
+							draw_grid_cells()
 							#_on_part_dropped(hovered_grids[0])
 						else:
 							_on_part_cleared()
+							draw_grid_cells()
 						button_held = false
 						hovered_grids.clear()
 
@@ -314,7 +318,8 @@ func populate_parts_screen(part_type: Constants.PartType) -> void:
 		var held_part: HeldPart = HeldPart.new()
 		held_part.part_id = part.part_id
 		held_part.slots = part.part_configuration
-		held_part.part_icons = ResourceManager.part_image_dict[part.part_id]
+		if ResourceManager.part_image_dict.has(part.part_id):
+			held_part.part_icons = ResourceManager.part_image_dict[part.part_id]
 		match part.part_type:
 			Constants.PartType.PartProcessor:
 				target_parent.add_child(draw_part(held_part, false, false, 0))
@@ -373,7 +378,10 @@ func draw_part(hp: HeldPart, mirrored_horizontally: bool, mirrored_vertically: b
 			var texrect: TextureRect = TextureRect.new()
 			texrect.custom_minimum_size = Vector2(min_x, min_x)
 			if hp.slots.has(Vector2i(x, y)):
-				texrect.texture = hp.part_icons[current_texture_index]
+				if hp.part_icons.size() > current_texture_index:
+					texrect.texture = hp.part_icons[current_texture_index]
+				else:
+					texrect.texture = empty_grid_frame
 				current_texture_index += 1
 			else:
 				texrect.texture = empty_grid_frame
@@ -503,9 +511,11 @@ func set_part_to_grid_cell(hp: HeldPart) -> void:
 	for offset in hp.slots:
 		# Make sure we don't wrap around
 		if selected_cell_pos.x + offset.x > 5 or selected_cell_pos.y + offset.y > 5:
+			draw_grid_cells()
 			return
 		# Make sure we're placing in a legal grid space for our frame
 		if !ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_available_slots.has(selected_cell_pos + offset):
+			draw_grid_cells()
 			return
 		indices.append((selected_cell_pos.y + offset.y) * 6 + offset.x + selected_cell_pos.x)
 	pi.part_instance_slots = indices
@@ -826,6 +836,37 @@ func pickup_placed_part(idx: int) -> void:
 func update_prem_amt_label() -> void:
 	prem_amt_label.text = str(DataManager.save_data.character.premonitions)
 
+func show_valid_grids(idx: int) -> void:
+	for gtb: GridTextureButton in grid_container_texture_buttons:
+		var pos: Vector2i = Vector2i(gtb.grid_index % 6, floori(float(gtb.grid_index) / 6.0))
+		if ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_available_slots.has(pos):
+			gtb.self_modulate = Color.WHITE
+		else:
+			gtb.self_modulate = Color("#282828")
+	var occupied_slots: Array[int]
+	for pi in DataManager.save_data.character.current_frame_build.frame_build_configuration:
+		for slot in pi.part_instance_slots:
+			occupied_slots.append(slot)
+			grid_container_texture_buttons[slot].self_modulate = Color.BLACK
+	var base_pos: Vector2i = Vector2i(idx%6, floori(float(idx) / 6.0))
+	var completely_invalid: bool = false
+	var part_slots: Array[int]
+	for slot in current_held_part.slots:
+		var adjusted_pos: Vector2i = base_pos + slot
+		if adjusted_pos.x < 0 or adjusted_pos.x > 5 or adjusted_pos.y < 0 or adjusted_pos.y > 5:
+			completely_invalid = true
+		else:
+			part_slots.append(adjusted_pos.x + adjusted_pos.y * 6)
+	for slot in part_slots:
+		if completely_invalid:
+			grid_container_texture_buttons[slot].self_modulate = Color.RED
+		else:
+			if occupied_slots.has(slot):
+				grid_container_texture_buttons[slot].self_modulate = Color.RED
+			else:
+				grid_container_texture_buttons[slot].self_modulate = Color.GREEN
+		
+
 func _on_new_lamplighter_button_pressed() -> void:
 	DataManager.save_save_data()
 	DataManager.save_data = SaveData.new()
@@ -963,6 +1004,8 @@ func _on_part_cleared() -> void:
 
 func _on_grid_cell_hovered(idx: int) -> void:
 	hovered_grids.append(idx)
+	if current_mode == Mode.Edit:
+		show_valid_grids(idx)
 
 func _on_grid_cell_unhovered(idx: int) -> void:
 	for i in range(hovered_grids.size()):
