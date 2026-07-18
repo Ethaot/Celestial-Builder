@@ -5,12 +5,13 @@
 [ext_resource type="FontFile" uid="uid://tvcbs1oxaq01" path="res://fonts/Cousine-BoldItalic.ttf" id="3_ogfsw"]
 [ext_resource type="FontFile" uid="uid://clxaxe666gut2" path="res://fonts/Cousine-Italic.ttf" id="3_u23kh"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u23kh"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_suov6"]
 bg_color = Color(0, 0, 0, 0.6)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.7526032, 1.8770993e-06, 0.4506035, 1)
 expand_margin_top = 12.0
 expand_margin_bottom = 4.0
 
@@ -137,8 +138,9 @@ border_color = Color(0.9098039, 0, 0.54901963, 1)
 [resource]
 default_font = ExtResource("1_yhag5")
 default_font_size = 64
+Button/colors/font_disabled_color = Color(0.7529412, 0, 0.4509804, 1)
 Button/fonts/font = ExtResource("1_yhag5")
-Button/styles/disabled = SubResource("StyleBoxFlat_u23kh")
+Button/styles/disabled = SubResource("StyleBoxFlat_suov6")
 Button/styles/focus = SubResource("StyleBoxFlat_ogfsw")
 Button/styles/hover = SubResource("StyleBoxFlat_6qad1")
 Button/styles/normal = SubResource("StyleBoxFlat_8twj1")

@@ -50,7 +50,7 @@ func setup() -> void:
 	if !OS.has_feature("mobile") and !OS.has_feature("web_android") and !OS.has_feature("web_ios"):
 		mouse_filter = Control.MOUSE_FILTER_IGNORE
 	page_width = screen_size.x
-	for child:ScrollContainer in main_hbox.get_children():
+	for child in main_hbox.get_children():
 		child.custom_minimum_size.x = page_width
 
 func go_to_page(idx: int, delayed: bool = false) -> void:

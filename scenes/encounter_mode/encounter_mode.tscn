@@ -3,9 +3,15 @@
 [ext_resource type="Script" uid="uid://6lpo6yi1q5l6" path="res://scripts/scroll_container_touch_support.gd" id="1_1716o"]
 [ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="1_ra7op"]
 [ext_resource type="FontFile" uid="uid://clxaxe666gut2" path="res://fonts/Cousine-Italic.ttf" id="2_1716o"]
+[ext_resource type="Script" uid="uid://6g2ebadbnqcm" path="res://scripts/encounter_mode/encounter_signal_bus.gd" id="2_qsfjy"]
 [ext_resource type="StyleBox" uid="uid://chgyajxu7nuva" path="res://assets/ui/styles/tab_button_style_box_normal.tres" id="3_5b1we"]
+[ext_resource type="Script" uid="uid://ctxrk0fh7hi5u" path="res://scripts/encounter_mode/encounter_mode_scroll_container.gd" id="3_lywu8"]
 [ext_resource type="Script" uid="uid://bbd32h71scplk" path="res://scripts/mobile_friendly_button.gd" id="3_xg3fg"]
+[ext_resource type="Script" uid="uid://chgjg4cfqjfww" path="res://scripts/alt_aspect_ratio_container.gd" id="4_5n7y7"]
 [ext_resource type="Script" uid="uid://ejyupbjr8brq" path="res://scripts/encounter_mode/encounter_data_manager.gd" id="4_xg3fg"]
+[ext_resource type="Script" uid="uid://cn45xauy53460" path="res://scripts/encounter_mode/encounter_mode_grid.gd" id="5_5n7y7"]
+[ext_resource type="Script" uid="uid://ck7qp4jserhsr" path="res://scripts/encounter_mode/characters_h_flow.gd" id="6_suov6"]
+[ext_resource type="Script" uid="uid://baa276i1q5fv6" path="res://scripts/encounter_mode/load_frame_build_panel.gd" id="10_spfob"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tnrwk"]
 bg_color = Color(0.9098039, 0, 0.54901963, 1)
@@ -19,6 +25,30 @@ expand_margin_bottom = 4.0
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gn8jn"]
 bg_color = Color(0.9098039, 0, 0.54901963, 1)
 expand_margin_bottom = 4.0
+
+[sub_resource type="GDScript" id="GDScript_4d01l"]
+script/source = "extends MobileFriendlyButton
+
+@export var encounter_data_manager: EncounterDataManager
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	pass
+"
+
+[sub_resource type="GDScript" id="GDScript_xg3fg"]
+script/source = "extends MobileFriendlyButton
+
+@export var encounter_data_manager: EncounterDataManager
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	encounter_data_manager.create_new_encounter()
+"
 
 [sub_resource type="GDScript" id="GDScript_6kn7j"]
 script/source = "extends MobileFriendlyButton
@@ -39,10 +69,110 @@ corner_radius_top_right = 32
 corner_radius_bottom_right = 32
 expand_margin_bottom = 4.0
 
+[sub_resource type="GDScript" id="GDScript_suov6"]
+script/source = "extends MobileFriendlyButton
+
+@export var encounter_signal_bus: EncounterSignalBus
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	var new_combatant: Character = Character.new()
+	new_combatant.lamplighter_name = \"New Combatant\"
+	new_combatant.current_frame_build = FrameBuild.new()
+	new_combatant.current_frame_build.frame_id = ResourceManager.frames[0].frame_id
+	encounter_signal_bus.add_new_combatant(new_combatant)
+"
+
+[sub_resource type="GDScript" id="GDScript_qsfjy"]
+script/source = "extends MobileFriendlyButton
+
+@export var load_frame_build_panel: EncounterLoadFrameBuildPanel
+@export var encounter_signal_bus: EncounterSignalBus
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+	encounter_signal_bus.frame_build_changed.connect(_on_frame_build_changed)
+
+func update_text(new_text: String) -> void:
+	text = new_text
+
+func _on_button_pressed() -> void:
+	load_frame_build_panel.popup()
+
+func _on_frame_build_changed(new_frame_build: FrameBuild) -> void:
+	update_text(new_frame_build.frame_build_name)
+"
+
+[sub_resource type="GDScript" id="GDScript_1bce3"]
+script/source = "extends Label
+
+@export var encounter_data_manager: EncounterDataManager
+@export var encounter_signal_bus: EncounterSignalBus
+@export var hp_up_button: Button
+@export var hp_down_button: Button
+
+func _ready() -> void:
+	encounter_signal_bus.combatant_switched.connect(update_label)
+	encounter_signal_bus.combatant_updated.connect(update_label)
+	hp_up_button.button_up.connect(_on_up_button_pressed)
+	hp_down_button.button_up.connect(_on_down_button_pressed)
+
+func update_label() -> void:
+	text = str(encounter_data_manager.current_combatant.current_hp)
+
+func _on_up_button_pressed() -> void:
+	encounter_data_manager.current_combatant.current_hp += 1
+	update_label()
+
+func _on_down_button_pressed() -> void:
+	encounter_data_manager.current_combatant.current_hp -= 1
+	update_label()
+	
+"
+
+[sub_resource type="GDScript" id="GDScript_lbbql"]
+script/source = "extends MobileFriendlyButton
+
+@export var encounter_signal_bus: EncounterSignalBus
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	encounter_signal_bus.clear_encounter()
+"
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qxmiq"]
 bg_color = Color(0, 0, 0, 1)
 
+[sub_resource type="GDScript" id="GDScript_6u1mn"]
+script/source = "extends MobileFriendlyButton
+
+@export var encounter_mode_scroll: EncounterModeScrollContainer
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	encounter_mode_scroll.go_to_page(0)
+"
+
+[sub_resource type="GDScript" id="GDScript_gn8jn"]
+script/source = "extends MobileFriendlyButton
+
+@export var encounter_mode_scroll: EncounterModeScrollContainer
+
+func _ready() -> void:
+	button_up.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	encounter_mode_scroll.go_to_page(1)
+"
+
 [node name="EncounterMode" type="ColorRect" unique_id=285261895]
+texture_filter = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -50,7 +180,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.15686275, 0.15686275, 0.15686275, 1)
 
-[node name="EncounterModeScrollContainer" type="ScrollContainer" parent="." unique_id=1138106878]
+[node name="EncounterModeScrollContainer" type="ScrollContainer" parent="." unique_id=1138106878 node_paths=PackedStringArray("menu_scroll_container", "encounter_scroll_container", "menu_tab_button", "encounter_tab_button")]
 clip_contents = false
 layout_mode = 1
 anchors_preset = -1
@@ -63,7 +193,11 @@ mouse_filter = 2
 theme = ExtResource("1_ra7op")
 horizontal_scroll_mode = 3
 vertical_scroll_mode = 0
-script = ExtResource("1_1716o")
+script = ExtResource("3_lywu8")
+menu_scroll_container = NodePath("VBoxContainer/HBoxContainer/MenuScrollContainer")
+encounter_scroll_container = NodePath("VBoxContainer/HBoxContainer/EncounterScrollContainer")
+menu_tab_button = NodePath("../MenuTabPanelContainer/MarginContainer/HBoxContainer/MenuTabButton")
+encounter_tab_button = NodePath("../MenuTabPanelContainer/MarginContainer/HBoxContainer/EncounterTabButton")
 metadata/_custom_type_script = "uid://6lpo6yi1q5l6"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="EncounterModeScrollContainer" unique_id=1523686026]
@@ -79,6 +213,7 @@ layout_mode = 2
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
+theme_override_constants/separation = 0
 
 [node name="MenuScrollContainer" type="ScrollContainer" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer" unique_id=2092624122]
 custom_minimum_size = Vector2(1080, 0)
@@ -116,12 +251,13 @@ text = "Encounter Mode"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="LoadEncounterButton" type="Button" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/MenuScrollContainer/HBoxContainer/VBoxContainer" unique_id=1624775363]
+[node name="LoadEncounterButton" type="Button" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/MenuScrollContainer/HBoxContainer/VBoxContainer" unique_id=1624775363 node_paths=PackedStringArray("encounter_data_manager")]
 layout_mode = 2
 theme = ExtResource("1_ra7op")
 text = "Load Encounter"
 autowrap_mode = 3
-script = ExtResource("3_xg3fg")
+script = SubResource("GDScript_4d01l")
+encounter_data_manager = NodePath("../../../../../../../EncounterDataManager")
 metadata/_custom_type_script = "uid://bbd32h71scplk"
 
 [node name="NewEncounterButton" type="Button" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/MenuScrollContainer/HBoxContainer/VBoxContainer" unique_id=751065295]
@@ -129,7 +265,7 @@ layout_mode = 2
 theme = ExtResource("1_ra7op")
 text = "New Encounter"
 autowrap_mode = 3
-script = ExtResource("3_xg3fg")
+script = SubResource("GDScript_xg3fg")
 metadata/_custom_type_script = "uid://bbd32h71scplk"
 
 [node name="CharacterSheetModeButton" type="Button" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/MenuScrollContainer/HBoxContainer/VBoxContainer" unique_id=1006403747]
@@ -160,22 +296,128 @@ metadata/_custom_type_script = "uid://6lpo6yi1q5l6"
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CharactersHFlow" type="HFlowContainer" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer" unique_id=146686697]
+[node name="CharactersHFlow" type="HFlowContainer" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer" unique_id=146686697 node_paths=PackedStringArray("encounter_data_manager", "encounter_signal_bus", "add_combatant_button")]
 layout_mode = 2
+theme_override_constants/v_separation = 16
+script = ExtResource("6_suov6")
+encounter_data_manager = NodePath("../../../../../../EncounterDataManager")
+encounter_signal_bus = NodePath("../../../../../../EncounterSignalBus")
+add_combatant_button = NodePath("AddCombatantButton")
 
-[node name="AddCombatantButton" type="Button" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer/CharactersHFlow" unique_id=73145011]
+[node name="AddCombatantButton" type="Button" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer/CharactersHFlow" unique_id=73145011 node_paths=PackedStringArray("encounter_signal_bus")]
 layout_mode = 2
 text = "+ Add Combatant"
-script = ExtResource("3_xg3fg")
+script = SubResource("GDScript_suov6")
+encounter_signal_bus = NodePath("../../../../../../../EncounterSignalBus")
 metadata/_custom_type_script = "uid://bbd32h71scplk"
 
-[node name="ClearEncounterButton" type="Button" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer" unique_id=1161217722]
+[node name="FrameDropdownButton" type="Button" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer" unique_id=1835857198 node_paths=PackedStringArray("load_frame_build_panel", "encounter_signal_bus")]
+layout_mode = 2
+text = "Frame"
+autowrap_mode = 3
+script = SubResource("GDScript_qsfjy")
+load_frame_build_panel = NodePath("../../../../../../LoadFrameBuildPanel")
+encounter_signal_bus = NodePath("../../../../../../EncounterSignalBus")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
+
+[node name="GridMarginContainer" type="MarginContainer" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer" unique_id=625274636 node_paths=PackedStringArray("encounter_data_manager", "encounter_signal_bus", "grid_grid_container", "armor_grid_container", "defenses_hbox", "part_effects_vbox")]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("5_5n7y7")
+encounter_data_manager = NodePath("../../../../../../EncounterDataManager")
+encounter_signal_bus = NodePath("../../../../../../EncounterSignalBus")
+grid_grid_container = NodePath("AspectRatioContainer/GridGridContainer")
+armor_grid_container = NodePath("AspectRatioContainer/ArmorGridContainer")
+defenses_hbox = NodePath("../DefensesHBox")
+part_effects_vbox = NodePath("../PartEffectsVBox")
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer/GridMarginContainer" unique_id=130246701]
+layout_mode = 2
+mouse_filter = 2
+stretch_mode = 0
+alignment_vertical = 0
+script = ExtResource("4_5n7y7")
+
+[node name="ColorRect" type="ColorRect" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer/GridMarginContainer/AspectRatioContainer" unique_id=2061732021]
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.9098039, 0, 0.54901963, 1)
+
+[node name="ColorRect" type="ColorRect" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer/GridMarginContainer/AspectRatioContainer/ColorRect" unique_id=2147175246]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.3137255, 0.3137255, 0.3137255, 1)
+
+[node name="GridGridContainer" type="GridContainer" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer/GridMarginContainer/AspectRatioContainer" unique_id=673077556]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 7
+
+[node name="ArmorGridContainer" type="GridContainer" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer/GridMarginContainer/AspectRatioContainer" unique_id=1422058314]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 7
+
+[node name="DefensesHBox" type="HFlowContainer" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer" unique_id=1743323301]
+layout_mode = 2
+theme_override_constants/h_separation = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer/DefensesHBox" unique_id=1730225508]
+custom_minimum_size = Vector2(192, 0)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer/DefensesHBox/VBoxContainer" unique_id=976127755]
+layout_mode = 2
+theme = ExtResource("1_ra7op")
+text = "Hull Points"
+horizontal_alignment = 1
+
+[node name="HPUpButton" type="Button" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer/DefensesHBox/VBoxContainer" unique_id=1840607915]
+layout_mode = 2
+theme = ExtResource("1_ra7op")
+text = "^"
+
+[node name="HPLabel" type="Label" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer/DefensesHBox/VBoxContainer" unique_id=1476070089 node_paths=PackedStringArray("encounter_data_manager", "encounter_signal_bus", "hp_up_button", "hp_down_button")]
+layout_mode = 2
+theme = ExtResource("1_ra7op")
+text = "12"
+horizontal_alignment = 1
+script = SubResource("GDScript_1bce3")
+encounter_data_manager = NodePath("../../../../../../../../EncounterDataManager")
+encounter_signal_bus = NodePath("../../../../../../../../EncounterSignalBus")
+hp_up_button = NodePath("../HPUpButton")
+hp_down_button = NodePath("../HPDownButton")
+
+[node name="HPDownButton" type="Button" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer/DefensesHBox/VBoxContainer" unique_id=26086704]
+layout_mode = 2
+theme = ExtResource("1_ra7op")
+text = "v"
+
+[node name="PartEffectsVBox" type="VBoxContainer" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer" unique_id=655055075]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="ClearEncounterButton" type="Button" parent="EncounterModeScrollContainer/VBoxContainer/HBoxContainer/EncounterScrollContainer/VBoxContainer" unique_id=1161217722 node_paths=PackedStringArray("encounter_signal_bus")]
 layout_mode = 2
 text = "Clear Encounter"
-script = ExtResource("3_xg3fg")
+script = SubResource("GDScript_lbbql")
+encounter_signal_bus = NodePath("../../../../../../EncounterSignalBus")
 metadata/_custom_type_script = "uid://bbd32h71scplk"
 
-[node name="PanelContainer" type="PanelContainer" parent="." unique_id=666134862]
+[node name="MenuTabPanelContainer" type="PanelContainer" parent="." unique_id=666134862]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -187,17 +429,17 @@ grow_vertical = 0
 theme = ExtResource("1_ra7op")
 theme_override_styles/panel = SubResource("StyleBoxFlat_qxmiq")
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=423282533]
+[node name="MarginContainer" type="MarginContainer" parent="MenuTabPanelContainer" unique_id=423282533]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_right = 16
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer" unique_id=685618269]
+[node name="HBoxContainer" type="HBoxContainer" parent="MenuTabPanelContainer/MarginContainer" unique_id=685618269]
 custom_minimum_size = Vector2(0, 128)
 layout_mode = 2
 theme_override_constants/separation = -4
 
-[node name="MenuTabButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=386284613]
+[node name="MenuTabButton" type="Button" parent="MenuTabPanelContainer/MarginContainer/HBoxContainer" unique_id=386284613 node_paths=PackedStringArray("encounter_mode_scroll")]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_ra7op")
@@ -210,10 +452,11 @@ theme_override_styles/disabled = ExtResource("3_5b1we")
 theme_override_styles/focus = ExtResource("3_5b1we")
 disabled = true
 text = "Menu"
-script = ExtResource("3_xg3fg")
+script = SubResource("GDScript_6u1mn")
+encounter_mode_scroll = NodePath("../../../../EncounterModeScrollContainer")
 metadata/_custom_type_script = "uid://bbd32h71scplk"
 
-[node name="EncounterTabButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=600134891]
+[node name="EncounterTabButton" type="Button" parent="MenuTabPanelContainer/MarginContainer/HBoxContainer" unique_id=600134891 node_paths=PackedStringArray("encounter_mode_scroll")]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_ra7op")
@@ -225,10 +468,11 @@ theme_override_styles/hover = ExtResource("3_5b1we")
 theme_override_styles/disabled = ExtResource("3_5b1we")
 theme_override_styles/focus = ExtResource("3_5b1we")
 text = "Encounter"
-script = ExtResource("3_xg3fg")
+script = SubResource("GDScript_gn8jn")
+encounter_mode_scroll = NodePath("../../../../EncounterModeScrollContainer")
 metadata/_custom_type_script = "uid://bbd32h71scplk"
 
-[node name="PartsTabButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=2058065255]
+[node name="PartsTabButton" type="Button" parent="MenuTabPanelContainer/MarginContainer/HBoxContainer" unique_id=2058065255]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_ra7op")
@@ -243,5 +487,53 @@ text = "Parts"
 script = ExtResource("3_xg3fg")
 metadata/_custom_type_script = "uid://bbd32h71scplk"
 
-[node name="EncounterDataManager" type="Node" parent="." unique_id=605458277]
+[node name="LoadFrameBuildPanel" type="Panel" parent="." unique_id=701332512 node_paths=PackedStringArray("encounter_data_manager", "encounter_signal_bus", "vbox")]
+visible = false
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_ra7op")
+script = ExtResource("10_spfob")
+encounter_data_manager = NodePath("../EncounterDataManager")
+encounter_signal_bus = NodePath("../EncounterSignalBus")
+vbox = NodePath("LoadFrameBuildScrollContainer/HBoxContainer/LoadFrameBuildVBox")
+
+[node name="LoadFrameBuildScrollContainer" type="ScrollContainer" parent="LoadFrameBuildPanel" unique_id=1085962721]
+clip_contents = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 96.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1716o")
+metadata/_custom_type_script = "uid://6lpo6yi1q5l6"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="LoadFrameBuildPanel/LoadFrameBuildScrollContainer" unique_id=1142836157]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Padding2" type="Control" parent="LoadFrameBuildPanel/LoadFrameBuildScrollContainer/HBoxContainer" unique_id=1176670328]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+
+[node name="LoadFrameBuildVBox" type="VBoxContainer" parent="LoadFrameBuildPanel/LoadFrameBuildScrollContainer/HBoxContainer" unique_id=232830178]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Padding" type="Control" parent="LoadFrameBuildPanel/LoadFrameBuildScrollContainer/HBoxContainer" unique_id=1218721478]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+
+[node name="EncounterDataManager" type="Node" parent="." unique_id=605458277 node_paths=PackedStringArray("encounter_signal_bus")]
 script = ExtResource("4_xg3fg")
+encounter_signal_bus = NodePath("../EncounterSignalBus")
+
+[node name="EncounterSignalBus" type="Node" parent="." unique_id=2094113229 node_paths=PackedStringArray("encounter_data_manager")]
+script = ExtResource("2_qsfjy")
+encounter_data_manager = NodePath("../EncounterDataManager")

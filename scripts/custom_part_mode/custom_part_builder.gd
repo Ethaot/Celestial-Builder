@@ -23,6 +23,7 @@ var load_component_hbox_prefab: PackedScene = preload("res://scenes/load_compone
 @export var shield_capacity_hbox: HBoxContainer
 @export var shield_capacity_amount_label: Label
 @export var part_tab_line_edit: LineEdit
+@export var part_requirements_line_edit: MobileFriendlyLineEdit
 @export var tags_vbox: VBoxContainer
 @export var add_tag_button: Button
 @export var connected_tags_vbox: VBoxContainer
@@ -269,6 +270,7 @@ func save_part() -> void:
 	current_part.part_id = part_id_line_edit.text
 	current_part.part_description = description_text_edit.text
 	current_part.part_tab = part_tab_line_edit.text
+	current_part.requirements = part_requirements_line_edit.text
 	if current_part is Shield:
 		current_part.capacity = shield_capacity_amount_label.text.to_int()
 	current_part.tags.clear()
@@ -304,6 +306,7 @@ func populate_all_components() -> void:
 	part_name_line_edit.text = current_part.part_name
 	part_id_line_edit.text = current_part.part_id
 	part_tab_line_edit.text = current_part.part_tab
+	part_requirements_line_edit.text = current_part.requirements
 	description_text_edit.text = current_part.part_description
 	update_part_type_button_text(current_part.part_type)
 	if current_part is Reactor or current_part is Shield:

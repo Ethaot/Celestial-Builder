@@ -11,6 +11,7 @@ const DEFAULT_DAMAGE_ARRAY: Array[int] = [
 	]
 
 @export var lamplighter_name: String
+@export var lamplighter_id: String
 @export var callsign: String
 @export var attributes: Array[int] = [0,0,0,0,0]
 @export var attribute_bonuses: Array[int] = [0,0,0,0,0]
@@ -31,6 +32,7 @@ const DEFAULT_DAMAGE_ARRAY: Array[int] = [
 func to_dict() -> Dictionary:
 	var dict: Dictionary
 	dict["lamplighter_name"] = lamplighter_name
+	dict["lamplighter_id"] = lamplighter_id
 	dict["callsign"] = callsign
 	dict["attributes"] = attributes
 	dict["attribute_bonuses"] = attribute_bonuses
@@ -44,6 +46,8 @@ func to_dict() -> Dictionary:
 
 func from_dict(dict: Dictionary) -> void:
 	lamplighter_name = dict["lamplighter_name"]
+	if dict.has("lamplighter_id"):
+		lamplighter_id = dict["lamplighter_id"]
 	callsign = dict["callsign"]
 	attributes.clear()
 	for attr in dict["attributes"]:

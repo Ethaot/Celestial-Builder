@@ -80,7 +80,7 @@ func popup() -> void:
 	visible = true
 "
 
-[node name="CustomPartBuilder" type="ColorRect" unique_id=1567033318 node_paths=PackedStringArray("scroll_container", "part_name_line_edit", "part_id_line_edit", "select_image_button", "upload_image_button", "part_type_button", "size_button", "part_type_dropdown_panel", "part_type_dropdown_vbox", "size_dropdown_panel", "size_dropdown_vbox", "grid_grid_container", "description_text_edit", "shield_capacity_hbox", "shield_capacity_amount_label", "part_tab_line_edit", "tags_vbox", "add_tag_button", "connected_tags_vbox", "add_connected_tag_button", "save_part_button", "load_part_button", "load_part_menu", "load_part_vbox", "choose_data_pack_button", "select_image_file_dialog", "upload_image_file_dialog")]
+[node name="CustomPartBuilder" type="ColorRect" unique_id=1567033318 node_paths=PackedStringArray("scroll_container", "part_name_line_edit", "part_id_line_edit", "select_image_button", "upload_image_button", "part_type_button", "size_button", "part_type_dropdown_panel", "part_type_dropdown_vbox", "size_dropdown_panel", "size_dropdown_vbox", "grid_grid_container", "description_text_edit", "shield_capacity_hbox", "shield_capacity_amount_label", "part_tab_line_edit", "part_requirements_line_edit", "tags_vbox", "add_tag_button", "connected_tags_vbox", "add_connected_tag_button", "save_part_button", "load_part_button", "load_part_menu", "load_part_vbox", "choose_data_pack_button", "select_image_file_dialog", "upload_image_file_dialog")]
 texture_filter = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -105,6 +105,7 @@ description_text_edit = NodePath("MainScrollContainer/MainVBox/DescriptionTextEd
 shield_capacity_hbox = NodePath("MainScrollContainer/MainVBox/ShieldCapacityHBox")
 shield_capacity_amount_label = NodePath("MainScrollContainer/MainVBox/ShieldCapacityHBox/ShieldCapacityLabel")
 part_tab_line_edit = NodePath("MainScrollContainer/MainVBox/PartTabLineEdit")
+part_requirements_line_edit = NodePath("MainScrollContainer/MainVBox/PartRequirementsLineEdit")
 tags_vbox = NodePath("MainScrollContainer/MainVBox/TagsHBox/TagsVBox")
 add_tag_button = NodePath("MainScrollContainer/MainVBox/TagsHBox/TagsVBox/AddTagButton")
 connected_tags_vbox = NodePath("MainScrollContainer/MainVBox/TagsHBox/ConnectedTagsVBox")
@@ -244,6 +245,12 @@ text = ">"
 layout_mode = 2
 placeholder_text = "Custom Part Tab"
 script = ExtResource("4_76g6l")
+
+[node name="PartRequirementsLineEdit" type="LineEdit" parent="MainScrollContainer/MainVBox" unique_id=462308199]
+layout_mode = 2
+placeholder_text = "Requirements"
+script = ExtResource("4_76g6l")
+metadata/_custom_type_script = "uid://chyxrd6ikyak2"
 
 [node name="TagsHBox" type="HBoxContainer" parent="MainScrollContainer/MainVBox" unique_id=980631003]
 layout_mode = 2

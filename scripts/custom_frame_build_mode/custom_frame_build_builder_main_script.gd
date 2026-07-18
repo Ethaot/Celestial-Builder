@@ -30,7 +30,7 @@ func setup() -> void:
 	page_width = screen_size.x
 	scroll_container.custom_minimum_size.x = page_width
 	
-	for child:ScrollContainer in main_hbox.get_children():
+	for child in main_hbox.get_children():
 		child.custom_minimum_size.x = page_width
 
 func go_to_page(idx: int, _delayed: bool = false) -> void:

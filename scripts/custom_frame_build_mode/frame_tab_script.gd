@@ -380,7 +380,8 @@ func check_power() -> void:
 	for pi in current_frame_build.frame_build_configuration:
 		var part: Part = ResourceManager.part_dict[pi.part_id]
 		var connected_tags: Array[String] = part.connected_tags
-		if part.tags.has("reactor"):
+		if part.connected_tags.size() > 0:
+		#if part.tags.has("reactor"):
 			var cells_to_check: Array[Vector2i]
 			var cells_to_check_next: Array[Vector2i]
 			var checked_cells: Array[Vector2i]
@@ -416,9 +417,9 @@ func check_power() -> void:
 										if !anti_tagged:
 											for ct in current_part.connected_tags:
 												if checked_part.tags.has(ct):
-													if checked_part.tags.has("processor"):
-														if !checked_cells.has(checked_cell):
-															cells_to_check_next.append(checked_cell)
+													#if checked_part.tags.has("processor"):
+														#if !checked_cells.has(checked_cell):
+															#cells_to_check_next.append(checked_cell)
 													draw_power_arrow(slot, (i+2)%4)
 													break
 					checked_cells.append(cell)
@@ -582,11 +583,17 @@ func populate_load_frame_build_menu() -> void:
 func show_valid_grids(idx: int) -> void:
 	for gtb: GridTextureButton in grid_container_texture_buttons:
 		var pos: Vector2i = Vector2i(gtb.grid_index % 6, floori(float(gtb.grid_index) / 6.0))
-		if ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_available_slots.has(pos):
-			gtb.self_modulate = Color.WHITE
-		else:
-			gtb.self_modulate = Color("#282828")
+		if pos.x >= 0 and pos.x < 6 and pos.y >= 0 and pos.y < 6:
+			if ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_available_slots.has(pos):
+				gtb.self_modulate = Color.WHITE
+			else:
+				gtb.self_modulate = Color("#282828")
 	var occupied_slots: Array[int]
+	for x in range(6):
+		for y in range(6):
+			var eval_pos: Vector2i = Vector2i(x,y)
+			if !ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_available_slots.has(eval_pos):
+				occupied_slots.append(x+y*6)
 	for pi in DataManager.save_data.character.current_frame_build.frame_build_configuration:
 		for slot in pi.part_instance_slots:
 			occupied_slots.append(slot)

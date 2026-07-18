@@ -26,6 +26,16 @@ func display_data_packs() -> void:
 		else:
 			dthb.data_pack_delete_button.visible = false
 		data_packs_toggle_vbox.add_child(dthb)
+	var cdthb: DataToggleHBox = data_pack_toggle_hbox_prefab.instantiate()
+	var cdptb: DataPackToggleButton = cdthb.data_pack_toggle_button
+	cdptb.text = "Custom"
+	cdptb.button_pressed = DataManager.config.custom_enabled
+	cdptb.pack_id = "custom"
+	cdptb.dptm = self
+	cdthb.data_pack_download_button.button_up.connect(_download_package_button_pressed.bind("custom"))
+	cdthb.data_pack_delete_button.visible = false
+	data_packs_toggle_vbox.add_child(cdthb)
+	
 	var back_button: Button = button_prefab.instantiate()
 	back_button.text = "Back"
 	back_button.button_up.connect(close_data_packs_menu)
@@ -125,9 +135,10 @@ func _download_package_button_pressed(package_id: String) -> void:
 		if error != OK:
 			push_error("Could not open zip archive.")
 			return
+		zip_packer.add_directory(package_id + "/")
 		if FileAccess.file_exists(ResourceManager.DATA_PACKS_PATH + package_id + "/manifest.json"):
 			print("Preparing to pack manifest.json...")
-			zip_packer.start_file("manifest.json")
+			zip_packer.start_file(package_id + "/manifest.json")
 			var file = FileAccess.open(ResourceManager.DATA_PACKS_PATH + package_id + "/manifest.json", FileAccess.READ)
 			var json_string: String = file.get_as_text()
 			var data = json_string.to_utf8_buffer()
@@ -137,7 +148,7 @@ func _download_package_button_pressed(package_id: String) -> void:
 			print("manifest.json packed.")
 		if FileAccess.file_exists(ResourceManager.DATA_PACKS_PATH + package_id + "/frames.json"):
 			print("Preparing to pack frames.json...")
-			zip_packer.start_file("frames.json")
+			zip_packer.start_file(package_id + "/frames.json")
 			var file = FileAccess.open(ResourceManager.DATA_PACKS_PATH + package_id + "/frames.json", FileAccess.READ)
 			var json_string: String = file.get_as_text()
 			var data = json_string.to_utf8_buffer()
@@ -147,7 +158,7 @@ func _download_package_button_pressed(package_id: String) -> void:
 			print("frames.json packed.")
 		if FileAccess.file_exists(ResourceManager.DATA_PACKS_PATH + package_id + "/frame_builds.json"):
 			print("Preparing to pack frame_builds.json...")
-			zip_packer.start_file("frame_builds.json")
+			zip_packer.start_file(package_id + "/frame_builds.json")
 			var file = FileAccess.open(ResourceManager.DATA_PACKS_PATH + package_id + "/frame_builds.json", FileAccess.READ)
 			var json_string: String = file.get_as_text()
 			var data = json_string.to_utf8_buffer()
@@ -157,7 +168,7 @@ func _download_package_button_pressed(package_id: String) -> void:
 			print("frame_builds.json packed.")
 		if FileAccess.file_exists(ResourceManager.DATA_PACKS_PATH + package_id + "/parts.json"):
 			print("Preparing to pack parts.json...")
-			zip_packer.start_file("parts.json")
+			zip_packer.start_file(package_id + "/parts.json")
 			var file = FileAccess.open(ResourceManager.DATA_PACKS_PATH + package_id + "/parts.json", FileAccess.READ)
 			var json_string: String = file.get_as_text()
 			var data = json_string.to_utf8_buffer()
@@ -165,6 +176,10 @@ func _download_package_button_pressed(package_id: String) -> void:
 			zip_packer.write_file(data)
 			zip_packer.close_file()
 			print("parts.json packed.")
+		if DirAccess.dir_exists_absolute(ResourceManager.DATA_PACKS_PATH + package_id + "/images/"):
+			zip_packer.add_directory(package_id + "/images/")
+			var source_dir: String = ResourceManager.DATA_PACKS_PATH + package_id + "/images/"
+			add_dir_to_zip_recursive(ResourceManager.DATA_PACKS_PATH, source_dir, zip_packer)
 		zip_packer.close()
 		print("Zip file written.")
 		var downloadable_zip = FileAccess.open(ResourceManager.TEMP_FOLDER + package_id + ".zip", FileAccess.READ)
@@ -204,3 +219,28 @@ func _download_package_button_pressed(package_id: String) -> void:
 		download_pack_file_dialog.file_selected.connect(download_package.bind(package_id))
 		download_pack_file_dialog.current_file = package_id + ".zip"
 		download_pack_file_dialog.popup_file_dialog()
+
+func add_dir_to_zip_recursive(base_dir: String, current_dir: String, packer: ZIPPacker) -> void:
+	var dir = DirAccess.open(current_dir)
+	if not dir:
+		return
+	
+	dir.list_dir_begin()
+	var file_name: String = dir.get_next()
+	
+	while file_name != "":
+		var full_path: String = current_dir.path_join(file_name)
+		if dir.current_is_dir():
+			add_dir_to_zip_recursive(base_dir, full_path, packer)
+		else:
+			var relative_path: String = full_path.trim_prefix(base_dir)
+			var file = FileAccess.open(full_path, FileAccess.READ)
+			if file:
+				var buffer = file.get_buffer(file.get_length())
+				file.close()
+				
+				packer.start_file(relative_path)
+				packer.write_file(buffer)
+				packer.close_file()
+		file_name = dir.get_next()
+	dir.list_dir_end()

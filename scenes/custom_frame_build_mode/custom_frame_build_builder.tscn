@@ -11,9 +11,14 @@
 [ext_resource type="Script" uid="uid://cojbe5fq0ysak" path="res://scripts/custom_frame_build_mode/add_faction_button.gd" id="6_24in7"]
 [ext_resource type="Script" uid="uid://c1eeelmq5jva1" path="res://scripts/custom_frame_build_mode/parts_tab_script.gd" id="6_fag2l"]
 [ext_resource type="PackedScene" uid="uid://dwxq6xyo184in" path="res://scenes/frame_select_dropdown_button.tscn" id="8_pqtcs"]
+[ext_resource type="Texture2D" uid="uid://bmfnganl0fsdx" path="res://assets/ui/mirror_h.png" id="9_vn2vc"]
 [ext_resource type="PackedScene" uid="uid://cugrq5ji4qm4" path="res://scenes/data_pack_selector_panel_container.tscn" id="10_fag2l"]
+[ext_resource type="Script" uid="uid://bbd32h71scplk" path="res://scripts/mobile_friendly_button.gd" id="10_gufr5"]
 [ext_resource type="Script" uid="uid://d1b0vmronhxko" path="res://scripts/custom_frame_build_mode/part_grid_interface.gd" id="10_pqtcs"]
+[ext_resource type="Texture2D" uid="uid://bpqaujek42hcg" path="res://assets/ui/mirror_v.png" id="11_30bye"]
 [ext_resource type="PackedScene" uid="uid://cg66ksdd4jth" path="res://scenes/dragged_part.tscn" id="11_pwrrv"]
+[ext_resource type="Texture2D" uid="uid://dabff7ypcwuo4" path="res://assets/ui/rotate_ccw.png" id="12_5m6yy"]
+[ext_resource type="Texture2D" uid="uid://bb2h7r0ib2c2h" path="res://assets/ui/rotate_cw.png" id="13_c5qld"]
 
 [sub_resource type="GDScript" id="GDScript_55x64"]
 script/source = "extends Button
@@ -269,16 +274,20 @@ theme = ExtResource("2_cybhx")
 text = "Load Frame Build"
 autowrap_mode = 3
 
-[node name="PartsScrollContainer" type="ScrollContainer" parent="MainScrollContainer/MainHBoxContainer" unique_id=2115693763 node_paths=PackedStringArray("main_script", "part_grid_interface", "part_tabs_vbox", "parts_grid_container", "weapons_ranged_tab_button", "weapons_explosive_tab_button", "weapons_melee_tab_button", "weapons_ew_tab_button", "weapons_missiles_tab_button", "parts_reactors_tab_button", "parts_thrusters_tab_button", "parts_processors_tab_button", "parts_shields_tab_button")]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainScrollContainer/MainHBoxContainer" unique_id=1153003901]
+layout_mode = 2
+
+[node name="PartsScrollContainer" type="ScrollContainer" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer" unique_id=2115693763 node_paths=PackedStringArray("main_script", "part_grid_interface", "part_tabs_vbox", "parts_grid_container", "weapons_ranged_tab_button", "weapons_explosive_tab_button", "weapons_melee_tab_button", "weapons_ew_tab_button", "weapons_missiles_tab_button", "parts_reactors_tab_button", "parts_thrusters_tab_button", "parts_processors_tab_button", "parts_shields_tab_button", "mirror_h_button", "mirror_v_button", "rotate_ccw_button", "rotate_cw_button")]
 custom_minimum_size = Vector2(1080, 0)
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 3
 script = ExtResource("6_fag2l")
-main_script = NodePath("../../..")
-part_grid_interface = NodePath("../../../PartGridInterface")
+main_script = NodePath("../../../..")
+part_grid_interface = NodePath("../../../../PartGridInterface")
 part_tabs_vbox = NodePath("PartsTabVBox/PartTabsVBox")
 parts_grid_container = NodePath("PartsTabVBox/PartsGridContainer")
 weapons_ranged_tab_button = NodePath("PartsTabVBox/PartTabsVBox/HFlowContainer/WeaponsRangedTabButton")
@@ -290,93 +299,142 @@ parts_reactors_tab_button = NodePath("PartsTabVBox/PartTabsVBox/HFlowContainer/P
 parts_thrusters_tab_button = NodePath("PartsTabVBox/PartTabsVBox/HFlowContainer/PartsThrustersTabButton")
 parts_processors_tab_button = NodePath("PartsTabVBox/PartTabsVBox/HFlowContainer/PartsProcessorsTabButton")
 parts_shields_tab_button = NodePath("PartsTabVBox/PartTabsVBox/HFlowContainer/PartsShieldsTabButton")
+mirror_h_button = NodePath("../MirrorButtonsHBox/MirrorHButton")
+mirror_v_button = NodePath("../MirrorButtonsHBox/MirrorVButton")
+rotate_ccw_button = NodePath("../MirrorButtonsHBox/RotateCCWButton")
+rotate_cw_button = NodePath("../MirrorButtonsHBox/RotateCWButton")
 
-[node name="PartsTabVBox" type="VBoxContainer" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer" unique_id=1451309321]
+[node name="PartsTabVBox" type="VBoxContainer" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/PartsScrollContainer" unique_id=1451309321]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 16
 
-[node name="PartTabsVBox" type="VBoxContainer" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox" unique_id=145406471]
+[node name="PartTabsVBox" type="VBoxContainer" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/PartsScrollContainer/PartsTabVBox" unique_id=145406471]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="HFlowContainer" type="HFlowContainer" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox" unique_id=914946150]
+[node name="HFlowContainer" type="HFlowContainer" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox" unique_id=914946150]
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 16
 
-[node name="WeaponsRangedTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=197029518]
+[node name="WeaponsRangedTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=197029518]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_cybhx")
 text = "Ranged"
 
-[node name="WeaponsExplosiveTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=619306130]
+[node name="WeaponsExplosiveTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=619306130]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_cybhx")
 text = "Explosive"
 
-[node name="WeaponsMeleeTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=1482796939]
+[node name="WeaponsMeleeTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=1482796939]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_cybhx")
 text = "Melee"
 
-[node name="WeaponsElectronicWarfareTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=27690178]
+[node name="WeaponsElectronicWarfareTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=27690178]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_cybhx")
 text = "Electronic Warfare"
 
-[node name="WeaponsMissilesTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=284421306]
+[node name="WeaponsMissilesTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=284421306]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_cybhx")
 text = "Missiles"
 
-[node name="PartsReactorsTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=1034350407]
+[node name="PartsReactorsTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=1034350407]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_cybhx")
 text = "Reactors"
 
-[node name="PartsThrustersTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=27220767]
+[node name="PartsThrustersTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=27220767]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_cybhx")
 text = "Thrusters"
 
-[node name="PartsProcessorsTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=1735638153]
+[node name="PartsProcessorsTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=1735638153]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_cybhx")
 text = "Processors"
 
-[node name="PartsShieldsTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=1742931095]
+[node name="PartsShieldsTabButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox/HFlowContainer" unique_id=1742931095]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_cybhx")
 text = "Shields"
 
-[node name="ColorRect" type="ColorRect" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox" unique_id=824709139]
+[node name="ColorRect" type="ColorRect" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox" unique_id=824709139]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 color = Color(0.15686275, 0.15686275, 0.15686275, 0)
 
-[node name="ColorRect2" type="ColorRect" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox" unique_id=357448333]
+[node name="ColorRect2" type="ColorRect" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox" unique_id=357448333]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
-[node name="ColorRect3" type="ColorRect" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox" unique_id=379684443]
+[node name="ColorRect3" type="ColorRect" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/PartsScrollContainer/PartsTabVBox/PartTabsVBox" unique_id=379684443]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 color = Color(0.15686275, 0.15686275, 0.015686275, 0)
 
-[node name="PartsGridContainer" type="GridContainer" parent="MainScrollContainer/MainHBoxContainer/PartsScrollContainer/PartsTabVBox" unique_id=299464447]
+[node name="PartsGridContainer" type="GridContainer" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/PartsScrollContainer/PartsTabVBox" unique_id=299464447]
 layout_mode = 2
 mouse_filter = 2
 columns = 2
+
+[node name="MirrorButtonsHBox" type="HBoxContainer" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer" unique_id=2120098606]
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="MirrorHButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/MirrorButtonsHBox" unique_id=1342276433]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+icon = ExtResource("9_vn2vc")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("10_gufr5")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
+
+[node name="MirrorVButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/MirrorButtonsHBox" unique_id=1179722510]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+icon = ExtResource("11_30bye")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("10_gufr5")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
+
+[node name="RotateCCWButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/MirrorButtonsHBox" unique_id=1141248710]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+icon = ExtResource("12_5m6yy")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("10_gufr5")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
+
+[node name="RotateCWButton" type="Button" parent="MainScrollContainer/MainHBoxContainer/VBoxContainer/MirrorButtonsHBox" unique_id=1860591147]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+icon = ExtResource("13_c5qld")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("10_gufr5")
+metadata/_custom_type_script = "uid://bbd32h71scplk"
 
 [node name="LoadFrameBuildMenu" type="ColorRect" parent="." unique_id=1422851021]
 visible = false
@@ -504,7 +562,7 @@ layout_mode = 1
 [node name="PartGridInterface" type="Node" parent="." unique_id=1702503083 node_paths=PackedStringArray("frame_tab_menu", "parts_tab_menu", "dragged_part")]
 script = ExtResource("10_pqtcs")
 frame_tab_menu = NodePath("../MainScrollContainer/MainHBoxContainer/FrameScrollContainer")
-parts_tab_menu = NodePath("../MainScrollContainer/MainHBoxContainer/PartsScrollContainer")
+parts_tab_menu = NodePath("../MainScrollContainer/MainHBoxContainer/VBoxContainer/PartsScrollContainer")
 dragged_part = NodePath("../dragged_part")
 
 [node name="dragged_part" parent="." unique_id=1949268490 instance=ExtResource("11_pwrrv")]

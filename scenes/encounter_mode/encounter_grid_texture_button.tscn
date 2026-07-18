@@ -1,0 +1,150 @@
+[gd_scene format=3 uid="uid://q32mrll7aajj"]
+
+[ext_resource type="Texture2D" uid="uid://j8aslsoao6vh" path="res://assets/ui/EmptyGridSpace.png" id="1_vnlyd"]
+[ext_resource type="Script" uid="uid://38fdc7u5em1" path="res://scripts/encounter_mode/encounter_grid_texture_button.gd" id="2_klctb"]
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="3_k3h3o"]
+[ext_resource type="FontFile" uid="uid://dpjfpo24ilp7l" path="res://fonts/Cousine-Bold.ttf" id="4_jrpuy"]
+[ext_resource type="Texture2D" uid="uid://cii5fa51i2qs8" path="res://assets/ui/power_arrow.png" id="5_y2u0h"]
+
+[node name="TextureButton" type="TextureButton" unique_id=726394561 node_paths=PackedStringArray("texrect", "damage_label", "disabled_label", "power_texrects", "grid_clipping_rect", "grid_gradient_rect")]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture_normal = ExtResource("1_vnlyd")
+stretch_mode = 4
+script = ExtResource("2_klctb")
+texrect = NodePath("CenterContainer/Control/TextureRect")
+damage_label = NodePath("CenterContainer/DamageLabel")
+disabled_label = NodePath("CenterContainer/DisabledLabel")
+power_texrects = [NodePath("power_arrow_left"), NodePath("power_arrow_top"), NodePath("power_arrow_right"), NodePath("power_arrow_bottom")]
+grid_clipping_rect = NodePath("ClippingRect")
+grid_gradient_rect = NodePath("ClippingRect/GridGradientRect")
+
+[node name="ClippingRect" type="ColorRect" parent="." unique_id=1223426456]
+clip_children = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="GridGradientRect" type="TextureRect" parent="ClippingRect" unique_id=1463342396]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 3
+
+[node name="CenterContainer" type="AspectRatioContainer" parent="." unique_id=1420050203]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch_mode = 3
+
+[node name="Control" type="Control" parent="CenterContainer" unique_id=772663713]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer/Control" unique_id=183779612]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+expand_mode = 2
+stretch_mode = 4
+
+[node name="DamageLabel" type="Label" parent="CenterContainer" unique_id=1331694556]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_k3h3o")
+theme_override_colors/font_color = Color(0.78431374, 0, 0, 1)
+theme_override_fonts/font = ExtResource("4_jrpuy")
+theme_override_font_sizes/font_size = 96
+text = "X"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DisabledLabel" type="Label" parent="CenterContainer" unique_id=2036854936]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("3_k3h3o")
+theme_override_colors/font_color = Color(0, 0, 0.78431374, 1)
+theme_override_fonts/font = ExtResource("4_jrpuy")
+theme_override_font_sizes/font_size = 96
+text = "O"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="power_arrow_left" type="TextureRect" parent="." unique_id=1014804714]
+visible = false
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("5_y2u0h")
+
+[node name="power_arrow_top" type="TextureRect" parent="." unique_id=60435378]
+visible = false
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 1.5707964
+pivot_offset_ratio = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("5_y2u0h")
+
+[node name="power_arrow_right" type="TextureRect" parent="." unique_id=1404486713]
+visible = false
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 3.1415927
+pivot_offset_ratio = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("5_y2u0h")
+
+[node name="power_arrow_bottom" type="TextureRect" parent="." unique_id=2007520382]
+visible = false
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 4.712389
+pivot_offset_ratio = Vector2(0.5, 0.5)
+mouse_filter = 2
+texture = ExtResource("5_y2u0h")

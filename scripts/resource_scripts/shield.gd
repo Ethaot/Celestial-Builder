@@ -34,10 +34,13 @@ func from_dict(dict: Dictionary) -> void:
 	part_type = dict["part_type"]
 	powered = dict["powered"]
 	for slot in dict["part_configuration"]:
-		var matches = regex.search_all(slot)
-		var x: int = matches[0].get_string().to_int()
-		var y: int = matches[1].get_string().to_int()
-		part_configuration.append(Vector2i(x, y))
+		if slot is Vector2i:
+			part_configuration.append(slot)
+		elif slot is String:
+			var matches = regex.search_all(slot)
+			var x: int = matches[0].get_string().to_int()
+			var y: int = matches[1].get_string().to_int()
+			part_configuration.append(Vector2i(x, y))
 	part_icon = dict["part_icon"]
 	part_description = dict["part_description"]
 	requirements = dict["requirements"]

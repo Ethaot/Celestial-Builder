@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://cy42m52crpqmx"]
+
+[ext_resource type="Script" uid="uid://b2dk78e5d3oox" path="res://scripts/encounter_mode/encounter_shields_v_box.gd" id="1_1bce3"]
+[ext_resource type="Theme" uid="uid://lf55xhf8cqi4" path="res://MainTheme.tres" id="2_efm83"]
+
+[node name="ShieldsVBox" type="VBoxContainer" unique_id=2113031562 node_paths=PackedStringArray("name_label", "up_button", "capacity_label", "down_button")]
+offset_right = 580.0
+offset_bottom = 240.0
+theme_override_constants/separation = 16
+script = ExtResource("1_1bce3")
+name_label = NodePath("Label")
+up_button = NodePath("Button")
+capacity_label = NodePath("Label2")
+down_button = NodePath("Button2")
+
+[node name="Label" type="Label" parent="." unique_id=1006234886]
+layout_mode = 2
+theme = ExtResource("2_efm83")
+text = "Shields"
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="." unique_id=539591089]
+layout_mode = 2
+theme = ExtResource("2_efm83")
+text = "^"
+
+[node name="Label2" type="Label" parent="." unique_id=2122444542]
+layout_mode = 2
+theme = ExtResource("2_efm83")
+text = "8"
+horizontal_alignment = 1
+
+[node name="Button2" type="Button" parent="." unique_id=1980528739]
+layout_mode = 2
+theme = ExtResource("2_efm83")
+text = "v"

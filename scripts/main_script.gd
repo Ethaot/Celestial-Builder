@@ -65,6 +65,10 @@ var load_save_hbox_prefab: PackedScene = preload("res://scenes/load_save_h_box.t
 @export var parts_thrusters_tab_button: Button
 @export var parts_processors_tab_button: Button
 @export var parts_shields_tab_button: Button
+@export var mirror_h_button: Button
+@export var mirror_v_button: Button
+@export var rotate_ccw_button: Button
+@export var rotate_cw_button: Button
 @export_group("Other")
 @export var dragged_part: DraggedPart
 @export var menu_tab_button: Button
@@ -91,6 +95,12 @@ var button_held: bool = false
 var mouse_button_pressed_timer: float = 0.0
 var start_part_pickup: bool = false
 var selecting_part_from_parts: bool = false
+
+var part_bin_mirrored_h: bool = false
+var part_bin_mirrored_v: bool = false
+var part_bin_times_rotated: int = 0
+var current_parts_tab: Constants.PartType
+var current_parts_subtab: String
 
 func _ready() -> void:
 	app_scroll_container.setup()
@@ -151,6 +161,10 @@ func _ready() -> void:
 	parts_thrusters_tab_button.button_up.connect(show_parts_screen.bind(Constants.PartType.PartThruster))
 	parts_processors_tab_button.button_up.connect(show_parts_screen.bind(Constants.PartType.PartProcessor))
 	parts_shields_tab_button.button_up.connect(show_parts_screen.bind(Constants.PartType.PartShield))
+	mirror_h_button.button_up.connect(_on_mirror_h_button_pressed)
+	mirror_v_button.button_up.connect(_on_mirror_v_button_pressed)
+	rotate_ccw_button.button_up.connect(_on_rotate_ccw_button_pressed)
+	rotate_cw_button.button_up.connect(_on_rotate_cw_button_pressed)
 	
 	ready.connect(_on_ready)
 
@@ -272,10 +286,21 @@ func populate_grid() -> void:
 			grid_container_texture_buttons.append(b)
 
 func show_parts_screen(part_type: Constants.PartType) -> void:
+	part_bin_mirrored_h = false
+	part_bin_mirrored_v = false
+	part_bin_times_rotated = 0
+	match part_type:
+		Constants.PartType.WeaponRanged, Constants.PartType.WeaponExplosive, Constants.PartType.WeaponMelee, Constants.PartType.WeaponEW, Constants.PartType.WeaponMissile:
+			rotate_ccw_button.visible = false
+			rotate_cw_button.visible = false
+		_:
+			rotate_ccw_button.visible = true
+			rotate_cw_button.visible = true
+	current_parts_tab = part_type
 	switch_to_parts_view()
-	populate_parts_screen(part_type)
+	populate_parts_screen(part_type, "", false, false, 0)
 
-func populate_parts_screen(part_type: Constants.PartType) -> void:
+func populate_parts_screen(part_type: Constants.PartType, part_subtab: String, mirrored_h: bool, mirrored_v: bool, times_rotated: int) -> void:
 	var part_groups_dict: Dictionary[String, PartGroupVBox]
 	for child in part_tabs_vbox.get_children():
 		if child.get_index() > 3:
@@ -310,9 +335,12 @@ func populate_parts_screen(part_type: Constants.PartType) -> void:
 			else:
 				var part_tab: PartGroupVBox = part_group_tab_vbox_prefab.instantiate()
 				part_tab.group_tab_button.text = part.part_tab
+				part_tab.group_tab_button.button_up.connect(func() -> void: current_parts_subtab = part.part_tab)
 				part_tabs_vbox.add_child(part_tab)
 				part_groups_dict[part.part_tab] = part_tab
 				target_parent = part_tab.group_tab_grid_container
+				if part.part_tab == current_parts_subtab:
+					part_tab.group_tab_grid_container.visible = true
 		
 		
 		var held_part: HeldPart = HeldPart.new()
@@ -321,38 +349,36 @@ func populate_parts_screen(part_type: Constants.PartType) -> void:
 		if ResourceManager.part_image_dict.has(part.part_id):
 			held_part.part_icons = ResourceManager.part_image_dict[part.part_id]
 		match part.part_type:
-			Constants.PartType.PartProcessor:
-				target_parent.add_child(draw_part(held_part, false, false, 0))
+			#Constants.PartType.PartProcessor:
+				#target_parent.add_child(draw_part(held_part, false, false, 0))
 			Constants.PartType.WeaponRanged, Constants.PartType.WeaponExplosive, Constants.PartType.WeaponMelee, Constants.PartType.WeaponEW, Constants.PartType.WeaponMissile:
-				for i in range(4):
-					var hp: HeldPart = held_part.duplicate(true)
-					match i:
-						0:
-							target_parent.add_child(draw_part(hp, false, false, 0))
-						1:
-							hp = mirror_slots_horizontally(hp)
-							target_parent.add_child(draw_part(hp, true, false, 0))
-						2:
-							hp = mirror_slots_vertically(hp)
-							target_parent.add_child(draw_part(hp, false, true, 0))
-						3:
-							hp = mirror_slots_horizontally(mirror_slots_vertically(hp))
-							target_parent.add_child(draw_part(hp, true, true, 0))
-			Constants.PartType.PartReactor, Constants.PartType.PartThruster, Constants.PartType.PartShield:
-				for i in range(4):
-					var hp: HeldPart = held_part.duplicate(true)
-					match i:
-						0:
-							target_parent.add_child(draw_part(hp, false, false, 0))
-						1:
-							rotate_slots(hp)
-							target_parent.add_child(draw_part(hp, false, false, 1))
-						2:
-							rotate_slots(rotate_slots(hp))
-							target_parent.add_child(draw_part(hp, false, false, 2))
-						3:
-							rotate_slots(rotate_slots(rotate_slots(hp)))
-							target_parent.add_child(draw_part(hp, false, false, 3))
+				var hp: HeldPart = held_part.duplicate(true)
+				if mirrored_h:
+					if mirrored_v:
+						hp = mirror_slots_horizontally(mirror_slots_vertically(hp))
+						target_parent.add_child(draw_part(hp, true, true, 0))
+					else:
+						hp = mirror_slots_horizontally(hp)
+						target_parent.add_child(draw_part(hp, true, false, 0))
+				elif mirrored_v:
+					hp = mirror_slots_vertically(hp)
+					target_parent.add_child(draw_part(hp, false, true, 0))
+				else:
+					target_parent.add_child(draw_part(hp, false, false, 0))
+							
+			Constants.PartType.PartReactor, Constants.PartType.PartThruster, Constants.PartType.PartProcessor, Constants.PartType.PartShield:
+				var hp: HeldPart = held_part.duplicate(true)
+				if mirrored_h:
+					if mirrored_v:
+						hp = mirror_slots_horizontally(mirror_slots_vertically(hp))
+					else:
+						hp = mirror_slots_horizontally(hp)
+				elif mirrored_v:
+					hp = mirror_slots_vertically(hp)
+				
+				for i in range(times_rotated):
+					hp = rotate_slots(hp)
+				target_parent.add_child(draw_part(hp, mirrored_h, mirrored_v, times_rotated))
 		
 	var vb: VBoxContainer = part_tabs_vbox.get_parent()
 	vb.move_child(parts_grid_container, vb.get_children().size() - 1)
@@ -626,7 +652,8 @@ func check_power() -> void:
 	for pi in DataManager.save_data.character.current_frame_build.frame_build_configuration:
 		var part: Part = ResourceManager.part_dict[pi.part_id]
 		var connected_tags: Array[String] = part.connected_tags
-		if part.tags.has("reactor"):
+		if part.connected_tags.size() > 0:
+		#if part.tags.has("reactor"):
 			var cells_to_check: Array[Vector2i]
 			var cells_to_check_next: Array[Vector2i]
 			var checked_cells: Array[Vector2i]
@@ -662,9 +689,9 @@ func check_power() -> void:
 										if !anti_tagged:
 											for ct in current_part.connected_tags:
 												if checked_part.tags.has(ct):
-													if checked_part.tags.has("processor"):
-														if !checked_cells.has(checked_cell):
-															cells_to_check_next.append(checked_cell)
+													#if checked_part.tags.has("processor"):
+														#if !checked_cells.has(checked_cell):
+															#cells_to_check_next.append(checked_cell)
 													draw_power_arrow(slot, (i+2)%4)
 													break
 					checked_cells.append(cell)
@@ -839,11 +866,18 @@ func update_prem_amt_label() -> void:
 func show_valid_grids(idx: int) -> void:
 	for gtb: GridTextureButton in grid_container_texture_buttons:
 		var pos: Vector2i = Vector2i(gtb.grid_index % 6, floori(float(gtb.grid_index) / 6.0))
-		if ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_available_slots.has(pos):
-			gtb.self_modulate = Color.WHITE
-		else:
-			gtb.self_modulate = Color("#282828")
+		if pos.x >= 0 and pos.x < 6 and pos.y >= 0 and pos.y < 6:
+			if ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_available_slots.has(pos):
+				gtb.self_modulate = Color.WHITE
+			else:
+				gtb.self_modulate = Color("#282828")
 	var occupied_slots: Array[int]
+	for x in range(6):
+		for y in range(6):
+			var eval_pos: Vector2i = Vector2i(x,y)
+			if !ResourceManager.frame_dict[DataManager.save_data.character.current_frame_build.frame_id].frame_available_slots.has(eval_pos):
+				occupied_slots.append(x+y*6)
+		
 	for pi in DataManager.save_data.character.current_frame_build.frame_build_configuration:
 		for slot in pi.part_instance_slots:
 			occupied_slots.append(slot)
@@ -933,8 +967,8 @@ func _on_lamplighter_loaded() -> void:
 	app_scroll_container.go_to_page(1, true)
 
 func _on_save_delete_button_pressed(save_id: String) -> void:
-	DataManager.delete_save_data(save_id)
 	_on_new_lamplighter_button_pressed()
+	DataManager.delete_save_data(save_id)
 	_on_load_lamplighter_button_pressed()
 
 func _on_frame_select_button_clicked() -> void:
@@ -1147,6 +1181,28 @@ func _reset_frame_damage() -> void:
 	for i in range(shields_interfaces.size()):
 		if DataManager.save_data.character.current_shields.size() > i:
 			shields_interfaces[i].set_shield_current_amount(DataManager.save_data.character.current_shields[i])
+
+func _on_mirror_h_button_pressed() -> void:
+	if part_bin_times_rotated % 2 == 0:
+		part_bin_mirrored_h = false if part_bin_mirrored_h else true
+	else:
+		part_bin_mirrored_v = false if part_bin_mirrored_v else true
+	populate_parts_screen(current_parts_tab, current_parts_subtab, part_bin_mirrored_h, part_bin_mirrored_v, part_bin_times_rotated)
+
+func _on_mirror_v_button_pressed() -> void:
+	if part_bin_times_rotated % 2 == 0:
+		part_bin_mirrored_v = false if part_bin_mirrored_v else true
+	else:
+		part_bin_mirrored_h = false if part_bin_mirrored_h else true
+	populate_parts_screen(current_parts_tab, current_parts_subtab, part_bin_mirrored_h, part_bin_mirrored_v, part_bin_times_rotated)
+
+func _on_rotate_ccw_button_pressed() -> void:
+	part_bin_times_rotated = (4 + part_bin_times_rotated - 1) % 4
+	populate_parts_screen(current_parts_tab, current_parts_subtab, part_bin_mirrored_h, part_bin_mirrored_v, part_bin_times_rotated)
+
+func _on_rotate_cw_button_pressed() -> void:
+	part_bin_times_rotated = (part_bin_times_rotated + 1) % 4
+	populate_parts_screen(current_parts_tab, current_parts_subtab, part_bin_mirrored_h, part_bin_mirrored_v, part_bin_times_rotated)
 
 func _on_ready() -> void:
 	done_loading = true

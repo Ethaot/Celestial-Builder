@@ -38,6 +38,7 @@ func save_config() -> void:
 	
 func load_config() -> void:
 	save_save_data()
+	print("Preparing to load Config...")
 	if DirAccess.dir_exists_absolute(CONFIG_DIR):
 		if FileAccess.file_exists(CONFIG_DIR + "config.json"):
 			var file = FileAccess.open(CONFIG_DIR + "config.json", FileAccess.READ)
@@ -47,19 +48,25 @@ func load_config() -> void:
 				var loaded_cfg: Config = Config.new()
 				if data["last_loaded_save_id"].length() > 0:
 					loaded_cfg.last_loaded_save_id = data["last_loaded_save_id"]
-					if data.has("last_loaded_encounter_id"):
-						loaded_cfg.last_loaded_encounter_id = data["last_loaded_encounter_id"]
-					if data.has("last_modified_data_pack_id"):
+				if data.has("last_loaded_encounter_id"):
+					loaded_cfg.last_loaded_encounter_id = data["last_loaded_encounter_id"]
+				if data.has("last_modified_data_pack_id"):
+					if data["last_modified_data_pack_id"].length() > 0:
 						loaded_cfg.last_modified_data_pack_id = data["last_modified_data_pack_id"]
 					else:
 						loaded_cfg.last_modified_data_pack_id = "custom"
+				else:
+					loaded_cfg.last_modified_data_pack_id = "custom"
 				config = loaded_cfg
 				currently_edited_data_pack = config.last_modified_data_pack_id
 			file.close()
+			print("Config loaded.")
 		else:
+			print("Config file does not exist. Creating new.")
 			config = Config.new()
 			save_config()
 	else:
+		print("Config Dir does not exist. Creating new.")
 		config = Config.new()
 		save_config()
 

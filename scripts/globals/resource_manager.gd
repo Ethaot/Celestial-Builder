@@ -116,8 +116,20 @@ func refresh_all_packs() -> void:
 	part_dict.merge(construct_parts_dict(custom_parts_array))
 	assign_parts_array(parse_parts(custom_parts_array))
 	
+	weapons_ranged.sort_custom(sort_parts_by_name)
+	weapons_explosive.sort_custom(sort_parts_by_name)
+	weapons_melee.sort_custom(sort_parts_by_name)
+	weapons_ew.sort_custom(sort_parts_by_name)
+	weapons_missiles.sort_custom(sort_parts_by_name)
+	parts_reactors.sort_custom(sort_parts_by_name)
+	parts_thrusters.sort_custom(sort_parts_by_name)
+	parts_processors.sort_custom(sort_parts_by_name)
+	parts_shields.sort_custom(sort_parts_by_name)
+	
 	frames.append_array(import_frames_dicts(CUSTOM_PACK_PATH))
 	frame_builds.append_array(import_frame_build_dicts(CUSTOM_PACK_PATH))
+	
+	frame_builds.sort_custom(sort_frame_builds_by_name)
 	
 	# Final Dict Construction
 	part_image_dict.merge(get_part_images_dict())
@@ -227,8 +239,8 @@ func get_data_pack_manifest() -> Array[Dictionary]:
 					for d in parsed_data:
 						if d is Dictionary:
 							if d["package_id"] == "celestial-bodies-core":
-								if d["package_url"] != "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-4.zip":
-									d["package_url"] = "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-4.zip"
+								if d["package_url"] != "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v1-0-0.zip":
+									d["package_url"] = "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v1-0-0.zip"
 								if !d.has("enabled"):
 									d["enabled"] = true
 							data_pack_manifest_data.append(d)
@@ -237,7 +249,7 @@ func get_data_pack_manifest() -> Array[Dictionary]:
 						"package_name": "Celestial Bodies Core",
 						"package_id": "celestial-bodies-core",
 						#"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core.zip",
-						"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-4.zip",
+						"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v1-0-0.zip",
 						"author": "Binary Star & Charlotte Laskowski",
 						"source_name": "Celestial Bodies Technical Handbook",
 						"source_url": "https://selkie.itch.io/celestial-bodies",
@@ -253,7 +265,7 @@ func get_data_pack_manifest() -> Array[Dictionary]:
 				"package_name": "Celestial Bodies Core",
 				"package_id": "celestial-bodies-core",
 				#"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core.zip",
-				"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v0-0-4.zip",
+				"package_url": "https://ethaot.github.io/celestial-builder-data-packs/celestial-bodies-core-v1-0-0.zip",
 				"author": "Binary Star & Charlotte Laskowski",
 				"source_name": "Celestial Bodies Technical Handbook",
 				"source_url": "https://selkie.itch.io/celestial-bodies",
@@ -656,6 +668,12 @@ func get_frame_builds_from_pack(data_pack_id: String) -> Array[FrameBuild]:
 					fb.from_dict(dict)
 					arr.append(fb)
 	return arr
+
+func sort_parts_by_name(a: Part, b: Part) -> bool:
+	return true if a.part_name < b.part_name else false
+	
+func sort_frame_builds_by_name(a: FrameBuild, b: FrameBuild) -> bool:
+	return true if a.frame_build_name < b.frame_build_name else false
 
 func _on_http_check_completed(result: int, response_code: int, headers: PackedStringArray, _body: PackedByteArray) -> void:
 	print("Got response code " + str(response_code))
